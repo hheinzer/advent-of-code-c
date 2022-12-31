@@ -7,4 +7,4 @@ CFLAGS+=-fsanitize=undefined -fsanitize=address
 .PHONY: clean
 
 clean:
-	find 20*/. -type f -perm -u+x -delete
+	find . -maxdepth 2 -type f -perm -u+x -delete
