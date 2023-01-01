@@ -28,7 +28,7 @@ int main(void)
             sscanf(line[i], "%ld", &cal);
             cals[n_cals - 1] += cal;
         } else {
-            cals = reallocarray(cals, ++n_cals, sizeof(*cals));
+            cals = realloc(cals, ++n_cals * sizeof(*cals));
             cals[n_cals - 1] = 0;
         }
     }
