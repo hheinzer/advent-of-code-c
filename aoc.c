@@ -2,7 +2,6 @@
  * helper functions for advent of code puzzles
  */
 #include <assert.h>
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +28,7 @@
 #define CMP(T)                                                                    \
     int cmp_##T##_asc(const void *a, const void *b) { return *(T *)a - *(T *)b; } \
     int cmp_##T##_dsc(const void *a, const void *b) { return *(T *)b - *(T *)a; }
+CMP(int);
 CMP(long);
 CMP(double);
 
@@ -46,15 +46,15 @@ void lines_read(const char *fname, char ***lines, size_t *n_lines)
     while ((c = fgetc(file)) != EOF) {
         if (c != '\n') {
             // append character
-            line = reallocarray(line, ++nc, sizeof(*line));
+            line = realloc(line, ++nc * sizeof(*line));
             line[nc - 1] = c;
         } else {
             // append end of string
-            line = reallocarray(line, ++nc, sizeof(*line));
+            line = realloc(line, ++nc * sizeof(*line));
             line[nc - 1] = 0;
 
             // append line
-            *lines = reallocarray(*lines, ++(*n_lines), sizeof(**lines));
+            *lines = realloc(*lines, ++(*n_lines) * sizeof(**lines));
             (*lines)[*n_lines - 1] = line;
 
             // initialize line
