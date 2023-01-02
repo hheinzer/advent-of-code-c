@@ -53,13 +53,14 @@ CMP(long);
 CMP(double);
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
-void lines_read(const char *fname, char ***lines, size_t *n_lines)
+size_t lines_read(char ***lines, const char *fname)
 {
     // open file
     FILE *file = fopen(fname, "r");
     assert(file && "Could not open file.");
 
     // read file line by line
+    size_t n_lines = 0;
     char *line = 0;
     size_t nc = 0;
     char c = 0;
@@ -74,8 +75,8 @@ void lines_read(const char *fname, char ***lines, size_t *n_lines)
             line[nc - 1] = 0;
 
             // append line
-            *lines = realloc(*lines, ++(*n_lines) * sizeof(**lines));
-            (*lines)[*n_lines - 1] = line;
+            *lines = realloc(*lines, ++n_lines * sizeof(**lines));
+            (*lines)[n_lines - 1] = line;
 
             // initialize line
             line = calloc(0, sizeof(*line));
@@ -86,6 +87,8 @@ void lines_read(const char *fname, char ***lines, size_t *n_lines)
 
     // close file
     fclose(file);
+
+    return n_lines;
 }
 
 // free all lines
