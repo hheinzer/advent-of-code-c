@@ -16,13 +16,33 @@
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
 
+// swap two variables
+#define SWAP(a, b)              \
+    do {                        \
+        __typeof__(a) swap = a; \
+        a = b;                  \
+        b = swap;               \
+    } while (0)
+
 // type generic array summation function
-#define SUM(a, n) \
-    ({ __typeof__(*a) s = 0; for (size_t i = 0; i < n; ++i) s += a[i]; s; })
+#define SUM(a, n)                        \
+    ({                                   \
+        __typeof__(*a) s = 0;            \
+        for (size_t i = 0; i < n; ++i) { \
+            s += a[i];                   \
+        }                                \
+        s;                               \
+    })
 
 // type generic array multiplication function
-#define PROD(a, n) \
-    ({ __typeof__(*a) p = 1; for (size_t i = 0; i < n; ++i) p *= a[i]; p; })
+#define PROD(a, n)                       \
+    ({                                   \
+        __typeof__(*a) p = 1;            \
+        for (size_t i = 0; i < n; ++i) { \
+            p *= a[i];                   \
+        }                                \
+        p;                               \
+    })
 
 // simple comparison function for ascending and descending order
 #define CMP(T)                                                                    \
