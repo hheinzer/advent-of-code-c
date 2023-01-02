@@ -23,10 +23,12 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         long a0, a1, b0, b1;
         sscanf(line[i], "%ld-%ld,%ld-%ld", &a0, &a1, &b0, &b1);
+
         // check whether b is contained in a or otherwise
         if (((a0 <= b0) && (b1 <= a1)) || ((b0 <= a0) && (a1 <= b1))) {
             ++count1;
         }
+
         // check for no overlap and invert result
         if (!((a1 < b0) || (b1 < a0))) {
             ++count2;

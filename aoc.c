@@ -53,7 +53,7 @@ CMP(long);
 CMP(double);
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
-size_t lines_read(char ***lines, const char *fname)
+size_t lines_read(char ***line, const char *fname)
 {
     // open file
     FILE *file = fopen(fname, "r");
@@ -61,29 +61,29 @@ size_t lines_read(char ***lines, const char *fname)
 
     // read file line by line
     size_t n_lines = 0;
-    char *line = 0;
+    char *l = 0;
     size_t nc = 0;
     char c = 0;
     while ((c = fgetc(file)) != EOF) {
         if (c != '\n') {
             // append character
-            line = realloc(line, ++nc * sizeof(*line));
-            line[nc - 1] = c;
+            l = realloc(l, ++nc * sizeof(*l));
+            l[nc - 1] = c;
         } else {
             // append end of string
-            line = realloc(line, ++nc * sizeof(*line));
-            line[nc - 1] = 0;
+            l = realloc(l, ++nc * sizeof(*l));
+            l[nc - 1] = 0;
 
             // append line
-            *lines = realloc(*lines, ++n_lines * sizeof(**lines));
-            (*lines)[n_lines - 1] = line;
+            *line = realloc(*line, ++n_lines * sizeof(**line));
+            (*line)[n_lines - 1] = l;
 
             // initialize line
-            line = calloc(0, sizeof(*line));
+            l = calloc(0, sizeof(*l));
             nc = 0;
         }
     }
-    free(line);
+    free(l);
 
     // close file
     fclose(file);
