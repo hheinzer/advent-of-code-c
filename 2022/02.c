@@ -18,8 +18,7 @@ int main(void)
 {
     // read input
     char **line = 0;
-    size_t n_lines = 0;
-    lines_read("02.txt", &line, &n_lines);
+    const size_t n_lines = lines_read(&line, "02.txt");
 
     // define points map for first rule set
     const long map1['Z' + 1]['Z' + 1] = {

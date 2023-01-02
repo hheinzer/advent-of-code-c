@@ -16,8 +16,7 @@ int main(void)
 {
     // read input
     char **line = 0;
-    size_t n_lines = 0;
-    lines_read("01.txt", &line, &n_lines);
+    const size_t n_lines = lines_read(&line, "01.txt");
 
     // add up calories of every elf, append to cals
     long *cals = calloc(1, sizeof(*cals));

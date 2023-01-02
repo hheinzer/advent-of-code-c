@@ -57,8 +57,7 @@ int main(void)
 {
     // read input
     char **line = 0;
-    size_t n_lines = 0;
-    lines_read("03.txt", &line, &n_lines);
+    const size_t n_lines = lines_read(&line, "03.txt");
 
     // find common char between first and second half of every line and add up priorities
     long sum_prio1 = 0;
