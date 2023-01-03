@@ -12,6 +12,8 @@
  */
 #include "aoc.c"
 
+CMP(long);
+
 int main(void)
 {
     // read input
