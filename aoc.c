@@ -25,25 +25,15 @@
         b = swap;               \
     } while (0)
 
-// type generic array summation function
-#define SUM(a, n)                        \
-    ({                                   \
-        __typeof__(*a) s = 0;            \
-        for (size_t i = 0; i < n; ++i) { \
-            s += a[i];                   \
-        }                                \
-        s;                               \
-    })
-
-// type generic array multiplication function
-#define PROD(a, n)                       \
-    ({                                   \
-        __typeof__(*a) p = 1;            \
-        for (size_t i = 0; i < n; ++i) { \
-            p *= a[i];                   \
-        }                                \
-        p;                               \
-    })
+// define simple summation function
+#define SUM(T)                         \
+    T sum_##T(const T *a, size_t n)    \
+    {                                  \
+        T s = 0;                       \
+        for (size_t i = 0; i < n; ++i) \
+            s += a[i];                 \
+        return s;                      \
+    }
 
 // define simple comparison function for ascending and descending order
 #define CMP(T)                                                                    \
