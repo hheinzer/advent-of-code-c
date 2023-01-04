@@ -12,7 +12,8 @@
  */
 #include "aoc.c"
 
-CMP(long);
+CMP(long)
+SUM(long)
 
 int main(void)
 {
@@ -41,7 +42,7 @@ int main(void)
     printf("%ld\n", cals[0]);
 
     // part 2
-    printf("%ld\n", SUM(cals, 3));
+    printf("%ld\n", sum_long(cals, 3));
 
     // cleanup
     lines_free(line, n_lines);

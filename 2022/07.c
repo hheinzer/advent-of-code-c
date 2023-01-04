@@ -17,7 +17,7 @@
  */
 #include "aoc.c"
 
-CMP(size_t);
+CMP(size_t)
 
 int main(void)
 {
