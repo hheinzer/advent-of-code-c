@@ -10,14 +10,8 @@
  */
 #include "aoc.c"
 
-#define CRATEMOVER 9001
-
-int main(void)
+void solve(char **line, size_t n_lines, size_t cratemover)
 {
-    // read input
-    char **line = 0;
-    const size_t n_lines = lines_read(&line, "05.txt");
-
     // find separator line
     const size_t i0 = line_index(line, n_lines, "");
 
@@ -49,18 +43,23 @@ int main(void)
     for (size_t iline = i0 + 1; iline < n_lines; ++iline) {
         size_t n = 0, f = 0, t = 0;
         sscanf(line[iline], "move %zu from %zu to %zu", &n, &f, &t);
-#if CRATEMOVER == 9000
-        for (size_t i = 0; i < n; ++i) {
-            list_push_back(&stack[t - 1], list_pop_back(&stack[f - 1]));
+        switch (cratemover) {
+        case 9000:
+            for (size_t i = 0; i < n; ++i) {
+                list_push_back(&stack[t - 1], list_pop_back(&stack[f - 1]));
+            }
+            break;
+        case 9001:
+            for (size_t i = 0; i < n; ++i) {
+                list_push_back(&tmp_stack, list_pop_back(&stack[f - 1]));
+            }
+            for (size_t i = 0; i < n; ++i) {
+                list_push_back(&stack[t - 1], list_pop_back(&tmp_stack));
+            }
+            break;
+        default:
+            assert(!"Illegal cratemover encountered.");
         }
-#elif CRATEMOVER == 9001
-        for (size_t i = 0; i < n; ++i) {
-            list_push_back(&tmp_stack, list_pop_back(&stack[f - 1]));
-        }
-        for (size_t i = 0; i < n; ++i) {
-            list_push_back(&stack[t - 1], list_pop_back(&tmp_stack));
-        }
-#endif
     }
     list_free(&tmp_stack);
 
@@ -71,9 +70,24 @@ int main(void)
     printf("\n");
 
     // cleanup
-    lines_free(line, n_lines);
     for (size_t i = 0; i < n_stacks; ++i) {
         list_free(&stack[i]);
     }
     free(stack);
+}
+
+int main(void)
+{
+    // read input
+    char **line = 0;
+    const size_t n_lines = lines_read(&line, "05.txt");
+
+    // part 1
+    solve(line, n_lines, 9000);
+
+    // part 2
+    solve(line, n_lines, 9001);
+
+    // cleanup
+    lines_free(line, n_lines);
 }
