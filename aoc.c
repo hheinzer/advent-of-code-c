@@ -17,7 +17,7 @@
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
 
-// swap two variables
+// simple swap macro
 #define SWAP(a, b)              \
     do {                        \
         __typeof__(a) swap = a; \
@@ -25,7 +25,7 @@
         b = swap;               \
     } while (0)
 
-// define simple comparison function for ascending and descending order
+// define simple comparison functions for ascending and descending order
 #define CMP(T)                                                                    \
     int cmp_##T##_asc(const void *a, const void *b) { return *(T *)a - *(T *)b; } \
     int cmp_##T##_dsc(const void *a, const void *b) { return *(T *)b - *(T *)a; }
