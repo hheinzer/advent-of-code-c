@@ -4,7 +4,17 @@ CFLAGS+=-Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
         -Wswitch-enum -Wpointer-arith -Wno-missing-braces -Wwrite-strings
 CFLAGS+=-fsanitize=undefined -fsanitize=address
 
-.PHONY: clean
+.PHONY: all clean
+
+all:
+	@for src in *c; do \
+		[ $$src = "aoc.c" ] || (\
+			prog=$$(basename $$src .c) && \
+			echo "--- $$prog ---" && \
+			make -s $$prog && \
+			./$$prog \
+		); \
+	done
 
 clean:
 	find . -maxdepth 2 -type f -perm -u+x -delete
