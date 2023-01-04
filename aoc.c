@@ -25,16 +25,6 @@
         b = swap;               \
     } while (0)
 
-// define simple summation function
-#define SUM(T)                         \
-    T sum_##T(const T *a, size_t n)    \
-    {                                  \
-        T s = 0;                       \
-        for (size_t i = 0; i < n; ++i) \
-            s += a[i];                 \
-        return s;                      \
-    }
-
 // define simple comparison function for ascending and descending order
 #define CMP(T)                                                                    \
     int cmp_##T##_asc(const void *a, const void *b) { return *(T *)a - *(T *)b; } \
@@ -132,7 +122,7 @@ void list_free(List *list)
     }
 }
 
-// insert element onto list at position ielem
+// insert element into list at position ielem, no copying of data
 void list_insert(List *list, size_t ielem, void *data)
 {
     assert(ielem <= list->nelem && "Illegal index encountered.");
@@ -189,6 +179,14 @@ void list_push_front(List *list, void *data)
 void list_push_back(List *list, void *data)
 {
     list_insert(list, list->nelem, data);
+}
+
+// insert element into list at position ielem, copy data
+void list_insert_copy(List *list, size_t ielem, void *data)
+{
+    void *copy = malloc(list->data_size);
+    memcpy(copy, data, list->data_size);
+    list_insert(list, ielem, copy);
 }
 void list_push_front_copy(List *list, void *data)
 {
