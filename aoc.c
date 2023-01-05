@@ -14,6 +14,12 @@
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+// sign of an integer
+#define SIGN(a) (((a) > 0) - ((a) < 0))
+
+// integer ceil division, positive integers only
+#define CEIL(a, b) (1 + (((a)-1) / (b)))
+
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
 
@@ -93,7 +99,7 @@ size_t line_index(char **line, size_t n_lines, const char *find)
 typedef struct List List;
 typedef struct ListElement ListElement;
 struct List {
-    size_t data_size;
+    const size_t data_size;
     size_t nelem;
     ListElement *head;
     ListElement *tail;
@@ -105,9 +111,11 @@ struct ListElement {
 };
 
 // create list
-List list_create(size_t data_size)
+List *list_create(size_t data_size)
 {
-    return (List) { .data_size = data_size };
+    List *list = malloc(sizeof(*list));
+    memcpy(list, &(List) { .data_size = data_size }, sizeof(*list));
+    return list;
 }
 
 // free list
@@ -120,6 +128,7 @@ void list_free(List *list)
         free(elem);
         elem = next;
     }
+    free(list);
 }
 
 // insert element into list at position ielem, no copying of data
@@ -264,12 +273,155 @@ void *list_pop_back(List *list)
     return list_remove(list, list->nelem - 1);
 }
 
-// copy list
-List list_copy(List *list)
+// general purpose hash table
+typedef struct Htable Htable;
+typedef struct HtableElement HtableElement;
+struct Htable {
+    const size_t data_size;
+    size_t table_size;
+    size_t nelem;
+    HtableElement *elem;
+};
+struct HtableElement {
+    char *key;
+    void *data;
+    HtableElement *next;
+};
+
+// create hash table
+Htable *htable_create(size_t data_size, size_t table_size)
 {
-    List copy = list_create(list->data_size);
-    for (ListElement *elem = list->head; elem; elem = elem->next) {
-        list_push_back_copy(&copy, elem->data);
+    Htable *htable = malloc(sizeof(*htable));
+    memcpy(htable, &(Htable) { .data_size = data_size }, sizeof(*htable));
+    htable->table_size = table_size;
+    htable->elem = calloc(table_size, sizeof(*htable->elem));
+    return htable;
+}
+
+// free hash table
+void htable_free(Htable *htable)
+{
+    for (size_t i = 0; i < htable->table_size; ++i) {
+        HtableElement *elem = &htable->elem[i];
+        while (elem) {
+            HtableElement *next = elem->next;
+            free(elem->key);
+            elem->key = 0;
+            free(elem->data);
+            if (elem != &htable->elem[i]) {
+                free(elem);
+            }
+            elem = next;
+        }
     }
-    return copy;
+    free(htable->elem);
+    free(htable);
+}
+
+// djb2 hash function (http://www.cse.yorku.ca/~oz/hash.html)
+size_t htable_hash(const char *key)
+{
+    size_t hash = 5381;
+    int c;
+    while ((c = *(key++))) {
+        hash = ((hash << 5) + hash) + c; // hash * 33 + c
+    }
+    return hash;
+}
+
+// insert element into hash table, no copying of data
+void htable_insert(Htable *htable, const char *key, void *data)
+{
+    // get insertion element
+    const size_t ielem = htable_hash(key) % htable->table_size;
+    HtableElement *elem = &htable->elem[ielem];
+
+    HtableElement *prev = 0;
+    while (elem && elem->key && strcmp(elem->key, key)) {
+        prev = elem;
+        elem = elem->next;
+    }
+
+    if (!elem) {
+        // new element at end of chain
+        elem = calloc(1, sizeof(*elem));
+        prev->next = elem;
+        elem->key = malloc(strlen(key) + 1);
+        strcpy(elem->key, key);
+        elem->data = data;
+        ++htable->nelem;
+
+    } else if (!elem->key) {
+        // empty spot in htable: insert new element
+        elem->key = malloc(strlen(key) + 1);
+        strcpy(elem->key, key);
+        elem->data = data;
+        ++htable->nelem;
+
+    } else {
+        // same key: exchange data
+        free(elem->data);
+        elem->data = data;
+    }
+}
+
+// insert element into hash table, copy data
+void htable_insert_copy(Htable *htable, const char *key, void *data)
+{
+    void *copy = malloc(htable->data_size);
+    memcpy(copy, data, htable->data_size);
+    htable_insert(htable, key, copy);
+}
+
+// search element in hash table
+HtableElement *htable_search(const Htable *htable, const char *key)
+{
+    const size_t ielem = htable_hash(key) % htable->table_size;
+    HtableElement *elem = &htable->elem[ielem];
+
+    while (elem && elem->key && strcmp(elem->key, key)) {
+        elem = elem->next;
+    }
+
+    return elem;
+}
+
+// remove element from hash table, return its data pointer
+void *htable_remove(Htable *htable, const char *key)
+{
+    const size_t ielem = htable_hash(key) % htable->table_size;
+    HtableElement *elem = &htable->elem[ielem];
+
+    HtableElement *prev = 0;
+    while (elem && elem->key && strcmp(elem->key, key)) {
+        prev = elem;
+        elem = elem->next;
+    }
+
+    if (!elem || !elem->key) {
+        // element is not in hash table
+        return 0;
+
+    } else if (prev) {
+        // element is chained
+        void *data = elem->data;
+        free(elem->key);
+        HtableElement *next = elem->next;
+        free(elem);
+        prev->next = next;
+        return data;
+
+    } else {
+        // element is at begin of chain
+        void *data = elem->data;
+        free(elem->key);
+        elem->key = 0;
+        elem->data = 0;
+        HtableElement *next = elem->next;
+        if (next) {
+            memcpy(elem, next, sizeof(*elem));
+            free(next);
+        }
+        return data;
+    }
 }
