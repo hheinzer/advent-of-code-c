@@ -28,15 +28,15 @@ int main(void)
     // find all directory sizes
     size_t *size_dir = 0;
     size_t n_dirs = 0;
-    List path = list_create(sizeof(size_t));
+    List *path = list_create(sizeof(size_t));
     for (size_t i = 0; i < n_lines; ++i) {
         if (!strcmp(line[i], "$ cd ..")) {
             // go up a directory, pop top directory from path
-            free(list_pop_back(&path));
+            free(list_pop_back(path));
 
         } else if (!strncmp(line[i], "$ cd", 4)) {
             // go down a directory, add directory to path
-            list_push_back_copy(&path, &n_dirs);
+            list_push_back_copy(path, &n_dirs);
             size_dir = realloc(size_dir, ++n_dirs * sizeof(*size_dir));
             size_dir[n_dirs - 1] = 0;
 
@@ -48,7 +48,7 @@ int main(void)
             if (strncmp(line[i], "dir", 3)) {
                 size_t size = 0;
                 sscanf(line[i], "%zu %*s", &size);
-                for (const ListElement *elem = path.head; elem; elem = elem->next) {
+                for (const ListElement *elem = path->head; elem; elem = elem->next) {
                     size_dir[*(size_t *)elem->data] += size;
                 }
             }
@@ -85,5 +85,5 @@ int main(void)
     // cleanup
     lines_free(line, n_lines);
     free(size_dir);
-    list_free(&path);
+    list_free(path);
 }
