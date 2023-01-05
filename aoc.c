@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // size of a static array
 #define LEN(a) (sizeof(a) / sizeof(*a))
@@ -35,6 +36,17 @@
 #define CMP(T)                                                                    \
     int cmp_##T##_asc(const void *a, const void *b) { return *(T *)a - *(T *)b; } \
     int cmp_##T##_dsc(const void *a, const void *b) { return *(T *)b - *(T *)a; }
+
+// functions that before and after main, used for timing
+static double _timer_start = 0;
+__attribute__((constructor)) void run_before_main()
+{
+    _timer_start = clock();
+}
+__attribute__((destructor)) void run_after_main()
+{
+    printf("wtime = %g s\n", (clock() - _timer_start) / CLOCKS_PER_SEC);
+}
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
 size_t lines_read(char ***line, const char *fname)
@@ -409,6 +421,7 @@ void *htable_remove(Htable *htable, const char *key)
         HtableElement *next = elem->next;
         free(elem);
         prev->next = next;
+        --htable->nelem;
         return data;
 
     } else {
@@ -422,6 +435,7 @@ void *htable_remove(Htable *htable, const char *key)
             memcpy(elem, next, sizeof(*elem));
             free(next);
         }
+        --htable->nelem;
         return data;
     }
 }
