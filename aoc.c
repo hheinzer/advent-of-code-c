@@ -285,10 +285,12 @@ void *list_pop_back(List *list)
     return list_remove(list, list->nelem - 1);
 }
 
-// get data pointer of element at ielem
+// get data pointer of element at ielem, return 0 it doesn't exist
 void *list_get(List *list, size_t ielem)
 {
-    assert(ielem < list->nelem && "Illegal index encountered.");
+    if (ielem >= list->nelem) {
+        return 0;
+    }
 
     // find element in list, take shortest path
     ListElement *elem = 0;
@@ -450,8 +452,8 @@ void *htable_remove(Htable *htable, const char *key)
     }
 }
 
-// search element in hash table, return its data pointer
-void *htable_search(const Htable *htable, const char *key)
+// search element in hash table, return its data pointer, return 0 if it doesn't exist
+HtableElement *htable_search(const Htable *htable, const char *key)
 {
     const size_t ielem = htable_hash(key) % htable->table_size;
     HtableElement *elem = &htable->elem[ielem];
@@ -460,5 +462,5 @@ void *htable_search(const Htable *htable, const char *key)
         elem = elem->next;
     }
 
-    return (elem ? elem->data : 0);
+    return elem;
 }
