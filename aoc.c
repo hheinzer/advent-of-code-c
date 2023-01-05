@@ -285,6 +285,29 @@ void *list_pop_back(List *list)
     return list_remove(list, list->nelem - 1);
 }
 
+// get data pointer of element at ielem
+void *list_get(List *list, size_t ielem)
+{
+    assert(ielem < list->nelem && "Illegal index encountered.");
+
+    // find element in list, take shortest path
+    ListElement *elem = 0;
+    if (ielem <= list->nelem - 1 - ielem) {
+        elem = list->head;
+        for (size_t i = 0; i < ielem; ++i) {
+            elem = elem->next;
+        }
+
+    } else {
+        elem = list->tail;
+        for (size_t i = 0; i < list->nelem - 1 - ielem; ++i) {
+            elem = elem->prev;
+        }
+    }
+
+    return elem->data;
+}
+
 // general purpose hash table
 typedef struct Htable Htable;
 typedef struct HtableElement HtableElement;
@@ -385,19 +408,6 @@ void htable_insert_copy(Htable *htable, const char *key, void *data)
     htable_insert(htable, key, copy);
 }
 
-// search element in hash table
-HtableElement *htable_search(const Htable *htable, const char *key)
-{
-    const size_t ielem = htable_hash(key) % htable->table_size;
-    HtableElement *elem = &htable->elem[ielem];
-
-    while (elem && elem->key && strcmp(elem->key, key)) {
-        elem = elem->next;
-    }
-
-    return elem;
-}
-
 // remove element from hash table, return its data pointer
 void *htable_remove(Htable *htable, const char *key)
 {
@@ -438,4 +448,17 @@ void *htable_remove(Htable *htable, const char *key)
         --htable->nelem;
         return data;
     }
+}
+
+// search element in hash table, return its data pointer
+void *htable_search(const Htable *htable, const char *key)
+{
+    const size_t ielem = htable_hash(key) % htable->table_size;
+    HtableElement *elem = &htable->elem[ielem];
+
+    while (elem && elem->key && strcmp(elem->key, key)) {
+        elem = elem->next;
+    }
+
+    return (elem ? elem->data : 0);
 }
