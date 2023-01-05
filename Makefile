@@ -4,7 +4,7 @@ CFLAGS+=-Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
         -Wswitch-enum -Wpointer-arith -Wno-missing-braces -Wwrite-strings
 CFLAGS+=-fsanitize=undefined -fsanitize=address
 
-.PHONY: all clean
+.PHONY: all clean format
 
 all:
 	@for src in *c; do \
@@ -18,3 +18,6 @@ all:
 
 clean:
 	find . -maxdepth 2 -type f -perm -u+x -delete
+
+format:
+	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
