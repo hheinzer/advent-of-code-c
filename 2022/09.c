@@ -3,8 +3,15 @@
  * (https://adventofcode.com/2022/day/9)
  *
  * Part 1:
+ * - moving the head is straight forward
+ * - following can be implemented with sign, ceil, and abs for integers
+ * - determining where the tail has been is done with a hash table
+ *   - every position is converted to a string that is used as the key
+ *   - we don't need to add any data, so this is effectively a set
+ *   - at the end, count how many elements are in the hash table
  *
  * Part 2:
+ * - the implementation is generalized, so we can rerun it with 10 knots
  */
 #include "aoc.c"
 
