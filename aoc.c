@@ -352,9 +352,10 @@ void htable_free(Htable *htable)
     free(htable);
 }
 
-// djb2 hash function (http://www.cse.yorku.ca/~oz/hash.html)
+// hash function
 size_t htable_hash(const char *key)
 {
+    // djb2 (http://www.cse.yorku.ca/~oz/hash.html)
     size_t hash = 5381;
     int c;
     while ((c = *(key++))) {
