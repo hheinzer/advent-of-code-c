@@ -13,7 +13,7 @@
  */
 #include "aoc.c"
 
-int is_visible(char **line, size_t ni, size_t nj, size_t i0, size_t j0)
+int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
 {
     // look left
     char max_height = line[i0][0];
@@ -54,7 +54,7 @@ int is_visible(char **line, size_t ni, size_t nj, size_t i0, size_t j0)
     return 0;
 }
 
-size_t scenic_score(char **line, size_t ni, size_t nj, size_t i0, size_t j0)
+size_t scenic_score(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
 {
     // look left
     size_t score = 1;
@@ -101,7 +101,7 @@ size_t scenic_score(char **line, size_t ni, size_t nj, size_t i0, size_t j0)
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "08.txt");
 
     // find visible trees

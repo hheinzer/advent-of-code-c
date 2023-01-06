@@ -17,7 +17,7 @@ CMP(long)
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "01.txt");
 
     // add up calories of every elf, append to cals

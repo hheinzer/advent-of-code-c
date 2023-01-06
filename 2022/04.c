@@ -14,7 +14,7 @@
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "04.txt");
 
     // count how often one range is fully contained in the other

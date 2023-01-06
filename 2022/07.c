@@ -22,7 +22,7 @@ CMP(size_t)
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "07.txt");
 
     // find all directory sizes

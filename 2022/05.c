@@ -10,7 +10,7 @@
  */
 #include "aoc.c"
 
-void solve(char **line, size_t n_lines, size_t cratemover)
+void solve(const char **line, size_t n_lines, size_t cratemover)
 {
     // find separator line
     const size_t i0 = line_index(line, n_lines, "");
@@ -77,7 +77,7 @@ void solve(char **line, size_t n_lines, size_t cratemover)
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "05.txt");
 
     // part 1

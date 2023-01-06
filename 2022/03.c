@@ -56,7 +56,7 @@ char find_common_char_3(const char *str1, const char *str2, const char *str3)
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "03.txt");
 
     // find common char between first and second half of every line and add up priorities

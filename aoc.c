@@ -49,7 +49,7 @@ __attribute__((destructor)) void run_after_main()
 }
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
-size_t lines_read(char ***line, const char *fname)
+size_t lines_read(const char ***line, const char *fname)
 {
     // open file
     FILE *file = fopen(fname, "r");
@@ -88,16 +88,16 @@ size_t lines_read(char ***line, const char *fname)
 }
 
 // free all lines
-void lines_free(char **line, size_t n_lines)
+void lines_free(const char **line, size_t n_lines)
 {
     for (size_t i = 0; i < n_lines; ++i) {
-        free(line[i]);
+        free((void *)line[i]);
     }
     free(line);
 }
 
 // find index of first line that matches
-size_t line_index(char **line, size_t n_lines, const char *find)
+size_t line_index(const char **line, size_t n_lines, const char *find)
 {
     for (size_t i = 0; i < n_lines; ++i) {
         if (!strcmp(line[i], find)) {

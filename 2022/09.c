@@ -53,7 +53,7 @@ void position_follow(Position *tail, const Position *head)
 int main(void)
 {
     // read input
-    char **line = 0;
+    const char **line = 0;
     const size_t n_lines = lines_read(&line, "09.txt");
 
     // simulate rope with 2 and 10 knots
