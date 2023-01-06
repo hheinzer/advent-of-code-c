@@ -317,7 +317,7 @@ struct Htable {
     const size_t data_size;
     size_t table_size;
     size_t nelem;
-    HtableElement *elem;
+    HtableElement **elem;
 };
 struct HtableElement {
     char *key;
@@ -339,15 +339,12 @@ Htable *htable_create(size_t data_size, size_t table_size)
 void htable_free(Htable *htable)
 {
     for (size_t i = 0; i < htable->table_size; ++i) {
-        HtableElement *elem = &htable->elem[i];
+        HtableElement *elem = htable->elem[i];
         while (elem) {
             HtableElement *next = elem->next;
             free(elem->key);
-            elem->key = 0;
             free(elem->data);
-            if (elem != &htable->elem[i]) {
-                free(elem);
-            }
+            free(elem);
             elem = next;
         }
     }
@@ -371,29 +368,28 @@ void htable_insert(Htable *htable, const char *key, void *data)
 {
     // get insertion element
     const size_t ielem = htable_hash(key) % htable->table_size;
-    HtableElement *elem = &htable->elem[ielem];
+    HtableElement *elem = htable->elem[ielem];
 
     HtableElement *prev = 0;
-    while (elem && elem->key && strcmp(elem->key, key)) {
+    while (elem && strcmp(elem->key, key)) {
         prev = elem;
         elem = elem->next;
     }
 
     if (!elem) {
-        // new element at end of chain
+        // create new element
         elem = calloc(1, sizeof(*elem));
-        prev->next = elem;
         elem->key = malloc(strlen(key) + 1);
         strcpy(elem->key, key);
         elem->data = data;
         ++htable->nelem;
 
-    } else if (!elem->key) {
-        // empty spot in htable: insert new element
-        elem->key = malloc(strlen(key) + 1);
-        strcpy(elem->key, key);
-        elem->data = data;
-        ++htable->nelem;
+        // update chain
+        if (prev) {
+            prev->next = elem;
+        } else {
+            htable->elem[ielem] = elem;
+        }
 
     } else {
         // same key: exchange data
@@ -414,40 +410,33 @@ void htable_insert_copy(Htable *htable, const char *key, void *data)
 void *htable_remove(Htable *htable, const char *key)
 {
     const size_t ielem = htable_hash(key) % htable->table_size;
-    HtableElement *elem = &htable->elem[ielem];
+    HtableElement *elem = htable->elem[ielem];
 
     HtableElement *prev = 0;
-    while (elem && elem->key && strcmp(elem->key, key)) {
+    while (elem && strcmp(elem->key, key)) {
         prev = elem;
         elem = elem->next;
     }
 
-    if (!elem || !elem->key) {
+    if (!elem) {
         // element is not in hash table
         return 0;
 
-    } else if (prev) {
-        // element is chained
-        void *data = elem->data;
-        free(elem->key);
-        HtableElement *next = elem->next;
-        free(elem);
-        prev->next = next;
-        --htable->nelem;
-        return data;
-
     } else {
-        // element is at begin of chain
+        // get data pointer and delete element
         void *data = elem->data;
-        free(elem->key);
-        elem->key = 0;
-        elem->data = 0;
         HtableElement *next = elem->next;
-        if (next) {
-            memcpy(elem, next, sizeof(*elem));
-            free(next);
-        }
+        free(elem->key);
+        free(elem);
         --htable->nelem;
+
+        // update chain
+        if (prev) {
+            prev->next = next;
+        } else {
+            htable->elem[ielem] = 0;
+        }
+
         return data;
     }
 }
@@ -456,7 +445,7 @@ void *htable_remove(Htable *htable, const char *key)
 HtableElement *htable_search(const Htable *htable, const char *key)
 {
     const size_t ielem = htable_hash(key) % htable->table_size;
-    HtableElement *elem = &htable->elem[ielem];
+    HtableElement *elem = htable->elem[ielem];
 
     while (elem && elem->key && strcmp(elem->key, key)) {
         elem = elem->next;
