@@ -64,7 +64,7 @@ int main(void)
         memset(rope, 0, sizeof(rope));
 
         // create hash table for tail positions (used as set: data=0)
-        Htable *tail_pos = htable_create(0, 10000);
+        Htable *tail_pos = htable_create(0, 7500);
 
         // run simulation
         for (size_t i = 0; i < n_lines; ++i) {
