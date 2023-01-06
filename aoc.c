@@ -203,19 +203,19 @@ void list_push_back(List *list, void *data)
 }
 
 // insert element into list at position ielem, copy data
-void list_insert_copy(List *list, size_t ielem, void *data)
+void list_insert_copy(List *list, size_t ielem, const void *data)
 {
     void *copy = malloc(list->data_size);
     memcpy(copy, data, list->data_size);
     list_insert(list, ielem, copy);
 }
-void list_push_front_copy(List *list, void *data)
+void list_push_front_copy(List *list, const void *data)
 {
     void *copy = malloc(list->data_size);
     memcpy(copy, data, list->data_size);
     list_push_front(list, copy);
 }
-void list_push_back_copy(List *list, void *data)
+void list_push_back_copy(List *list, const void *data)
 {
     void *copy = malloc(list->data_size);
     memcpy(copy, data, list->data_size);
@@ -400,7 +400,7 @@ void htable_insert(Htable *htable, const char *key, void *data)
 }
 
 // insert element into hash table, copy data
-void htable_insert_copy(Htable *htable, const char *key, void *data)
+void htable_insert_copy(Htable *htable, const char *key, const void *data)
 {
     void *copy = malloc(htable->data_size);
     memcpy(copy, data, htable->data_size);
