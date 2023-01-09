@@ -2,6 +2,7 @@
  * helper functions for advent of code puzzles
  */
 #include <assert.h>
+#include <ctype.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -203,22 +204,22 @@ void list_push_back(List *list, void *data)
 }
 
 // insert element into list at position ielem, copy data
-void list_insert_copy(List *list, size_t ielem, const void *data)
+void list_insert_copy(List *list, size_t ielem, const void *data, void *(*data_copy)(void *, const void *, size_t))
 {
     void *copy = malloc(list->data_size);
-    memcpy(copy, data, list->data_size);
+    data_copy(copy, data, list->data_size);
     list_insert(list, ielem, copy);
 }
-void list_push_front_copy(List *list, const void *data)
+void list_push_front_copy(List *list, const void *data, void *(*data_copy)(void *, const void *, size_t))
 {
     void *copy = malloc(list->data_size);
-    memcpy(copy, data, list->data_size);
+    data_copy(copy, data, list->data_size);
     list_push_front(list, copy);
 }
-void list_push_back_copy(List *list, const void *data)
+void list_push_back_copy(List *list, const void *data, void *(*data_copy)(void *, const void *, size_t))
 {
     void *copy = malloc(list->data_size);
-    memcpy(copy, data, list->data_size);
+    data_copy(copy, data, list->data_size);
     list_push_back(list, copy);
 }
 
@@ -308,6 +309,42 @@ void *list_get(List *list, size_t ielem)
     }
 
     return elem->data;
+}
+
+// sort list elements
+void list_sort(List *list, int (*compar)(const void *, const void *))
+{
+    // create data array
+    char *data = malloc(list->nelem * list->data_size);
+    ListElement *elem = list->head;
+    for (size_t i = 0; i < list->nelem; ++i, elem = elem->next) {
+        memcpy(data + i * list->data_size, elem->data, list->data_size);
+    }
+
+    // sort array
+    qsort(data, list->nelem, list->data_size, compar);
+
+    // write back data array
+    elem = list->head;
+    for (size_t i = 0; i < list->nelem; ++i, elem = elem->next) {
+        memcpy(elem->data, data + i * list->data_size, list->data_size);
+    }
+
+    // cleanup
+    free(data);
+}
+
+// search for an element in the list, return index of first match
+size_t list_search(List *list, const void *data, int (*compar)(const void *, const void *))
+{
+    ListElement *elem = list->head;
+    for (size_t i = 0; i < list->nelem; ++i) {
+        if (!compar(elem->data, data)) {
+            return i;
+        }
+        elem = elem->next;
+    }
+    assert(!"Element not in list.");
 }
 
 // general purpose hash table
@@ -400,10 +437,10 @@ void htable_insert(Htable *htable, const char *key, void *data)
 }
 
 // insert element into hash table, copy data
-void htable_insert_copy(Htable *htable, const char *key, const void *data)
+void htable_insert_copy(Htable *htable, const char *key, const void *data, void *(*data_copy)(void *, const void *, size_t))
 {
     void *copy = malloc(htable->data_size);
-    memcpy(copy, data, htable->data_size);
+    data_copy(copy, data, htable->data_size);
     htable_insert(htable, key, copy);
 }
 
