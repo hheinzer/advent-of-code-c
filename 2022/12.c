@@ -25,7 +25,7 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
     // initialize BFS
     visited[S] = 1;
     dist[S] = 0;
-    list_push_back_copy(queue, &S);
+    list_push_back_copy(queue, &S, memcpy);
 
     // start BFS
     size_t length = 0;
@@ -50,7 +50,7 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
                     }
                     visited[n] = 1;
                     dist[n] = dist[f] + 1;
-                    list_push_back_copy(queue, &n);
+                    list_push_back_copy(queue, &n, memcpy);
                 }
             }
         }

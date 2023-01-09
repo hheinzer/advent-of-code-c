@@ -32,7 +32,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
                 }
 
                 // add crate
-                list_push_front_copy(stack[istack], &crate);
+                list_push_front_copy(stack[istack], &crate, memcpy);
             }
         }
     }

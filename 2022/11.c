@@ -42,7 +42,7 @@ void solve(const char **line, size_t n_lines, size_t part)
         char *c = strchr(line[i + 1], ':');
         long item = 0;
         while (c && sscanf(c + 1, " %ld", &item)) {
-            list_push_back_copy(monkey[imonkey].item, &item);
+            list_push_back_copy(monkey[imonkey].item, &item, memcpy);
             c = strchr(c + 1, ',');
         }
 
