@@ -316,6 +316,7 @@ void list_sort(List *list, int (*compar)(const void *, const void *))
     char *data = malloc(list->nelem * list->data_size);
     ListElement *elem = list->head;
     for (size_t i = 0; i < list->nelem; ++i, elem = elem->next) {
+        // shallow copy
         memcpy(data + i * list->data_size, elem->data, list->data_size);
     }
 
@@ -325,6 +326,7 @@ void list_sort(List *list, int (*compar)(const void *, const void *))
     // write back data array
     elem = list->head;
     for (size_t i = 0; i < list->nelem; ++i, elem = elem->next) {
+        // shallow copy
         memcpy(elem->data, data + i * list->data_size, list->data_size);
     }
 
