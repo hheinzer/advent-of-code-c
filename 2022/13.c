@@ -3,8 +3,15 @@
  * (https://adventofcode.com/2022/day/13)
  *
  * Part 1:
+ * - create a new data type that can either be a list or an integer
+ * - create all the packets with this data type
+ * - create a comparison function for this data data type and check if the packets are in
+ *   order
  *
  * Part 2:
+ * - add divider packets
+ * - use comparison function to sort list
+ * - search for dividers in sorted list
  */
 #include "aoc.c"
 

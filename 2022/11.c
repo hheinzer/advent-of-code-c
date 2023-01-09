@@ -7,9 +7,8 @@
  *   - us pop_front and push_back to get and throw items
  *
  * Part 2:
- * - the trick to keep the worry levels from overflowing is to
- *   compute a combined modulo and use it to decrease to worry levels
- *   of every item
+ * - the trick to keep the worry levels from overflowing is to compute a combined modulo
+ *   and use it to decrease to worry levels of every item
  *   - the combined modulo is computed by multiplying all test values
  *   - this will not change whether or not an item is divisible by the
  *     test value, keeping the test logic intact

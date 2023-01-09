@@ -6,7 +6,8 @@
  * - use a stack to keep track of where we are in the file system
  *   - for every "$ cd <somewhere>" we add a new directory
  *   - for every "$ cd .." we remove to top directory
- * - every file that we encounter is (directly or indirectly) part of all the folders in the path
+ * - every file that we encounter is (directly or indirectly) part of all the folders in
+ *   the path
  *   - add its size to all directories in path
  * - sort final directory size array in ascending order
  * - add up all sizes until a size is larger than 100000

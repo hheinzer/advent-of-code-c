@@ -4,12 +4,12 @@
  *
  * Part 1:
  * - scan all for directions for the highest tree
- * - if for any direction the highest tree is smaller than the tree in question,
- *   it is visible
+ * - if for any direction the highest tree is smaller than the tree in question, it is
+ *   visible
  *
  * Part 2:
- * - count the number of trees in every direction until there is on that has the
- *   same size or is larger
+ * - count the number of trees in every direction until there is on that has the same
+ *   size or is larger
  */
 #include "aoc.c"
 

@@ -6,10 +6,9 @@
  * - use breadth first search to find shortest path
  *
  * Part 2:
- * - instead of searching for all 'a' and search from these,
- *   we start from all 'b'
- *   - there are a lot of disconnected 'a' and only a line of 'b'
- *     at the left side of the map, which are all connected to an 'a'
+ * - instead of searching for all 'a' and search from these, we start from all 'b'
+ *   - there are a lot of disconnected 'a' and only a line of 'b' at the left side of the
+ *   map, which are all connected to an 'a'
  *   - to get the distance from an 'a' we just add 1
  */
 #include "aoc.c"
