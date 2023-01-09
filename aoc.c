@@ -134,12 +134,10 @@ List *list_create(size_t data_size)
 // free list
 void list_free(List *list)
 {
-    ListElement *elem = list->head;
-    for (size_t i = 0; i < list->nelem; ++i) {
-        ListElement *next = elem->next;
+    for (ListElement *elem = list->head, *next; elem; elem = next) {
+        next = elem->next;
         free(elem->data);
         free(elem);
-        elem = next;
     }
     free(list);
 }

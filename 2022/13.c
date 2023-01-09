@@ -72,9 +72,11 @@ void pd_free(PacketData *pd)
     if (pd->type == PDT_LIST) {
         for (ListElement *elem = pd->pd_list->head; elem; elem = elem->next) {
             pd_free(elem->data);
+            elem->data = 0;
         }
         list_free(pd->pd_list);
     }
+    free(pd);
 }
 
 void pd_print(const PacketData *pd)
@@ -212,10 +214,9 @@ int main(void)
     lines_free(line, n_lines);
     for (ListElement *elem = packet->head; elem; elem = elem->next) {
         pd_free(elem->data);
+        elem->data = 0;
     }
     list_free(packet);
     pd_free(div1);
     pd_free(div2);
-    free(div1);
-    free(div2);
 }
