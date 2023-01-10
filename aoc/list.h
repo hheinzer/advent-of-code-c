@@ -1,3 +1,6 @@
+/*
+ * general purpose doubly linked list
+ */
 #ifndef LIST_H
 #define LIST_H
 
