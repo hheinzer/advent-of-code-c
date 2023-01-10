@@ -151,7 +151,7 @@ int cmp_packet_asc(const void *_a, const void *_b)
         return cmp;
 
     } else {
-        // both are lists: compare elements
+        // both are lists: compare packets
         const Node *node_a = a->pd_list->head;
         const Node *node_b = b->pd_list->head;
         int cmp = 0;
