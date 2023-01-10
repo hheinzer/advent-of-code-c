@@ -17,21 +17,21 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
     size_t S, size_t E)
 {
     // prepare breadth first search (BFS)
-    List *queue = list_alloc(sizeof(size_t));
+    Queue *queue = queue_alloc(sizeof(size_t));
     int *visited = calloc(ni * nj, sizeof(*visited));
     size_t *dist = calloc(ni * nj, sizeof(*dist));
 
     // initialize BFS
     visited[S] = 1;
     dist[S] = 0;
-    list_insert_last(queue, COPY(S));
+    queue_push(queue, COPY(S));
 
     // start BFS
     size_t length = 0;
     const size_t offset[] = { -1, +1, -nj, +nj }; // left, right, up, down
     while (queue->len) {
         // pop front
-        size_t *first = list_remove_first(queue);
+        size_t *first = queue_pop(queue);
         const size_t f = *first;
         const size_t fi = f / nj;
         const size_t fj = f % nj;
@@ -49,14 +49,14 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
                     }
                     visited[n] = 1;
                     dist[n] = dist[f] + 1;
-                    list_insert_last(queue, COPY(n));
+                    queue_push(queue, COPY(n));
                 }
             }
         }
     }
 
 cleanup:
-    list_free(&queue, free);
+    queue_free(&queue, free);
     free(visited);
     free(dist);
 

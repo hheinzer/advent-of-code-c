@@ -12,8 +12,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "htable.h"
 #include "list.h"
+#include "stack.h"
+#include "queue.h"
+#include "htable.h"
 
 // size of a static array
 #define LEN(a) (sizeof(a) / sizeof(*a))

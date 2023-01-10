@@ -3,7 +3,7 @@
  * (https://adventofcode.com/2022/day/11)
  *
  * Part 1:
- * - create the monkeys using a list for the held items
+ * - create the monkeys using a queue for the held items
  *   - us pop_front and push_back to get and throw items
  *
  * Part 2:
@@ -18,7 +18,7 @@
 CMP(size_t)
 
 typedef struct Monkey {
-    List *item;
+    Queue *item;
     char op_type;
     long op_value;
     long test_value;
@@ -37,11 +37,11 @@ void solve(const char **line, size_t n_lines, size_t part)
         sscanf(line[i + 0], " Monkey %zu:", &imonkey);
 
         // read items
-        monkey[imonkey].item = list_alloc(sizeof(long));
+        monkey[imonkey].item = queue_alloc(sizeof(long));
         char *c = strchr(line[i + 1], ':');
         long item = 0;
         while (c && sscanf(c + 1, " %ld", &item)) {
-            list_insert_last(monkey[imonkey].item, COPY(item));
+            queue_push(monkey[imonkey].item, COPY(item));
             c = strchr(c + 1, ',');
         }
 
@@ -84,7 +84,7 @@ void solve(const char **line, size_t n_lines, size_t part)
         for (size_t i = 0; i < LEN(monkey); ++i) {
             while (monkey[i].item->len) {
                 // inspect item
-                long *item = list_remove_first(monkey[i].item);
+                long *item = queue_pop(monkey[i].item);
                 switch (monkey[i].op_type) {
                 case '+':
                     *item += monkey[i].op_value;
@@ -120,9 +120,9 @@ void solve(const char **line, size_t n_lines, size_t part)
 
                 // test and throw item
                 if (*item % monkey[i].test_value == 0) {
-                    list_insert_last(monkey[monkey[i].if_true].item, item);
+                    queue_push(monkey[monkey[i].if_true].item, item);
                 } else {
-                    list_insert_last(monkey[monkey[i].if_false].item, item);
+                    queue_push(monkey[monkey[i].if_false].item, item);
                 }
             }
         }
@@ -140,7 +140,7 @@ void solve(const char **line, size_t n_lines, size_t part)
 
     // cleanup
     for (size_t i = 0; i < LEN(monkey); ++i) {
-        list_free(&monkey[i].item, free);
+        queue_free(&monkey[i].item, free);
     }
 }
 

@@ -29,15 +29,15 @@ int main(void)
     // find all directory sizes
     size_t *size_dir = 0;
     size_t n_dirs = 0;
-    List *path = list_alloc(sizeof(size_t));
+    Stack *path = stack_alloc(sizeof(size_t));
     for (size_t i = 0; i < n_lines; ++i) {
         if (!strcmp(line[i], "$ cd ..")) {
             // go up a directory, pop top directory from path
-            free(list_remove_last(path));
+            free(stack_pop(path));
 
         } else if (!strncmp(line[i], "$ cd", 4)) {
             // go down a directory, add directory to path
-            list_insert_last(path, COPY(n_dirs));
+            stack_push(path, COPY(n_dirs));
             size_dir = realloc(size_dir, ++n_dirs * sizeof(*size_dir));
             size_dir[n_dirs - 1] = 0;
 
@@ -88,5 +88,5 @@ int main(void)
     // cleanup
     lines_free(line, n_lines);
     free(size_dir);
-    list_free(&path, free);
+    stack_free(&path, free);
 }

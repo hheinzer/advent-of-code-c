@@ -8,7 +8,7 @@
  * - the elf that carries the most calories is the first one
  *
  * Part 2:
- * - the 3 elves with the most calories are the first 3 in the sorted list
+ * - the 3 elves with the most calories are the first 3 in the sorted array
  */
 #include "../aoc/aoc.h"
 
