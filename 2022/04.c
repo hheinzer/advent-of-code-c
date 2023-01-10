@@ -9,7 +9,7 @@
  * - check if there is any overlap between the ranges
  * - notice that it is easier to check for the opposite
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 int main(void)
 {

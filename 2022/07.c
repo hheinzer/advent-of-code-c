@@ -16,7 +16,7 @@
  * - compute the minimum space that we need to free
  * - find the smallest folder that is at least as big
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 CMP(size_t)
 

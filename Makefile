@@ -18,7 +18,7 @@ default: all
 SRC=$(shell find . -type f -name '*.c')
 BIN=$(SRC:%.c=%)
 
-$(BIN): ../aoc.o ../list.o ../htable.o
+$(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/htable.o
 
 all:
 	@for src in *c; do \

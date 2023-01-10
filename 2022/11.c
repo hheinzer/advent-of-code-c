@@ -13,7 +13,7 @@
  *   - this will not change whether or not an item is divisible by the
  *     test value, keeping the test logic intact
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 CMP(size_t)
 

@@ -11,7 +11,7 @@
  *   map, which are all connected to an 'a'
  *   - to get the distance from an 'a' we just add 1
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 size_t shortest_path_length(const char *height, size_t ni, size_t nj,
     size_t S, size_t E)

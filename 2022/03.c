@@ -10,7 +10,7 @@
  * - find common char in 3 subsequent strings
  * - add up priorities
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 char find_common_char_2(const char *str1, const char *str2, size_t n)
 {

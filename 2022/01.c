@@ -10,7 +10,7 @@
  * Part 2:
  * - the 3 elves with the most calories are the first 3 in the sorted list
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 CMP(long)
 

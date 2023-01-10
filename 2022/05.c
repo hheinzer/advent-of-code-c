@@ -8,7 +8,7 @@
  * Part 2:
  * - use intermediate stack to invert crate order
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 void solve(const char **line, size_t n_lines, size_t cratemover)
 {

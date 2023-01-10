@@ -13,7 +13,7 @@
  * Part 2:
  * - the implementation is generalized, so we can rerun it with 10 knots
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 typedef struct Position {
     long x;

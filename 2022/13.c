@@ -13,7 +13,7 @@
  * - use comparison function to sort list
  * - search for dividers in sorted list
  */
-#include "../aoc.h"
+#include "../aoc/aoc.h"
 
 typedef enum PacketDataType {
     PDT_LIST,
