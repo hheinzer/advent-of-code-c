@@ -39,7 +39,7 @@
         b = swap;               \
     } while (0)
 
-// create a copy of a on the heap
+// simple copy macro
 #define COPY(a) memcpy(malloc(sizeof(a)), &a, sizeof(a))
 
 // define simple comparison functions for ascending and descending order

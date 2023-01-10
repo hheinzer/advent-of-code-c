@@ -1,6 +1,6 @@
 #include "aoc.h"
 
-// functions that before and after main, used for timing
+// functions that run before and after main, used for timing
 static double _timer_start = 0;
 __attribute__((constructor)) static void run_before_main(void)
 {
