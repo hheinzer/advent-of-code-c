@@ -32,7 +32,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
                 }
 
                 // add crate
-                list_insert_front(stack[istack], COPY(crate));
+                list_insert_first(stack[istack], COPY(crate));
             }
         }
     }
@@ -45,15 +45,15 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
         switch (cratemover) {
         case 9000:
             for (size_t i = 0; i < n; ++i) {
-                list_insert_back(stack[t - 1], list_remove_back(stack[f - 1]));
+                list_insert_last(stack[t - 1], list_remove_last(stack[f - 1]));
             }
             break;
         case 9001:
             for (size_t i = 0; i < n; ++i) {
-                list_insert_back(tmp, list_remove_back(stack[f - 1]));
+                list_insert_last(tmp, list_remove_last(stack[f - 1]));
             }
             for (size_t i = 0; i < n; ++i) {
-                list_insert_back(stack[t - 1], list_remove_back(tmp));
+                list_insert_last(stack[t - 1], list_remove_last(tmp));
             }
             break;
         default:
@@ -64,7 +64,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
 
     // print topmost of every stack
     for (size_t i = 0; i < n_stacks; ++i) {
-        printf("%c", *(char *)stack[i]->tail->data);
+        printf("%c", *(char *)stack[i]->last->data);
     }
     printf("\n");
 

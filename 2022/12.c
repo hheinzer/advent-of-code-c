@@ -24,18 +24,18 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
     // initialize BFS
     visited[S] = 1;
     dist[S] = 0;
-    list_insert_back(queue, COPY(S));
+    list_insert_last(queue, COPY(S));
 
     // start BFS
     size_t length = 0;
     const size_t offset[] = { -1, +1, -nj, +nj }; // left, right, up, down
     while (queue->len) {
         // pop front
-        size_t *front = list_remove_front(queue);
-        const size_t f = *front;
+        size_t *first = list_remove_first(queue);
+        const size_t f = *first;
         const size_t fi = f / nj;
         const size_t fj = f % nj;
-        free(front);
+        free(first);
 
         // check left, right, up, down
         const int check[] = { (fj > 0), (fj < nj - 1), (fi > 0), (fi < ni - 1) };
@@ -49,7 +49,7 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
                     }
                     visited[n] = 1;
                     dist[n] = dist[f] + 1;
-                    list_insert_back(queue, COPY(n));
+                    list_insert_last(queue, COPY(n));
                 }
             }
         }

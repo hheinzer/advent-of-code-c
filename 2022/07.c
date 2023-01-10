@@ -33,11 +33,11 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         if (!strcmp(line[i], "$ cd ..")) {
             // go up a directory, pop top directory from path
-            free(list_remove_back(path));
+            free(list_remove_last(path));
 
         } else if (!strncmp(line[i], "$ cd", 4)) {
             // go down a directory, add directory to path
-            list_insert_back(path, COPY(n_dirs));
+            list_insert_last(path, COPY(n_dirs));
             size_dir = realloc(size_dir, ++n_dirs * sizeof(*size_dir));
             size_dir[n_dirs - 1] = 0;
 
@@ -49,7 +49,7 @@ int main(void)
             if (strncmp(line[i], "dir", 3)) {
                 size_t size = 0;
                 sscanf(line[i], "%zu %*s", &size);
-                const Node *node = path->head;
+                const Node *node = path->first;
                 while (node) {
                     size_dir[*(size_t *)node->data] += size;
                     node = node->next;
