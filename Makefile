@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS+=-std=c11 -pedantic -g -Wall -Wextra
+CFLAGS+=-std=c11 -pedantic -g -Wall -Wextra -Og
 CFLAGS+=-Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
         -Wswitch-enum -Wpointer-arith -Wno-missing-braces -Wwrite-strings
 
@@ -31,7 +31,8 @@ all:
 	done
 
 clean:
-	-rm -rf $(BIN) *.o ../*.o
+	-rm -rf $(BIN)
+	-find . -type f -name '*.o'
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
