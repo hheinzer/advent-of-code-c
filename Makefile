@@ -11,24 +11,20 @@ CFLAGS+=-fsanitize=undefined -fsanitize=address
 #		-fdata-sections -ffunction-sections \
 #		-flto=auto
 
-.PHONY: default all clean format
-
-default: all
-
 SRC=$(shell find . -type f -name '*.c')
 BIN=$(SRC:%.c=%)
 
-$(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/htable.o
+.PHONY: all clean format
 
 all:
-	@for src in *c; do \
-		[ $$src = "aoc.c" ] || (\
-			prog=$$(basename $$src .c) && \
-			echo "--- $$prog ---" && \
-			$(MAKE) -s $$prog && \
-			./$$prog \
-		); \
+	@for src in *.c; do \
+		prog=$$(basename $$src .c) && \
+		echo "--- $$prog ---" && \
+		$(MAKE) -s $$prog && \
+		./$$prog; \
 	done
+
+$(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/htable.o
 
 clean:
 	-rm -rf $(BIN)
