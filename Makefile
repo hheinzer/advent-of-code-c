@@ -28,7 +28,7 @@ $(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/htable.o
 
 clean:
 	-rm -rf $(BIN)
-	-find . -type f -name '*.o'
+	-find . -type f -name '*.o' -delete
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
