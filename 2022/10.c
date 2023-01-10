@@ -13,7 +13,7 @@
  *   - sprite is 3 pixels wide, with center at X
  *   - if so, mark pixel in CRT
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 int main(void)
 {

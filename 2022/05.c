@@ -8,12 +8,12 @@
  * Part 2:
  * - use intermediate stack to invert crate order
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 void solve(const char **line, size_t n_lines, size_t cratemover)
 {
     // find separator line
-    const size_t i0 = line_index(line, n_lines, "");
+    const size_t i0 = line_find(line, n_lines, "");
 
     // create crate stacks
     List *stack[9] = { 0 };
@@ -28,39 +28,39 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
 
                 // increase number of stack if necessary
                 for (size_t k = n_stacks; k < istack + 1; ++k) {
-                    stack[n_stacks++] = list_create(sizeof(char));
+                    stack[n_stacks++] = list_alloc(sizeof(char));
                 }
 
                 // add crate
-                list_push_front_copy(stack[istack], &crate, memcpy);
+                list_insert_front(stack[istack], COPY(crate));
             }
         }
     }
 
     // follow movement instructions
-    List *tmp = list_create(sizeof(char));
+    List *tmp = list_alloc(sizeof(char));
     for (size_t iline = i0 + 1; iline < n_lines; ++iline) {
         size_t n = 0, f = 0, t = 0;
         sscanf(line[iline], "move %zu from %zu to %zu", &n, &f, &t);
         switch (cratemover) {
         case 9000:
             for (size_t i = 0; i < n; ++i) {
-                list_push_back(stack[t - 1], list_pop_back(stack[f - 1]));
+                list_insert_back(stack[t - 1], list_remove_back(stack[f - 1]));
             }
             break;
         case 9001:
             for (size_t i = 0; i < n; ++i) {
-                list_push_back(tmp, list_pop_back(stack[f - 1]));
+                list_insert_back(tmp, list_remove_back(stack[f - 1]));
             }
             for (size_t i = 0; i < n; ++i) {
-                list_push_back(stack[t - 1], list_pop_back(tmp));
+                list_insert_back(stack[t - 1], list_remove_back(tmp));
             }
             break;
         default:
             assert(!"Illegal cratemover encountered.");
         }
     }
-    list_free(tmp);
+    list_free(&tmp, free);
 
     // print topmost of every stack
     for (size_t i = 0; i < n_stacks; ++i) {
@@ -70,7 +70,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
 
     // cleanup
     for (size_t i = 0; i < n_stacks; ++i) {
-        list_free(stack[i]);
+        list_free(&stack[i], free);
     }
 }
 

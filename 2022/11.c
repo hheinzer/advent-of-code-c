@@ -13,7 +13,7 @@
  *   - this will not change whether or not an item is divisible by the
  *     test value, keeping the test logic intact
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 CMP(size_t)
 
@@ -37,11 +37,11 @@ void solve(const char **line, size_t n_lines, size_t part)
         sscanf(line[i + 0], " Monkey %zu:", &imonkey);
 
         // read items
-        monkey[imonkey].item = list_create(sizeof(long));
+        monkey[imonkey].item = list_alloc(sizeof(long));
         char *c = strchr(line[i + 1], ':');
         long item = 0;
         while (c && sscanf(c + 1, " %ld", &item)) {
-            list_push_back_copy(monkey[imonkey].item, &item, memcpy);
+            list_insert_back(monkey[imonkey].item, COPY(item));
             c = strchr(c + 1, ',');
         }
 
@@ -82,9 +82,9 @@ void solve(const char **line, size_t n_lines, size_t part)
     }
     for (size_t round = 0; round < n_rounds; ++round) {
         for (size_t i = 0; i < LEN(monkey); ++i) {
-            while (monkey[i].item->nelem) {
+            while (monkey[i].item->len) {
                 // inspect item
-                long *item = list_pop_front(monkey[i].item);
+                long *item = list_remove_front(monkey[i].item);
                 switch (monkey[i].op_type) {
                 case '+':
                     *item += monkey[i].op_value;
@@ -120,9 +120,9 @@ void solve(const char **line, size_t n_lines, size_t part)
 
                 // test and throw item
                 if (*item % monkey[i].test_value == 0) {
-                    list_push_back(monkey[monkey[i].if_true].item, item);
+                    list_insert_back(monkey[monkey[i].if_true].item, item);
                 } else {
-                    list_push_back(monkey[monkey[i].if_false].item, item);
+                    list_insert_back(monkey[monkey[i].if_false].item, item);
                 }
             }
         }
@@ -140,7 +140,7 @@ void solve(const char **line, size_t n_lines, size_t part)
 
     // cleanup
     for (size_t i = 0; i < LEN(monkey); ++i) {
-        list_free(monkey[i].item);
+        list_free(&monkey[i].item, free);
     }
 }
 

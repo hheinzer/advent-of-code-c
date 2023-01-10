@@ -11,27 +11,27 @@
  *   map, which are all connected to an 'a'
  *   - to get the distance from an 'a' we just add 1
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 size_t shortest_path_length(const char *height, size_t ni, size_t nj,
     size_t S, size_t E)
 {
     // prepare breadth first search (BFS)
-    List *queue = list_create(sizeof(size_t));
+    List *queue = list_alloc(sizeof(size_t));
     int *visited = calloc(ni * nj, sizeof(*visited));
     size_t *dist = calloc(ni * nj, sizeof(*dist));
 
     // initialize BFS
     visited[S] = 1;
     dist[S] = 0;
-    list_push_back_copy(queue, &S, memcpy);
+    list_insert_back(queue, COPY(S));
 
     // start BFS
     size_t length = 0;
     const size_t offset[] = { -1, +1, -nj, +nj }; // left, right, up, down
-    while (queue->nelem) {
+    while (queue->len) {
         // pop front
-        size_t *front = list_pop_front(queue);
+        size_t *front = list_remove_front(queue);
         const size_t f = *front;
         const size_t fi = f / nj;
         const size_t fj = f % nj;
@@ -49,14 +49,14 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj,
                     }
                     visited[n] = 1;
                     dist[n] = dist[f] + 1;
-                    list_push_back_copy(queue, &n, memcpy);
+                    list_insert_back(queue, COPY(n));
                 }
             }
         }
     }
 
 cleanup:
-    list_free(queue);
+    list_free(&queue, free);
     free(visited);
     free(dist);
 

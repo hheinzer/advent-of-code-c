@@ -12,7 +12,7 @@
  * - score for selected shape: 1:Rock, 2:Paper, 3:Scissors
  * - figure out if I need to select rock, paper, or scissors
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 int main(void)
 {

@@ -13,7 +13,7 @@
  * - use comparison function to sort list
  * - search for dividers in sorted list
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 typedef enum PacketDataType {
     PDT_LIST,
@@ -33,13 +33,13 @@ PacketData *pd_create(const char **line_ptr)
     // create new list
     PacketData *pd = malloc(sizeof(*pd));
     pd->type = PDT_LIST;
-    pd->pd_list = list_create(sizeof(PacketData));
+    pd->pd_list = list_alloc(sizeof(PacketData));
 
     const char *line = *line_ptr + 1;
     while (*line) {
         if (*line == '[') {
             // add new list
-            list_push_back(pd->pd_list, pd_create(&line));
+            list_insert_back(pd->pd_list, pd_create(&line));
 
         } else if (*line == ']') {
             // end of list: return currently open list and update line pointer
@@ -54,7 +54,7 @@ PacketData *pd_create(const char **line_ptr)
             PacketData *_pd = malloc(sizeof(*_pd));
             _pd->type = PDT_INT;
             sscanf(line, "%d", &_pd->pd_int);
-            list_push_back(pd->pd_list, _pd);
+            list_insert_back(pd->pd_list, _pd);
 
             // in case integer had more than one digit, push line pointer forward
             while (isdigit(*(line + 1))) {
@@ -70,11 +70,11 @@ void pd_free(PacketData *pd)
 {
     // recursively free the packet
     if (pd->type == PDT_LIST) {
-        for (ListElement *elem = pd->pd_list->head; elem; elem = elem->next) {
-            pd_free(elem->data);
-            elem->data = 0;
+        for (Node *node = pd->pd_list->head; node; node = node->next) {
+            pd_free(node->data);
+            node->data = 0;
         }
-        list_free(pd->pd_list);
+        list_free(&pd->pd_list, free);
     }
     free(pd);
 }
@@ -83,13 +83,13 @@ void pd_print(const PacketData *pd)
 {
     // recursively print packet
     printf("[");
-    for (ListElement *elem = pd->pd_list->head; elem; elem = elem->next) {
-        const PacketData *_pd = elem->data;
+    for (Node *node = pd->pd_list->head; node; node = node->next) {
+        const PacketData *_pd = node->data;
         if (_pd->type == PDT_INT) {
-            printf("%d%s", _pd->pd_int, (elem->next ? "," : ""));
+            printf("%d%s", _pd->pd_int, (node->next ? "," : ""));
         } else {
             pd_print(_pd);
-            printf("%s", (elem->next ? "," : ""));
+            printf("%s", (node->next ? "," : ""));
         }
     }
     printf("]");
@@ -107,12 +107,12 @@ void *pd_copy(void *_dest, const void *_src, size_t size_bytes)
 
     } else {
         // recursively copy packet
-        dest->pd_list = list_create(size_bytes);
-        for (const ListElement *elem = src->pd_list->head; elem; elem = elem->next) {
-            const PacketData *src_data = elem->data;
+        dest->pd_list = list_alloc(size_bytes);
+        for (const Node *node = src->pd_list->head; node; node = node->next) {
+            const PacketData *src_data = node->data;
             PacketData *dest_data = malloc(size_bytes);
             pd_copy(dest_data, src_data, size_bytes);
-            list_push_back(dest->pd_list, dest_data);
+            list_insert_back(dest->pd_list, dest_data);
         }
     }
 
@@ -132,37 +132,37 @@ int cmp_packet_asc(const void *_a, const void *_b)
         // one is int, other is list: convert int to list and recompare
         PacketData a_list = {
             .type = PDT_LIST,
-            .pd_list = list_create(sizeof(PacketData)),
+            .pd_list = list_alloc(sizeof(PacketData)),
         };
-        list_push_back_copy(a_list.pd_list, a, pd_copy);
+        list_insert_back(a_list.pd_list, pd_copy(malloc(sizeof(*a)), a, sizeof(*a)));
         int cmp = cmp_packet_asc(&a_list, b);
-        list_free(a_list.pd_list);
+        list_free(&a_list.pd_list, free);
         return cmp;
 
     } else if ((a->type == PDT_LIST) && (b->type == PDT_INT)) {
         // one is int, other is list: convert int to list and recompare
         PacketData b_list = {
             .type = PDT_LIST,
-            .pd_list = list_create(sizeof(PacketData)),
+            .pd_list = list_alloc(sizeof(PacketData)),
         };
-        list_push_back_copy(b_list.pd_list, b, pd_copy);
+        list_insert_back(b_list.pd_list, pd_copy(malloc(sizeof(*b)), b, sizeof(*b)));
         int cmp = cmp_packet_asc(a, &b_list);
-        list_free(b_list.pd_list);
+        list_free(&b_list.pd_list, free);
         return cmp;
 
     } else {
         // both are lists: compare elements
-        const ListElement *elem_a = a->pd_list->head;
-        const ListElement *elem_b = b->pd_list->head;
+        const Node *node_a = a->pd_list->head;
+        const Node *node_b = b->pd_list->head;
         int cmp = 0;
-        while (elem_a && elem_b && (cmp == 0)) {
-            cmp = cmp_packet_asc(elem_a->data, elem_b->data);
-            elem_a = elem_a->next;
-            elem_b = elem_b->next;
+        while (node_a && node_b && (cmp == 0)) {
+            cmp = cmp_packet_asc(node_a->data, node_b->data);
+            node_a = node_a->next;
+            node_b = node_b->next;
         }
 
         // return comparison, or comparison of list lengths
-        return (cmp ? cmp : (int)a->pd_list->nelem - (int)b->pd_list->nelem);
+        return (cmp ? cmp : (int)a->pd_list->len - (int)b->pd_list->len);
     }
 }
 
@@ -173,24 +173,24 @@ int main(void)
     const size_t n_lines = lines_read(&line, "13.txt");
 
     // create packets
-    List *packet = list_create(sizeof(PacketData));
+    List *packet = list_alloc(sizeof(PacketData));
     for (size_t i = 0; i < n_lines; ++i) {
         if (strcmp(line[i], "")) {
             const char *l = line[i];
             PacketData *pd = pd_create(&l);
-            list_push_back(packet, pd);
+            list_insert_back(packet, pd);
         }
     }
 
     // sum up the indices of the pair in right order
     size_t sum_right_order = 0;
-    const ListElement *elem_a = packet->head;
-    const ListElement *elem_b = elem_a->next;
-    for (size_t i = 0; i < packet->nelem / 2; ++i) {
-        int cmp = cmp_packet_asc(elem_a->data, elem_b->data);
+    const Node *node_a = packet->head;
+    const Node *node_b = node_a->next;
+    for (size_t i = 0; i < packet->len / 2; ++i) {
+        int cmp = cmp_packet_asc(node_a->data, node_b->data);
         sum_right_order += (cmp < 0 ? i + 1 : 0);
-        elem_a = elem_b->next;
-        elem_b = (elem_a ? elem_a->next : 0);
+        node_a = node_b->next;
+        node_b = (node_a ? node_a->next : 0);
     }
 
     // part 1
@@ -199,24 +199,24 @@ int main(void)
     // add divider packets
     PacketData *div1 = pd_create(&(const char *) { "[[2]]" });
     PacketData *div2 = pd_create(&(const char *) { "[[6]]" });
-    list_push_back_copy(packet, div1, pd_copy);
-    list_push_back_copy(packet, div2, pd_copy);
+    list_insert_back(packet, pd_copy(malloc(sizeof(*div1)), div1, sizeof(*div1)));
+    list_insert_back(packet, pd_copy(malloc(sizeof(*div2)), div2, sizeof(*div2)));
 
     // sort packets
     list_sort(packet, cmp_packet_asc);
 
     // part 2
-    const size_t i_div1 = list_search(packet, div1, cmp_packet_asc);
-    const size_t i_div2 = list_search(packet, div2, cmp_packet_asc);
+    const size_t i_div1 = list_index(packet, div1, cmp_packet_asc);
+    const size_t i_div2 = list_index(packet, div2, cmp_packet_asc);
     printf("%zu\n", (i_div1 + 1) * (i_div2 + 1));
 
     // cleanup
     lines_free(line, n_lines);
-    for (ListElement *elem = packet->head; elem; elem = elem->next) {
-        pd_free(elem->data);
-        elem->data = 0;
+    for (Node *node = packet->head; node; node = node->next) {
+        pd_free(node->data);
+        node->data = 0;
     }
-    list_free(packet);
+    list_free(&packet, free);
     pd_free(div1);
     pd_free(div2);
 }

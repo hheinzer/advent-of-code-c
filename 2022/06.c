@@ -9,7 +9,7 @@
  * Part 2:
  * - chack every pair of 14 chars from beginning
  */
-#include "aoc.c"
+#include "../aoc.h"
 
 int all_chars_unique(const char *str, size_t n)
 {
