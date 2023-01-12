@@ -23,7 +23,8 @@ int main(void)
 
     // simulate cathode-ray tube
     long sum_signal_strength = 0;
-    int CRT[6 * 40] = { 0 };
+    char CRT[6 * 40];
+    memset(CRT, ' ', sizeof(CRT));
     long X = 1;
     long dX = 0;
     long cycle = 1;
@@ -35,7 +36,7 @@ int main(void)
 
         // update screen
         if ((X - 1 <= (cycle - 1) % 40) && ((cycle - 1) % 40 <= X + 1)) {
-            CRT[cycle - 1] = 1;
+            CRT[cycle - 1] = '#';
         }
 
         // follow instruction
@@ -56,10 +57,7 @@ int main(void)
 
     // part 2
     for (size_t i = 0; i < 6; ++i) {
-        for (size_t j = 0; j < 40; ++j) {
-            printf("%c", (CRT[i * 40 + j] ? '#' : '.'));
-        }
-        printf("\n");
+        printf("%.*s\n", 40, &CRT[i * 40]);
     }
 
     // cleanup
