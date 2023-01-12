@@ -24,7 +24,7 @@ all:
 		./$$prog; \
 	done
 
-$(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/htable.o
+$(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/stack.o ../aoc/queue.o ../aoc/dict.o
 
 clean:
 	-rm -rf $(BIN)

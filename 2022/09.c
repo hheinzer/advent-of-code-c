@@ -5,10 +5,10 @@
  * Part 1:
  * - moving the head is straight forward
  * - following can be implemented with sign, ceil, and abs for integers
- * - determining where the tail has been is done with a hash table
+ * - determining where the tail has been is done with a dict
  *   - every position is converted to a string that is used as the key
  *   - we don't need to add any data, so this is effectively a set
- *   - at the end, count how many elements are in the hash table
+ *   - at the end, count how many elements are in the dict
  *
  * Part 2:
  * - the implementation is generalized, so we can rerun it with 10 knots
@@ -58,13 +58,14 @@ int main(void)
 
     // simulate rope with 2 and 10 knots
     const size_t nr[] = { 2, 10 };
+    char key[256] = "";
     for (size_t r = 0; r < LEN(nr); ++r) {
         // initialize rope
         Position rope[nr[r]];
         memset(rope, 0, sizeof(rope));
 
-        // create hash table for tail positions (used as set: data=0)
-        Htable *tail_pos = htable_create(0, 7500);
+        // create dict for tail positions (used as set: data=0)
+        Dict *pos = dict_alloc(0, 7500);
 
         // run simulation
         for (size_t i = 0; i < n_lines; ++i) {
@@ -77,18 +78,17 @@ int main(void)
                     position_follow(&rope[k], &rope[k - 1]);
                 }
 
-                // insert tail position into hash table
-                char key[22] = "";
-                sprintf(key, "%+09ld %+09ld", rope[nr[r] - 1].x, rope[nr[r] - 1].y);
-                htable_insert(tail_pos, key, 0);
+                // insert tail position into dict
+                dict_insert(pos,
+                    KEY(key, "%ld,%ld", rope[nr[r] - 1].x, rope[nr[r] - 1].y), 0);
             }
         }
 
         // print result
-        printf("%zu\n", tail_pos->nelem);
+        printf("%zu\n", pos->len);
 
         // cleanup
-        htable_free(tail_pos);
+        dict_free(&pos, 0);
     }
 
     // cleanup

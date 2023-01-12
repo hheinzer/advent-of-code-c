@@ -13,7 +13,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "htable.h"
+#include "dict.h"
 #include "list.h"
 #include "queue.h"
 #include "stack.h"
@@ -44,6 +44,9 @@
 
 // simple copy macro
 #define COPY(a) memcpy(malloc(sizeof(a)), &a, sizeof(a))
+
+// simple key creation macro
+#define KEY(k, ...) (snprintf(k, sizeof(k), __VA_ARGS__), k)
 
 // define simple comparison functions for ascending and descending order
 #define CMP(T)                                                                    \
