@@ -49,10 +49,8 @@ int main(void)
             if (strncmp(line[i], "dir", 3)) {
                 size_t size = 0;
                 sscanf(line[i], "%zu %*s", &size);
-                const Node *node = path->first;
-                while (node) {
+                for (const Node *node = path->first; node; node = node->next) {
                     size_dir[*(size_t *)node->data] += size;
-                    node = node->next;
                 }
             }
         }
