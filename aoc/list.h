@@ -49,6 +49,9 @@ Node *list_get(const List *list, size_t i);
 // return 0 if not found
 Node *list_find(const List *list, void *data, int (*data_cmp)(const void *, const void *));
 
+// delete specified node, return data pointer
+void *list_delete(List *list, Node *node);
+
 // search for first occurrence of data in list, if found return index of matching node,
 // return list->len (out of range) if not found
 size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *));

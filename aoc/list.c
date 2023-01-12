@@ -178,6 +178,26 @@ Node *list_find(const List *list, void *data, int (*data_cmp)(const void *, cons
     return 0;
 }
 
+void *list_delete(List *list, Node *node)
+{
+    if (node == list->first) { // delete first node
+        list->first = list->first->next;
+        list->first->prev = 0;
+
+    } else if (node == list->last) { // delete last node
+        list->last = list->last->prev;
+        list->last->next = 0;
+
+    } else { // delete middle node
+        node->next->prev = node->prev;
+        node->prev->next = node->next;
+    }
+    void *data = node->data;
+    node_free(&node, 0);
+    --list->len; // decrement length
+    return data;
+}
+
 size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *))
 {
     Node *node = list->first;
