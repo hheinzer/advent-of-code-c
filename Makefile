@@ -24,11 +24,12 @@ all:
 		./$$prog; \
 	done
 
-$(BIN): ../aoc/aoc.o ../aoc/list.o ../aoc/stack.o ../aoc/queue.o ../aoc/dict.o
+DEP=../aoc/aoc.o ../aoc/list.o ../aoc/stack.o ../aoc/queue.o ../aoc/dict.o
+
+$(BIN): $(DEP)
 
 clean:
-	-rm -rf $(BIN)
-	-find . -type f -name '*.o' -delete
+	-rm -rf $(BIN) $(DEP)
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
