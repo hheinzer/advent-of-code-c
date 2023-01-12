@@ -6,14 +6,13 @@ static Node *node_alloc(void *data)
     return memcpy(malloc(sizeof(node)), &node, sizeof(node));
 }
 
-static void node_free(Node **node, void (*data_free)())
+static void node_free(Node *node, void (*data_free)())
 {
     if (data_free) {
-        data_free((*node)->data);
-        (*node)->data = 0;
+        data_free(node->data);
+        node->data = 0;
     }
-    free(*node);
-    *node = 0;
+    free(node);
 }
 
 List *list_alloc(size_t data_size)
@@ -27,7 +26,7 @@ void list_free(List **list, void (*data_free)())
     Node *node = (*list)->first;
     while (node) {
         Node *next = node->next;
-        node_free(&node, data_free);
+        node_free(node, data_free);
         node = next;
     }
     free(*list);
@@ -123,7 +122,7 @@ void *list_remove(List *list, size_t i)
         node->prev->next = node->next;
     }
     void *data = node->data;
-    node_free(&node, 0);
+    node_free(node, 0);
     --list->len; // decrement length
     return data;
 }
@@ -193,7 +192,7 @@ void *list_delete(List *list, Node *node)
         node->prev->next = node->next;
     }
     void *data = node->data;
-    node_free(&node, 0);
+    node_free(node, 0);
     --list->len; // decrement length
     return data;
 }
