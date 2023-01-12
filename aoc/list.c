@@ -167,12 +167,10 @@ Node *list_get(const List *list, size_t i)
 
 Node *list_find(const List *list, void *data, int (*data_cmp)(const void *, const void *))
 {
-    Node *node = list->first;
-    while (node) {
+    for (Node *node = list->first; node; node = node->next) {
         if (!data_cmp(node->data, data)) {
             return node;
         }
-        node = node->next;
     }
     return 0;
 }
@@ -224,4 +222,14 @@ void list_sort(List *list, int (*data_cmp)(const void *, const void *))
         node = node->next;
     }
     free(data);
+}
+
+int list_traverse(const List *list, int (*func)())
+{
+    for (const Node *node = list->first; node; node = node->next) {
+        if (func(node->data)) {
+            return 1;
+        }
+    }
+    return 0;
 }

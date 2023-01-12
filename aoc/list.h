@@ -59,4 +59,8 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
 // sort list in place
 void list_sort(List *list, int (*data_cmp)(const void *, const void *));
 
+// traverse nodes of list and apply func to data,
+// return 1 as soon as func returns 1, else return 0
+int list_traverse(const List *list, int (*func)());
+
 #endif

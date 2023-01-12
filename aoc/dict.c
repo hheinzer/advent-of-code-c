@@ -140,3 +140,17 @@ Item *dict_find(Dict *dict, const char *key)
     }
     return (!item || !item->key ? 0 : item);
 }
+
+int dict_traverse(const Dict *dict, int (*func)())
+{
+    for (size_t i = 0; i < dict->size; ++i) {
+        const Item *item = &dict->item[i];
+        while (item && item->key) {
+            if (func(item->data)) {
+                return 1;
+            }
+            item = item->next;
+        }
+    }
+    return 0;
+}

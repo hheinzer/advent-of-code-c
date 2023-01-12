@@ -42,4 +42,8 @@ void *dict_remove(Dict *dict, const char *key);
 // return 0 if key not present
 Item *dict_find(Dict *dict, const char *key);
 
+// traverse items of dict and apply func to data,
+// return 1 as soon as func returns 1, else return 0
+int dict_traverse(const Dict *dict, int (*func)());
+
 #endif
