@@ -13,8 +13,7 @@
  */
 #include "../aoc/aoc.h"
 
-size_t shortest_path_length(const char *height, size_t ni, size_t nj,
-    size_t S, size_t E)
+size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, size_t E)
 {
     // prepare breadth first search (BFS)
     Queue *queue = queue_alloc(sizeof(size_t));
