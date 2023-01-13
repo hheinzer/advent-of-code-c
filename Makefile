@@ -3,7 +3,7 @@ CFLAGS+=-std=c11 -pedantic -g -Wall -Wextra -Og
 CFLAGS+=-Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
         -Wswitch-enum -Wpointer-arith -Wno-missing-braces -Wwrite-strings
 
-CFLAGS+=-fsanitize=undefined -fsanitize=address
+#CFLAGS+=-fsanitize=undefined -fsanitize=address
 
 #CFLAGS+=-Winline \
 #		-march=native -mtune=native \
