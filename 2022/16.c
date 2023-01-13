@@ -3,8 +3,15 @@
  * (https://adventofcode.com/2022/day/16)
  *
  * Part 1:
+ * - find all the non-zero flow rate valves, only they are interesting
+ * - compute the cost (distances to + 1 minute open valve) from any valve to any other
+ *   valve
+ * - search all possible ways of visiting the valves and find the max flow rate
  *
  * Part 2:
+ * - split the list of valves between me and the elephant in all possible ways
+ * - search all possible ways of visiting the valves and find the max flow rate for me
+ *   and the elephant, add up the rates
  */
 #include "../aoc/aoc.h"
 
