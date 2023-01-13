@@ -21,6 +21,19 @@ List *list_alloc(size_t data_size)
     return memcpy(malloc(sizeof(list)), &list, sizeof(list));
 }
 
+List *list_copy(const List *other, void *(*data_copy)())
+{
+    List *list = list_alloc(other->data_size);
+    for (const Node *node = other->first; node; node = node->next) {
+        void *copy = 0;
+        if (data_copy) {
+            copy = data_copy(malloc(list->data_size), node->data, list->data_size);
+        }
+        list_insert_last(list, copy);
+    }
+    return list;
+}
+
 void list_free(List **list, void (*data_free)())
 {
     Node *node = (*list)->first;
@@ -165,7 +178,7 @@ Node *list_get(const List *list, size_t i)
     }
 }
 
-Node *list_find(const List *list, void *data, int (*data_cmp)(const void *, const void *))
+Node *list_find(const List *list, const void *data, int (*data_cmp)())
 {
     for (Node *node = list->first; node; node = node->next) {
         if (!data_cmp(node->data, data)) {
@@ -195,7 +208,7 @@ void *list_delete(List *list, Node *node)
     return data;
 }
 
-size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *))
+size_t list_index(const List *list, void *data, int (*data_cmp)())
 {
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) {
@@ -207,7 +220,7 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
     return list->len;
 }
 
-void list_sort(List *list, int (*data_cmp)(const void *, const void *))
+void list_sort(List *list, int (*data_cmp)())
 {
     char *data = malloc(list->len * list->data_size);
     Node *node = list->first;
