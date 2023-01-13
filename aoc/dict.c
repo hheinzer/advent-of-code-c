@@ -17,7 +17,7 @@ static Item *item_alloc(const char *key, void *data)
 
 static void item_clear(Item *item, void (*data_free)())
 {
-    free(item->key);
+    free((void *)item->key);
     item->key = 0;
     if (data_free) {
         data_free(item->data);
@@ -40,6 +40,21 @@ Dict *dict_alloc(size_t data_size, size_t size)
         .item = calloc(size, sizeof(Item)),
     };
     return memcpy(malloc(sizeof(dict)), &dict, sizeof(dict));
+}
+
+Dict *dict_copy(const Dict *other, void *(*data_copy)())
+{
+    Dict *dict = dict_alloc(other->data_size, other->size);
+    for (size_t i = 0; i < other->size; ++i) {
+        for (const Item *item = &other->item[i]; item && item->key; item = item->next) {
+            void *copy = 0;
+            if (data_copy) {
+                copy = data_copy(malloc(dict->data_size), item->data, dict->data_size);
+            }
+            dict_insert(dict, item->key, copy);
+        }
+    }
+    return dict;
 }
 
 void dict_free(Dict **dict, void (*data_free)())
@@ -131,7 +146,7 @@ void *dict_remove(Dict *dict, const char *key)
     }
 }
 
-Item *dict_find(Dict *dict, const char *key)
+Item *dict_find(const Dict *dict, const char *key)
 {
     const size_t i = hash(key) % dict->size;
     Item *item = &dict->item[i];
@@ -144,12 +159,10 @@ Item *dict_find(Dict *dict, const char *key)
 int dict_traverse(const Dict *dict, int (*func)())
 {
     for (size_t i = 0; i < dict->size; ++i) {
-        const Item *item = &dict->item[i];
-        while (item && item->key) {
-            if (func(item->data)) {
+        for (const Item *item = &dict->item[i]; item && item->key; item = item->next) {
+            if (func(item->key, item->data)) {
                 return 1;
             }
-            item = item->next;
         }
     }
     return 0;
