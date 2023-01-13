@@ -44,6 +44,7 @@
 
 // simple copy macro
 #define COPY(a) memcpy(malloc(sizeof(a)), &a, sizeof(a))
+#define STRCOPY(s) strcpy(malloc(strlen(s) + 1), s)
 
 // simple key creation macro
 #define KEY(k, ...) (snprintf(k, sizeof(k), __VA_ARGS__), k)
