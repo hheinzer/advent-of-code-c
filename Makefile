@@ -7,9 +7,6 @@ assert   = on
 debug    = on
 analyzer = on
 sanitize = on
-simd     = off
-profile  = off
-optinfo  = off
 
 # compiler
 CC = gcc
@@ -60,27 +57,9 @@ ifeq ($(sanitize), on)
 CFLAGS += -fsanitize=undefined -fsanitize=address
 endif
 
-# simd flags
-ifeq ($(simd), on)
-CFLAGS += -fopenmp-simd
-endif
-
-# profiler flags
-ifeq ($(profile), on)
-CFLAGS += -pg -fno-lto
-endif
-
-# cache info
-CFLAGS += -DCACHE_LINESIZE=$(shell getconf LEVEL1_DCACHE_LINESIZE)
-
 # linking
 LDFLAGS = -Wl,--gc-sections
 LDLIBS  = -lm
-
-# collect compiler optimization info
-ifeq ($(optinfo) $(CC), on gcc)
-CFLAGS += -fopt-info-optall-all=$@-opt-info.txt
-endif
 
 # objects
 SRC = $(shell find aoc -type f -name '*.c')

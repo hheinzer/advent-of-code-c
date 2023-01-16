@@ -86,7 +86,9 @@ int main(void)
 
     // insert floor
     max_y += 2;
-    memset(grid[max_y], '#', sizeof(*grid));
+    for (size_t j = 0; j < NX; ++j) {
+        grid[max_y][j] = '#';
+    }
 
     // part 2
     ns += drop_sand(grid, max_y);

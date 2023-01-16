@@ -63,5 +63,4 @@ void lines_free(const char **line, size_t n_lines);
 // find index of first line that matches
 size_t line_find(const char **line, size_t n_lines, const char *find);
 
-
 #endif
