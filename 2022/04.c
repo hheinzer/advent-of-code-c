@@ -9,13 +9,13 @@
  * - check if there is any overlap between the ranges
  * - notice that it is easier to check for the opposite
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "04.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/04.txt");
 
     // count how often one range is fully contained in the other
     long count1 = 0;

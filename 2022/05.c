@@ -8,7 +8,7 @@
  * Part 2:
  * - use intermediate stack to invert crate order
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 void solve(const char **line, size_t n_lines, size_t cratemover)
 {
@@ -78,7 +78,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "05.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/05.txt");
 
     // part 1
     solve(line, n_lines, 9000);

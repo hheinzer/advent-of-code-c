@@ -13,13 +13,13 @@
  *   - sprite is 3 pixels wide, with center at X
  *   - if so, mark pixel in CRT
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "10.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/10.txt");
 
     // simulate cathode-ray tube
     long sum_signal_strength = 0;

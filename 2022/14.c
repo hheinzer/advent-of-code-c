@@ -10,7 +10,7 @@
  * Part 2:
  * - insert the ground and keep dropping sand
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 #define NY 200
 #define NX 1000
@@ -43,7 +43,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "14.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/14.txt");
 
     // create reservoir
     long max_y = LONG_MIN;

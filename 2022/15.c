@@ -10,7 +10,7 @@
  * - missing beacon must be exactly +1 outside of range of one of the other beacons
  * - only check this diamond pattern around the beacon ranges
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 typedef struct Point {
     long x;
@@ -139,7 +139,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "15.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/15.txt");
 
     // create list of sensors and dict of beacons
     List *sensor = list_alloc(sizeof(Point));

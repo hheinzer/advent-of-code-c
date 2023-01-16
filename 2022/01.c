@@ -10,7 +10,7 @@
  * Part 2:
  * - the 3 elves with the most calories are the first 3 in the sorted array
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 CMP(long)
 
@@ -18,7 +18,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "01.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/01.txt");
 
     // add up calories of every elf, append to cals
     long *cals = calloc(1, sizeof(*cals));

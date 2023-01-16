@@ -11,7 +11,7 @@
  * - count the number of trees in every direction until there is on that has the same
  *   size or is larger
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
 {
@@ -102,7 +102,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "08.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/08.txt");
 
     // find visible trees
     const size_t ni = n_lines;

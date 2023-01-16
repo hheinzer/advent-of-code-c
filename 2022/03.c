@@ -10,7 +10,7 @@
  * - find common char in 3 subsequent strings
  * - add up priorities
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 char find_common_char_2(const char *str1, const char *str2, size_t n)
 {
@@ -57,7 +57,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "03.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/03.txt");
 
     // find common char between first and second half of every line and add up priorities
     long sum_prio1 = 0;

@@ -12,13 +12,13 @@
  * - score for selected shape: 1:Rock, 2:Paper, 3:Scissors
  * - figure out if I need to select rock, paper, or scissors
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "02.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/02.txt");
 
     // define points map for first rule set
     const long map1['Z' + 1]['Z' + 1] = {

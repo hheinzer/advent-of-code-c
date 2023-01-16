@@ -13,7 +13,7 @@
  * Part 2:
  * - the implementation is generalized, so we can rerun it with 10 knots
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 typedef struct Position {
     long x;
@@ -54,7 +54,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "09.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/09.txt");
 
     // simulate rope with 2 and 10 knots
     const size_t nr[] = { 2, 10 };

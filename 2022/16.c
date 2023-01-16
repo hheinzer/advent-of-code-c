@@ -13,7 +13,7 @@
  * - search all possible ways of visiting the valves and find the max flow rate for me
  *   and the elephant, add up the rates
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 typedef struct Valve {
     long rate;
@@ -182,7 +182,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "16.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/16.txt");
 
     // build network
     Dict *valve = dict_alloc(sizeof(Valve), 60);

@@ -16,7 +16,7 @@
  * - compute the minimum space that we need to free
  * - find the smallest folder that is at least as big
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 CMP(size_t)
 
@@ -24,7 +24,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "07.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/07.txt");
 
     // find all directory sizes
     size_t *size_dir = 0;

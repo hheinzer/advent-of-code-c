@@ -11,7 +11,7 @@
  *   map, which are all connected to an 'a'
  *   - to get the distance from an 'a' we just add 1
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, size_t E)
 {
@@ -66,7 +66,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "12.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/12.txt");
 
     // build height profile
     const size_t ni = n_lines;

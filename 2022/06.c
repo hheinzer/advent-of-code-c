@@ -9,7 +9,7 @@
  * Part 2:
  * - chack every pair of 14 chars from beginning
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 int all_chars_unique(const char *str, size_t n)
 {
@@ -27,7 +27,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "06.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/06.txt");
 
     // part 1
     const size_t n = strlen(line[0]);

@@ -13,7 +13,7 @@
  * - use comparison function to sort list
  * - search for dividers in sorted list
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 typedef enum PacketDataType {
     PDT_LIST,
@@ -172,7 +172,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "13.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/13.txt");
 
     // create packets
     List *packet = list_alloc(sizeof(PacketData));

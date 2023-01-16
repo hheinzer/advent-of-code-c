@@ -13,7 +13,7 @@
  *   - this will not change whether or not an item is divisible by the
  *     test value, keeping the test logic intact
  */
-#include "../aoc/aoc.h"
+#include "aoc.h"
 
 CMP(size_t)
 
@@ -148,7 +148,7 @@ int main(void)
 {
     // read input
     const char **line = 0;
-    const size_t n_lines = lines_read(&line, "11.txt");
+    const size_t n_lines = lines_read(&line, "2022/input/11.txt");
 
     // part 1
     solve(line, n_lines, 1);
