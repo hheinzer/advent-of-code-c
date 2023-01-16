@@ -20,10 +20,10 @@ AR = gcc-ar rcs
 #
 
 # targets
-.PHONY: default lib all clean check memcheck format
+.PHONY: default lib run clean check memcheck format
 
 # default target
-default: all
+default: run
 
 # default flags
 CFLAGS = -std=c11 -pedantic -g -Wall -Wextra
@@ -115,7 +115,7 @@ $(BIN): %: %.c $(LIB) Makefile
 	-$(CC) $(CFLAGS) $(INCS) $(LDFLAGS) $< $(LIB) $(LDLIBS) -o $@
 
 # run all
-all: $(BIN)
+run: $(BIN)
 	for prog in $(sort $(BIN)); do \
 		echo "--- $$prog ---" && \
 		./$$prog; \
