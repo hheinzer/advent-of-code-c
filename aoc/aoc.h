@@ -13,6 +13,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "input.h"
 #include "dict.h"
 #include "list.h"
 #include "queue.h"
@@ -53,14 +54,5 @@
 #define CMP(T)                                                                    \
     int cmp_##T##_asc(const void *a, const void *b) { return *(T *)a - *(T *)b; } \
     int cmp_##T##_dsc(const void *a, const void *b) { return *(T *)b - *(T *)a; }
-
-// read all lines in file "fname" into lines, replace '\n' with '\0'
-size_t lines_read(const char ***line, const char *fname);
-
-// free all lines
-void lines_free(const char **line, size_t n_lines);
-
-// find index of first line that matches
-size_t line_find(const char **line, size_t n_lines, const char *find);
 
 #endif
