@@ -6,176 +6,112 @@
  * - find all the non-zero flow rate valves, only they are interesting
  * - compute the cost (distances to + 1 minute open valve) from any valve to any other
  *   valve
- * - search all possible ways of visiting the valves and find the max flow rate
+ * - search all possible ways of visiting the valves and find the max flow rate,
+ *   for 1 player, (DFS with state caching, memoization)
  *
  * Part 2:
- * - split the list of valves between me and the elephant in all possible ways
- * - search all possible ways of visiting the valves and find the max flow rate for me
- *   and the elephant, add up the rates
+ * - repeat with 2 players and less time
  */
 #include "aoc.h"
 
-typedef struct Valve {
-    long rate;
-    List *adj;
-} Valve;
-
-Valve *valve_alloc(void)
+size_t bfs(size_t n, const size_t *_adj, size_t S, size_t E)
 {
-    Valve valve = { .adj = list_alloc(sizeof(char[3])) };
-    return COPY(valve);
-}
-
-void valve_free(Valve *valve)
-{
-    list_free(&valve->adj, free);
-    free(valve);
-}
-
-int subcost_free(const char *key, Dict *subcost)
-{
-    (void)key;
-    dict_free(&subcost, free);
-    return 0;
-}
-
-size_t shortest_path_length(const Dict *valve, char *start, char *end)
-{
-    // prepare breadth first search (BFS)
-    Queue *queue = queue_alloc(sizeof(char[3]));
-    Dict *visited = dict_alloc(0, valve->size);
-    Dict *dist = dict_alloc(sizeof(size_t), valve->size);
-
-    // initialize BFS
-    dict_insert(visited, start, 0);
-    dict_insert(dist, start, COPY((size_t) { 0 }));
-    queue_push(queue, start);
-
-    // start BFS
-    size_t length = 0;
-    while (queue->len) {
-        // get first valve
-        const char *first_key = queue_pop(queue);
-        const Valve *first = dict_find(valve, first_key)->data;
-        const size_t *dist_first = dict_find(dist, first_key)->data;
-
-        // check neighbors
-        for (const Node *node = first->adj->first; node; node = node->next) {
-            char *adj = node->data;
-            if (!dict_find(visited, adj)) {
-                if (!strcmp(adj, end)) {
-                    length = *dist_first + 1;
+    // breadth first search
+    Queue *q = queue_alloc(sizeof(size_t));
+    int *visited = calloc(n, sizeof(*visited));
+    size_t *distance = calloc(n, sizeof(*distance));
+    visited[S] = 1;
+    distance[S] = 0;
+    queue_push(q, COPY(S));
+    size_t min_distance = 0;
+    const size_t(*adj)[n] = TENSOR(adj, _adj);
+    while (q->len > 0) {
+        void *data = queue_pop(q);
+        size_t i = *(size_t *)data;
+        free(data);
+        for (size_t j = 0; j < n; ++j) {
+            if (adj[i][j] && !visited[j]) {
+                if (j == E) {
+                    min_distance = distance[i] + 1;
                     goto cleanup;
                 }
-                dict_insert(visited, adj, 0);
-                dict_insert(dist, adj, COPY((size_t) { *dist_first + 1 }));
-                queue_push(queue, adj);
+                visited[j] = 1;
+                distance[j] = distance[i] + 1;
+                queue_push(q, COPY(j));
             }
         }
     }
-
 cleanup:
-    queue_free(&queue, 0);
-    dict_free(&visited, 0);
-    dict_free(&dist, free);
-
-    return length;
+    queue_free(&q, free);
+    free(visited);
+    free(distance);
+    return min_distance;
 }
 
-int dict_key_print(const char *key)
+size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char *seen,
+    size_t loc, size_t AA, size_t time_allowed, size_t time_taken, size_t n_players)
 {
-    return !printf("%s ", key);
-}
-
-size_t _max_total_flow(const Dict *valve, const Dict *cost, const char *location, size_t time_allowed,
-    Dict *visited, size_t time_taken, size_t total_flow)
-{
-    // add location to visited
-    dict_insert(visited, location, 0);
-
-    // create list of valves to be visited next
-    const char *next_valve[valve->len];
-    size_t n = 0;
-    const Dict *subcost = dict_find(cost, location)->data;
-    for (size_t i = 0; i < subcost->size; ++i) {
-        const Item *item = &subcost->item[i];
-        while (item && item->key) {
-            const char *valve_key = item->key;
-
-            // filter out valves that have been visited before (turned on, already)
-            if (dict_find(visited, valve_key)) {
-                goto skip;
-            }
-
-            // filter out valves that we cannot move to anymore
-            const size_t *valve_cost = dict_find(subcost, valve_key)->data;
-            if (time_taken + (*valve_cost) >= time_allowed) {
-                goto skip;
-            }
-
-            // add valve
-            next_valve[n++] = item->key;
-
-        skip:
-            item = item->next;
+    if (time_taken == time_allowed) {
+        if (n_players > 1) {
+            return _dfs(cache, n, rate, _cost, seen, AA, AA, time_allowed, 0, n_players - 1);
+        } else {
+            return 0;
         }
     }
 
-    // go to all next valves
-    size_t max_total_flow = 0;
+    // check if state has been evaluated before
+    char key[256] = "";
+    const size_t time_remaining = time_allowed - time_taken;
+    snprintf(key, sizeof(key), "%s %zu %zu %zu", seen, loc, time_remaining, n_players);
+    Item *item = dict_find(cache, key);
+    if (item) {
+        return *(size_t *)item->data;
+    }
+
+    // mark valve at location as seen
+    char reset = seen[loc];
+    seen[loc] = '1';
+
+    // check all possible options
+    size_t flow = 0;
+    const size_t(*cost)[n] = TENSOR(cost, _cost);
     for (size_t i = 0; i < n; ++i) {
-        const char *valve_key = next_valve[i];
-        const size_t *valve_cost = dict_find(subcost, valve_key)->data;
-        const size_t valve_rate = ((Valve *)dict_find(valve, valve_key)->data)->rate;
-        const size_t _total_flow = _max_total_flow(
-            valve,
-            cost,
-            valve_key,
-            time_allowed,
-            visited,
-            time_taken + (*valve_cost),
-            total_flow + (time_allowed - time_taken - (*valve_cost)) * valve_rate);
-        max_total_flow = MAX(max_total_flow, _total_flow);
-    }
-
-    // remove location from visited
-    dict_remove(visited, location);
-
-    return MAX(max_total_flow, total_flow);
-}
-
-size_t max_total_flow(const Dict *valve, const Dict *cost, Dict *visited, const char *location, size_t time_allowed)
-{
-    // initialize search
-    size_t time_taken = 0;
-    size_t total_flow = 0;
-
-    // search for best strategy result
-    const size_t max_total_flow = _max_total_flow(valve, cost, location, time_allowed,
-        visited, time_taken, total_flow);
-
-    return max_total_flow;
-}
-
-long ipow(long base, size_t exp)
-{
-    long ret = 1;
-    for (size_t i = 0; i < exp; ++i) {
-        ret *= base;
-    }
-    return ret;
-}
-
-long *product(long *a, size_t na, size_t nj)
-{
-    const size_t ni = ipow(na, nj);
-    long(*product)[nj] = calloc(ni, sizeof(*product));
-    for (size_t i = 0; i < ni; ++i) {
-        for (size_t j = 0; j < nj; ++j) {
-            product[i][j] = a[(i / (ni / ipow(na, j + 1))) % na];
+        // go to unseen valve if there is enough time
+        if ((seen[i] == '0') && (cost[loc][i] < time_remaining)) {
+            size_t _flow = (time_remaining - cost[loc][i]) * rate[i]
+                + _dfs(cache, n, rate, _cost, seen, i,
+                    AA, time_allowed, time_taken + cost[loc][i], n_players);
+            flow = MAX(flow, _flow);
         }
     }
-    return *product;
+
+    // stop opening valves
+    flow = MAX(flow,
+        _dfs(cache, n, rate, _cost, seen, loc, AA, time_allowed, time_allowed, n_players));
+
+    // reset valve at location
+    seen[loc] = reset;
+
+    // add state to cache
+    dict_insert(cache, key, COPY(flow));
+
+    return flow;
+}
+
+size_t dfs(size_t n, const size_t *rate, const List *non_zero, const size_t *cost,
+    size_t loc, size_t time_allowed, size_t n_players)
+{
+    // create array that marks closed, non-zero valves as '0'
+    char seen[n + 1];
+    memset(seen, '1', sizeof(seen));
+    seen[n] = 0;
+    for (const Node *node = non_zero->first; node; node = node->next) {
+        seen[*(size_t *)node->data] = '0';
+    }
+    Dict *cache = dict_alloc(sizeof(size_t), 3000000);
+    size_t ret = _dfs(cache, n, rate, cost, seen, loc, loc, time_allowed, 0, n_players);
+    dict_free(&cache, free);
+    return ret;
 }
 
 int main(void)
@@ -184,91 +120,61 @@ int main(void)
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/16.txt");
 
-    // build network
-    Dict *valve = dict_alloc(sizeof(Valve), 60);
-    List *non_zero = list_alloc(sizeof(char[3]));
+    // create map between valve name and index, read flow rates, find non-zero valves
+    Dict *v2i = dict_alloc(sizeof(size_t), 2 * n_lines);
+    size_t *rate = calloc(n_lines, sizeof(*rate));
+    List *non_zero = list_alloc(sizeof(size_t));
     for (size_t i = 0; i < n_lines; ++i) {
-        Valve *v = valve_alloc();
         char key[3] = "";
-        char adj[256] = "";
-        sscanf(line[i], "Valve %s has flow rate=%ld; %*s %*s to %*s %[^\n]",
-            key, &v->rate, adj);
-        dict_insert(valve, key, v);
-        if (v->rate > 0) { // valve with non-zero flow rate
-            list_insert_last(non_zero, COPY(key));
+        sscanf(line[i], "Valve %s has flow rate=%zu", key, &rate[i]);
+        dict_insert(v2i, key, COPY(i));
+        if (rate[i] > 0) {
+            list_insert_last(non_zero, COPY(i));
         }
-        char *tok = strtok(adj, ",");
-        while (tok) { // add adjacent valves
-            sscanf(tok, " %s ", key);
-            list_insert_last(v->adj, COPY(key));
+    }
+    const size_t AA = *(size_t *)dict_find(v2i, "AA")->data;
+
+    // create network
+    size_t(*adj)[n_lines] = calloc(n_lines, sizeof(*adj));
+    for (size_t i = 0; i < n_lines; ++i) {
+        char key[3] = "";
+        char net[256] = "";
+        sscanf(line[i], "Valve %s has flow rate=%*d; %*s %*s to %*s %[^\n]", key, net);
+        size_t iv = *(size_t *)dict_find(v2i, key)->data;
+        char *tok = strtok(net, ",");
+        while (tok) {
+            sscanf(tok, " %s", key);
+            size_t jv = *(size_t *)dict_find(v2i, key)->data;
+            adj[iv][jv] = 1;
             tok = strtok(0, ",");
         }
     }
 
-    // compute distances of moving between non-zero rooms and turn on valve
-    Dict *cost = dict_alloc(sizeof(Dict), valve->size);
-    list_insert_last(non_zero, COPY("AA"));
+    // compute cost of moving between non-zero valves and turning them on
+    size_t(*cost)[n_lines] = calloc(n_lines, sizeof(*cost));
+    list_insert_first(non_zero, COPY(AA));
     for (const Node *start = non_zero->first; start; start = start->next) {
-        Dict *subcost = dict_alloc(sizeof(size_t), valve->size);
+        const size_t S = *(size_t *)start->data;
         for (const Node *end = non_zero->first; end; end = end->next) {
-            if ((end != start) && strcmp(end->data, "AA")) {
-                const size_t length = shortest_path_length(valve, start->data, end->data);
-                dict_insert(subcost, end->data, COPY((size_t) { length + 1 }));
+            const size_t E = *(size_t *)end->data;
+            if ((S != E) && (E != AA)) {
+                cost[S][E] = bfs(n_lines, *adj, S, E) + 1;
             }
         }
-        dict_insert(cost, start->data, subcost);
     }
-    free(list_remove_last(non_zero));
+    free(list_remove_first(non_zero));
 
     // part 1
-    Dict *visited = dict_alloc(0, valve->size);
-    printf("%zu\n", max_total_flow(valve, cost, visited, "AA", 30));
-    dict_free(&visited, 0);
-
-    // create all possible combination patterns
-    const size_t nj = non_zero->len;
-    const size_t ni = ipow(2, nj);
-    long(*prod)[nj] = TENSOR(prod, product((long[]) { 0, 1 }, 2, nj));
-
-    // search for max flow with two players
-    Dict *visited_me = dict_alloc(0, valve->size);
-    Dict *visited_elephant = dict_alloc(0, valve->size);
-    size_t max_total_flow_comb = 0;
-    for (size_t i = 0, j; i < ni; ++i) {
-        // create visited dicts for me and elephant
-        j = 0;
-        for (const Node *node = non_zero->first; node; node = node->next) {
-            if (prod[i][j++]) {
-                dict_insert(visited_me, node->data, 0);
-            } else {
-                dict_insert(visited_elephant, node->data, 0);
-            }
-        }
-
-        // compute combined total flow
-        size_t total_flow_comb = 0;
-        total_flow_comb += max_total_flow(valve, cost, visited_me, "AA", 26);
-        total_flow_comb += max_total_flow(valve, cost, visited_elephant, "AA", 26);
-        max_total_flow_comb = MAX(max_total_flow_comb, total_flow_comb);
-
-        // clear visited dicts
-        j = 0;
-        for (const Node *node = non_zero->first; node; node = node->next) {
-            dict_remove(visited_me, node->data);
-            dict_remove(visited_elephant, node->data);
-        }
-    }
-    dict_free(&visited_me, 0);
-    dict_free(&visited_elephant, 0);
+    printf("%zu\n", dfs(n_lines, rate, non_zero, *cost, AA, 30, 1));
 
     // part 2
-    printf("%zu\n", max_total_flow_comb);
+    printf("%zu\n", dfs(n_lines, rate, non_zero, *cost, AA, 26, 2));
 
     // cleanup
     lines_free(line, n_lines);
-    dict_free(&valve, valve_free);
+    dict_free(&v2i, free);
+    free(rate);
     list_free(&non_zero, free);
-    dict_traverse(cost, subcost_free);
-    dict_free(&cost, 0);
-    free(prod);
+    free(adj);
+    free(cost);
 }
