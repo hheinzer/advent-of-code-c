@@ -27,7 +27,7 @@
 #define SIGN(a) (((a) > 0) - ((a) < 0))
 
 // integer ceil division, positive integers only
-#define CEIL(a, b) ((__typeof__(a))ceil((double)(a) / (double)(b)))
+#define CEIL(a, b) ((__typeof__(a))ceil((a) / (double)(b)))
 
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
