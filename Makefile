@@ -95,7 +95,7 @@ $(BIN): %: %.c $(LIB) Makefile
 
 # run all
 run: $(BIN)
-	for prog in $(sort $(BIN)); do \
+	@for prog in $(sort $(BIN)); do \
 		echo "--- $$prog ---" && \
 		./$$prog; \
 	done
