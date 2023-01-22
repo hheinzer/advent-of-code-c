@@ -23,15 +23,11 @@
 // size of a static array
 #define LEN(a) (sizeof(a) / sizeof(*a))
 
-// type generic min and max functions
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
 // sign of an integer
 #define SIGN(a) (((a) > 0) - ((a) < 0))
 
 // integer ceil division, positive integers only
-#define CEIL(a, b) (1 + (((a)-1) / (b)))
+#define CEIL(a, b) ((__typeof__(a))ceil((double)(a) / (double)(b)))
 
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
@@ -51,10 +47,27 @@
 // simple key creation macro
 #define KEY(k, ...) (snprintf(k, sizeof(k), __VA_ARGS__), k)
 
+// define simple min and max functions
+#define MINMAX(T)               \
+    T min_##T(T a, T b)         \
+    {                           \
+        return (a < b ? a : b); \
+    }                           \
+    T max_##T(T a, T b)         \
+    {                           \
+        return (a > b ? a : b); \
+    }
+
 // define simple comparison functions for ascending and descending order
-#define CMP(T)                                                                    \
-    int cmp_##T##_asc(const void *a, const void *b) { return *(T *)a - *(T *)b; } \
-    int cmp_##T##_dsc(const void *a, const void *b) { return *(T *)b - *(T *)a; }
+#define CMP(T)                                      \
+    int cmp_##T##_asc(const void *a, const void *b) \
+    {                                               \
+        return *(T *)a - *(T *)b;                   \
+    }                                               \
+    int cmp_##T##_dsc(const void *a, const void *b) \
+    {                                               \
+        return *(T *)b - *(T *)a;                   \
+    }
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
 size_t lines_read(const char ***line, const char *fname);
