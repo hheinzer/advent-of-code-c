@@ -14,8 +14,6 @@
  */
 #include "aoc.h"
 
-MINMAX(size_t)
-
 size_t bfs(size_t n, const size_t *_adj, size_t S, size_t E)
 {
     // breadth first search
@@ -83,12 +81,12 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
             size_t _flow = (time_remaining - cost[loc][i]) * rate[i]
                 + _dfs(cache, n, rate, _cost, seen, i,
                     AA, time_allowed, time_taken + cost[loc][i], n_players);
-            flow = max_size_t(flow, _flow);
+            flow = MAX(flow, _flow);
         }
     }
 
     // stop opening valves
-    flow = max_size_t(flow,
+    flow = MAX(flow,
         _dfs(cache, n, rate, _cost, seen, loc, AA, time_allowed, time_allowed, n_players));
 
     // reset valve at location

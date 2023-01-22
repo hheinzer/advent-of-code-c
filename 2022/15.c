@@ -12,8 +12,6 @@
  */
 #include "aoc.h"
 
-MINMAX(long)
-
 typedef struct Point {
     long x;
     long y;
@@ -55,8 +53,8 @@ size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
         Range *r0 = prev->data;
         Range *r1 = node->data;
         if (r0->x1 >= r1->x0) { // ranges overlap
-            r1->x0 = min_long(r1->x0, r0->x0);
-            r1->x1 = max_long(r1->x1, r0->x1);
+            r1->x0 = MIN(r1->x0, r0->x0);
+            r1->x1 = MAX(r1->x1, r0->x1);
             free(list_delete(range, prev));
         }
     }

@@ -12,9 +12,6 @@
  */
 #include "aoc.h"
 
-MINMAX(long)
-MINMAX(size_t)
-
 typedef enum Mineral {
     ORE,
     CLY,
@@ -74,7 +71,7 @@ long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
         for (size_t j = 0; j < N; ++j) {
             if (bp->amt[ibot][j]) {
                 if (s.bot[j] > 0) {
-                    wait = max_long(wait, CEIL(bp->amt[ibot][j] - s.amt[j], s.bot[j]));
+                    wait = MAX(wait, CEIL(bp->amt[ibot][j] - s.amt[j], s.bot[j]));
                 } else {
                     can_wait = 0; // we cannot wait to build this robot
                 }
@@ -105,10 +102,10 @@ long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
 
             // improve cache hit rate by tossing items we don't need
             for (size_t j = 0; j < N - 1; ++j) {
-                ns.amt[j] = min_long(ns.amt[j], bp->max[j] * remtime);
+                ns.amt[j] = MIN(ns.amt[j], bp->max[j] * remtime);
             }
 
-            max_geo = max_long(max_geo, _dfs(bp, remtime, ns, cache, best));
+            max_geo = MAX(max_geo, _dfs(bp, remtime, ns, cache, best));
         }
     }
 
@@ -116,7 +113,7 @@ long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
     dict_insert(cache, key, COPY(max_geo));
 
     // update global best
-    *best = max_long(*best, max_geo);
+    *best = MAX(*best, max_geo);
 
     return max_geo;
 }
@@ -153,7 +150,7 @@ int main(void)
             &bp[i].amt[GEO][ORE], &bp[i].amt[GEO][OBS]);
         for (size_t j = 0; j < N - 1; ++j) {
             for (size_t k = 0; k < N; ++k) {
-                bp[i].max[j] = max_long(bp[i].max[j], bp[i].amt[k][j]);
+                bp[i].max[j] = MAX(bp[i].max[j], bp[i].amt[k][j]);
             }
         }
     }
@@ -167,7 +164,7 @@ int main(void)
 
     // part 2
     long prod_geo_cnt = 1;
-    for (size_t i = 0; i < min_size_t(n_lines, 3); ++i) {
+    for (size_t i = 0; i < MIN(n_lines, 3); ++i) {
         prod_geo_cnt *= dfs(&bp[i], 32);
     }
     printf("%ld\n", prod_geo_cnt);

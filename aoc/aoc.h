@@ -48,15 +48,8 @@
 #define KEY(k, ...) (snprintf(k, sizeof(k), __VA_ARGS__), k)
 
 // define simple min and max functions
-#define MINMAX(T)               \
-    T min_##T(T a, T b)         \
-    {                           \
-        return (a < b ? a : b); \
-    }                           \
-    T max_##T(T a, T b)         \
-    {                           \
-        return (a > b ? a : b); \
-    }
+#define MIN(a, b) ((__typeof__(a))fmin(a, b))
+#define MAX(a, b) ((__typeof__(a))fmax(a, b))
 
 // define simple comparison functions for ascending and descending order
 #define CMP(T)                                      \

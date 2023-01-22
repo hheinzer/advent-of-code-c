@@ -14,8 +14,6 @@
  */
 #include "aoc.h"
 
-MINMAX(size_t)
-
 void flood_fill(size_t ni, size_t nj, size_t nk,
     int outside[ni][nj][nk], int cube[ni][nj][nk],
     size_t i, size_t j, size_t k)
@@ -57,9 +55,9 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         size_t x, y, z;
         sscanf(line[i], "%zu,%zu,%zu", &x, &y, &z);
-        x_max = max_size_t(x_max, x);
-        y_max = max_size_t(y_max, y);
-        z_max = max_size_t(z_max, z);
+        x_max = MAX(x_max, x);
+        y_max = MAX(y_max, y);
+        z_max = MAX(z_max, z);
     }
 
     // create 3D occupation matrix (+2: buffer layer)

@@ -13,15 +13,12 @@
  */
 #include "aoc.h"
 
-MINMAX(char)
-MINMAX(size_t)
-
 int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
 {
     // look left
     char max_height = line[i0][0];
     for (size_t j = 1; j < j0; ++j) {
-        max_height = max_char(max_height, line[i0][j]);
+        max_height = MAX(max_height, line[i0][j]);
     }
     if (line[i0][j0] > max_height) {
         return 1;
@@ -30,7 +27,7 @@ int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
     // look right
     max_height = line[i0][j0 + 1];
     for (size_t j = j0 + 2; j < nj; ++j) {
-        max_height = max_char(max_height, line[i0][j]);
+        max_height = MAX(max_height, line[i0][j]);
     }
     if (line[i0][j0] > max_height) {
         return 1;
@@ -39,7 +36,7 @@ int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
     // look up
     max_height = line[0][j0];
     for (size_t i = 1; i < i0; ++i) {
-        max_height = max_char(max_height, line[i][j0]);
+        max_height = MAX(max_height, line[i][j0]);
     }
     if (line[i0][j0] > max_height) {
         return 1;
@@ -48,7 +45,7 @@ int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
     // look down
     max_height = line[i0 + 1][j0];
     for (size_t i = i0 + 2; i < ni; ++i) {
-        max_height = max_char(max_height, line[i][j0]);
+        max_height = MAX(max_height, line[i][j0]);
     }
     if (line[i0][j0] > max_height) {
         return 1;
@@ -122,7 +119,7 @@ int main(void)
     size_t max_score = 0;
     for (size_t i = 1; i < ni - 1; ++i) {
         for (size_t j = 1; j < nj - 1; ++j) {
-            max_score = max_size_t(max_score, scenic_score(line, ni, nj, i, j));
+            max_score = MAX(max_score, scenic_score(line, ni, nj, i, j));
         }
     }
     printf("%zu\n", max_score);

@@ -13,8 +13,6 @@
  */
 #include "aoc.h"
 
-MINMAX(size_t)
-
 size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, size_t E)
 {
     // prepare breadth first search (BFS)
@@ -97,7 +95,7 @@ int main(void)
         const size_t A = a - height;
         const size_t l = shortest_path_length(height, ni, nj, A, E);
         if (l) {
-            min_length = min_size_t(min_length, l + 1);
+            min_length = MIN(min_length, l + 1);
         }
         a = strchr(a + 1, 'b');
     }
