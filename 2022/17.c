@@ -12,6 +12,9 @@
  */
 #include "aoc.h"
 
+MINMAX(size_t)
+MINMAX(long)
+
 int does_collide(long r[5][2], const Dict *cave, long dx, long dy)
 {
     // check for collision with wall, floor, or other rock
@@ -68,7 +71,7 @@ void find_pattern(const long *a, size_t n, size_t *np, size_t *nr)
 size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
 {
     // we are not dropping more than 5000 rocks
-    const size_t n = MIN(_n, 5000);
+    const size_t n = min_size_t(_n, 5000);
 
     long *height = calloc(n + 1, sizeof(*height));
     Dict *cave = dict_alloc(0, 2 * (5 * n));
@@ -107,7 +110,7 @@ size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
 
         // determine new height
         for (size_t j = 0; j < 5; ++j) {
-            height[i + 1] = MAX(height[i], r[j][1] + 1);
+            height[i + 1] = max_long(height[i], r[j][1] + 1);
         }
     }
 

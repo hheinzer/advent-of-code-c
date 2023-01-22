@@ -12,6 +12,8 @@
  */
 #include "aoc.h"
 
+MINMAX(long)
+
 #define NY 200
 #define NX 1000
 
@@ -55,12 +57,12 @@ int main(void)
         long x0 = 0;
         long y0 = 0;
         sscanf(tok, " %ld,%ld ", &x0, &y0);
-        max_y = MAX(max_y, y0);
+        max_y = max_long(max_y, y0);
         while ((tok = strtok(0, "->"))) {
             long x1 = 0;
             long y1 = 0;
             sscanf(tok, " %ld,%ld ", &x1, &y1);
-            max_y = MAX(max_y, y1);
+            max_y = max_long(max_y, y1);
             if (y1 == y0) { // add row
                 const long nj = labs(x1 - x0);
                 const long dx = (x1 - x0) / nj;
