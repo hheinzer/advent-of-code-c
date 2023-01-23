@@ -37,7 +37,7 @@ List *list_copy(const List *other, void *(*data_copy)())
 void list_free(List **list, void (*data_free)())
 {
     Node *node = (*list)->first;
-    while (node) {
+    for (size_t i = 0; i < (*list)->len; ++i) {
         Node *next = node->next;
         node_free(node, data_free);
         node = next;
