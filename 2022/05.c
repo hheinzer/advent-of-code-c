@@ -18,7 +18,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
     // create crate stacks
     Stack *stack[9] = { 0 };
     size_t n_stacks = 0;
-    for (size_t i = 0; i < i0; ++i) {
+    for (size_t i = i0 - 1; i < i0; --i) {
         const size_t n = strlen(line[i]);
         for (size_t j = 1; j < n; j += 4) {
             char crate = line[i][j];
@@ -32,7 +32,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
                 }
 
                 // add crate
-                list_insert_first(stack[istack], COPY(crate));
+                stack_push(stack[istack], COPY(crate));
             }
         }
     }
