@@ -8,7 +8,12 @@ __attribute__((constructor)) static void run_before_main(void)
 }
 __attribute__((destructor)) static void run_after_main(void)
 {
-    printf("wtime = %g s\n", (clock() - _timer_start) / CLOCKS_PER_SEC);
+    const double wtime = (clock() - _timer_start) / CLOCKS_PER_SEC;
+    if (wtime > 1.0) {
+        printf("%swtime = %g s%s\n", "\x1b[31;1m", wtime, "\x1b[0m");
+    } else {
+        printf("wtime = %g s\n", wtime);
+    }
 }
 
 size_t lines_read(const char ***line, const char *fname)
