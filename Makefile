@@ -4,9 +4,10 @@
 
 # configuration {on, off}
 assert   = on
-debug    = on
 analyzer = on
+debug    = on
 sanitize = on
+profile  = off
 
 # compiler
 CC = gcc
@@ -57,6 +58,11 @@ ifeq ($(sanitize), on)
 CFLAGS += -fsanitize=undefined -fsanitize=address
 endif
 
+# profiler flags
+ifeq ($(profile), on)
+CFLAGS += -pg -fno-lto
+endif
+
 # linking
 LDFLAGS = -Wl,--gc-sections
 LDLIBS  = -lm
@@ -102,7 +108,7 @@ run: $(BIN)
 
 # auxiliary functions
 clean:
-	rm -rf $(OBJ) $(BIN) $(DEP) $(LIB)
+	rm -rf $(OBJ) $(BIN) $(DEP) $(LIB) gmon.out perf.data*
 
 check:
 	-cppcheck --enable=all --inconclusive --suppress=missingIncludeSystem \
