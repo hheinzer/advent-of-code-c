@@ -28,6 +28,8 @@ List *list_copy(const List *other, void *(*data_copy)())
         void *copy = 0;
         if (data_copy) {
             copy = data_copy(malloc(list->data_size), node->data, list->data_size);
+        } else {
+            copy = node->data;
         }
         list_insert_last(list, copy);
     }
