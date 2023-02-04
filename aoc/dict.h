@@ -20,6 +20,7 @@ struct Dict {
 
 struct Item {
     const char *key; // pointer to item key
+    size_t key_size; // key size
     void *data; // pointer to item data
     Item *next; // pointer to next item in bucket
 };
@@ -29,13 +30,11 @@ Dict *dict_alloc(size_t data_size, size_t size);
 
 // allocate copy of other,
 // use data_copy to copy data from other item, if 0 do not copy data,
-// signature of data_copy() is same as memcpy()
-Dict *dict_copy(const Dict *other, void *(*data_copy)());
+Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t));
 
 // free dict,
 // use data_free to free data in item, if 0 do not free data,
-// signature of data_free() is same as free()
-void dict_free(Dict **dict, void (*data_free)());
+void dict_free(Dict **dict, void (*data_free)(void *));
 
 // insert data into dict with specified key,
 // overwrite data if key present,
@@ -56,7 +55,6 @@ Item *dict_find(const Dict *dict, const char *key);
 // traverse items of dict and apply func to data,
 // return 1 as soon as func returns 1
 // return 0 if func always returned 0,
-// signature of func() is: int func(TYPE *data)
-int dict_traverse(const Dict *dict, int (*func)());
+int dict_traverse(const Dict *dict, int (*func)(const char *, void *));
 
 #endif
