@@ -7,12 +7,12 @@
 #include <assert.h>
 #include <ctype.h>
 #include <limits.h>
-#include <tgmath.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <tgmath.h>
 #include <time.h>
 
 #include "dict.h"
