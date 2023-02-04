@@ -13,7 +13,7 @@ inline Queue *queue_alloc(size_t data_size)
     return list_alloc(data_size);
 }
 
-inline void queue_free(Queue **queue, void (*data_free)())
+inline void queue_free(Queue **queue, void (*data_free)(void *))
 {
     list_free(queue, data_free);
 }

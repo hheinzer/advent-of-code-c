@@ -6,7 +6,7 @@ static Node *node_alloc(void *data)
     return memcpy(malloc(sizeof(node)), &node, sizeof(node));
 }
 
-static void node_free(Node *node, void (*data_free)())
+static void node_free(Node *node, void (*data_free)(void *))
 {
     if (data_free) {
         data_free(node->data);
@@ -21,7 +21,7 @@ List *list_alloc(size_t data_size)
     return memcpy(malloc(sizeof(list)), &list, sizeof(list));
 }
 
-List *list_copy(const List *other, void *(*data_copy)())
+List *list_copy(const List *other, void *(*data_copy)(void *, const void *, size_t))
 {
     List *list = list_alloc(other->data_size);
     for (const Node *node = other->first; node; node = node->next) {
@@ -36,7 +36,7 @@ List *list_copy(const List *other, void *(*data_copy)())
     return list;
 }
 
-void list_free(List **list, void (*data_free)())
+void list_free(List **list, void (*data_free)(void *))
 {
     Node *node = (*list)->first;
     for (size_t i = 0; i < (*list)->len; ++i) {
@@ -180,7 +180,7 @@ Node *list_get(const List *list, size_t i)
     }
 }
 
-Node *list_find(const List *list, const void *data, int (*data_cmp)())
+Node *list_find(const List *list, const void *data, int (*data_cmp)(const void *, const void *))
 {
     for (Node *node = list->first; node; node = node->next) {
         if (!data_cmp(node->data, data)) {
@@ -210,7 +210,7 @@ void *list_delete(List *list, Node *node)
     return data;
 }
 
-size_t list_index(const List *list, void *data, int (*data_cmp)())
+size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *))
 {
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) {
@@ -222,7 +222,7 @@ size_t list_index(const List *list, void *data, int (*data_cmp)())
     return list->len;
 }
 
-void list_sort(List *list, int (*data_cmp)())
+void list_sort(List *list, int (*data_cmp)(const void *, const void *))
 {
     char *data = malloc(list->len * list->data_size);
     Node *node = list->first;
@@ -239,7 +239,7 @@ void list_sort(List *list, int (*data_cmp)())
     free(data);
 }
 
-int list_traverse(const List *list, int (*func)())
+int list_traverse(const List *list, int (*func)(void *))
 {
     for (const Node *node = list->first; node; node = node->next) {
         if (func(node->data)) {

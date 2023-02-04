@@ -66,9 +66,10 @@ PacketData *pd_create(const char **line_ptr)
     return pd;
 }
 
-void pd_free(PacketData *pd)
+void pd_free(void *_pd)
 {
     // recursively free the packet
+    PacketData *pd = (PacketData *)_pd;
     if (pd->type == PDT_LIST) {
         Node *node = pd->pd_list->first;
         while (node) {

@@ -2,7 +2,7 @@
 
 Queue *queue_alloc(size_t data_size);
 
-void queue_free(Queue **queue, void (*data_free)());
+void queue_free(Queue **queue, void (*data_free)(void *));
 
 int queue_push(Queue *queue, void *data);
 
