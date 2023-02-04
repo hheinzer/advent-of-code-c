@@ -62,7 +62,7 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
     // check if state has been evaluated before
     char key[256] = "";
     const size_t time_remaining = time_allowed - time_taken;
-    snprintf(key, sizeof(key), "%s %zu %zu %zu", seen, loc, time_remaining, n_players);
+    snprintf(key, sizeof(key), "%zu %zu %s %zu", loc, time_remaining, seen, n_players);
     Item *item = dict_find(cache, key);
     if (item) {
         return *(size_t *)item->data;
