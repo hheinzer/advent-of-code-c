@@ -45,19 +45,16 @@ void find_pattern(const long *a, size_t n, size_t *np, size_t *nr)
         const long *s = a + i;
 
         // check if there are any repeating sections up to half of the length of s
-        for (size_t r = 2; r < (n - i) / 2; ++r) {
-            if (array_repeats(s, s + r, r)) {
+        for (size_t j = 1; j < (n - i) / 2; ++j) {
+            if (array_repeats(s, s + j, j)) {
                 // make sure this repeats in the whole rest of s
                 int all = 1;
-                for (size_t j = 2 * r; j < (n - i) - r; j += r) {
-                    all = all && array_repeats(s, s + j, r);
-                    if (!all) {
-                        break;
-                    }
+                for (size_t k = 2 * j; (k < (n - i) - j) && all; k += j) {
+                    all &= array_repeats(s, s + k, j);
                 }
                 if (all) {
                     *np = i;
-                    *nr = r;
+                    *nr = j;
                     return;
                 }
             }
