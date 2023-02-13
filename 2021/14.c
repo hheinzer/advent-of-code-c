@@ -3,8 +3,17 @@
  * (https://adventofcode.com/2021/day/14)
  *
  * Part 1:
+ * - instead of keeping track of the actual polymer string,
+ *   keep track of how many of the input pairs there are (left side of rules)
+ *   - constant size array, not memory bound
+ * - modify polymer by applying the rules in a slightly different way than explained
+ *   - example: "CH -> B" uses up "CH" and creates "CB" and "BH"
+ * - count the occurrence of individual letters, each one will appear twice, because the
+ *   pairs overlap (except for the first and last letter of the initial polymer)
+ * - count letters, compute min/max, compute difference
  *
  * Part 2:
+ * - repeat with more steps
  */
 #include "aoc.h"
 
@@ -37,7 +46,7 @@ size_t polymer_quantity_diff(size_t ni, char input[ni][3], size_t count[ni], con
     ++hist[poly[strlen(poly) - 1] - 'A'];
 
     // compute min/max of individual letters,
-    // each letter is counted twice: devide count by 2
+    // each letter is counted twice: divide count by 2
     size_t min = SIZE_MAX;
     size_t max = 0;
     for (char letter = 'A'; letter <= 'Z'; ++letter) {
