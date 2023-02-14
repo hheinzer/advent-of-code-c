@@ -10,7 +10,7 @@ __attribute__((destructor)) static void run_after_main(void)
 {
     const double wtime = (clock() - _timer_start) / CLOCKS_PER_SEC;
     if (wtime > 1.0) {
-        printf("%swtime = %g s%s\n", "\x1b[31;1m", wtime, "\x1b[0m");
+        printf("wtime = %g s (!!!)\n", wtime);
     } else {
         printf("wtime = %g s\n", wtime);
     }
