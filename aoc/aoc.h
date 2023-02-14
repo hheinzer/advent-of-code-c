@@ -16,6 +16,7 @@
 #include <time.h>
 
 #include "dict.h"
+#include "heap.h"
 #include "list.h"
 #include "queue.h"
 #include "stack.h"
