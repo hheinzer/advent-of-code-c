@@ -29,11 +29,11 @@ struct Item {
 Dict *dict_alloc(size_t data_size, size_t size);
 
 // allocate copy of other,
-// use data_copy to copy data from other item, if 0 do not copy data,
+// use data_copy to copy data from other, if 0 do not copy data
 Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t));
 
 // free dict,
-// use data_free to free data in item, if 0 do not free data,
+// use data_free to free data, if 0 do not free data
 void dict_free(Dict **dict, void (*data_free)(void *));
 
 // insert data into dict with specified key,

@@ -28,11 +28,11 @@ struct Node {
 List *list_alloc(size_t data_size);
 
 // allocate copy of other,
-// use data_copy to copy data from other item, if 0 do not copy data,
+// use data_copy to copy data from other, if 0 do not copy data
 List *list_copy(const List *other, void *(*data_copy)(void *, const void *, size_t));
 
 // free list,
-// use data_free to free data in node, use 0 to not free data,
+// use data_free to free data, use 0 to not free data
 void list_free(List **list, void (*data_free)(void *));
 
 // insert data into list at specified location,
@@ -55,7 +55,7 @@ Node *list_get(const List *list, size_t i);
 
 // search for first occurrence of data in list,
 // return matching node if found,
-// return 0 if not found,
+// return 0 if not found
 Node *list_find(const List *list, const void *data, int (*data_cmp)(const void *, const void *));
 
 // delete specified node,
@@ -64,7 +64,7 @@ void *list_delete(List *list, Node *node);
 
 // search for first occurrence of data in list,
 // return index of matching node if found,
-// return list->len (out of range) if not found,
+// return list->len (out of range) if not found
 size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *));
 
 // sort list in place,
@@ -72,7 +72,7 @@ void list_sort(List *list, int (*data_cmp)(const void *, const void *));
 
 // traverse nodes of list and apply func to data,
 // return 1 as soon as func returns 1,
-// return 0 if func always returned 0,
+// return 0 if func always returned 0
 int list_traverse(const List *list, int (*func)(void *));
 
 #endif
