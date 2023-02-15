@@ -38,42 +38,110 @@ size_t dijkstra(size_t ni, size_t nj, int grid[ni][nj])
     while (heap->len > 0) {
         // get the highest priority element (shortest distance)
         size_t *u = heap_remove(heap);
+        const size_t ui = u[0];
+        const size_t uj = u[1];
+        free(u);
 
         // check if it is the end
-        if ((u[0] == ni - 2) && (u[1] == nj - 2)) {
-            ret = dist[u[0]][u[1]];
-            free(u);
+        if ((ui == ni - 2) && (uj == nj - 2)) {
+            ret = dist[ui][uj];
             goto cleanup;
         }
 
         // mark u as visited
-        visited[u[0]][u[1]] = 1;
+        visited[ui][uj] = 1;
 
         // check neighbors
         for (size_t k = 0; k < 4; ++k) {
-            const size_t i = u[0] + di[k];
-            const size_t j = u[1] + dj[k];
+            const size_t vi = ui + di[k];
+            const size_t vj = uj + dj[k];
 
             // go to valid neighbor, if it has not been visited yet
-            if ((grid[i][j] > 0) && !visited[i][j]) {
+            if ((grid[vi][vj] > 0) && !visited[vi][vj]) {
                 // compute total distance to neighbor
-                const size_t v[2] = { i, j };
-                const size_t alt = dist[u[0]][u[1]] + grid[v[0]][v[1]];
+                const size_t alt = dist[ui][uj] + grid[vi][vj];
 
                 // if it is smaller, then update neighbor distance and add neighbor to heap
-                if (alt < dist[v[0]][v[1]]) {
-                    dist[v[0]][v[1]] = alt;
-                    heap_insert(heap, -alt, COPY(v));
+                if (alt < dist[vi][vj]) {
+                    dist[vi][vj] = alt;
+                    heap_insert(heap, -alt, COPY(((size_t[]) { vi, vj })));
                 }
             }
         }
-
-        // cleanup
-        free(u);
     }
 
 cleanup:
     heap_free(&heap, free);
+    free(dist);
+    free(visited);
+    return ret;
+}
+
+CMP(size_t)
+
+// this is just here for a speed comparison, don't use it,
+// it is slower than dijkstra with heap
+size_t dijkstra_sorted_list(size_t ni, size_t nj, int grid[ni][nj])
+{
+    // static offsets to reach neighbors
+    static const long di[4] = { -1, +1, +0, +0 };
+    static const long dj[4] = { +0, +0, -1, +1 };
+
+    // set up dijkstra search
+    Queue *queue = queue_alloc(sizeof(size_t[3]));
+    size_t(*dist)[nj] = malloc(ni * sizeof(*dist));
+    for (size_t i = 1; i < ni - 1; ++i) {
+        for (size_t j = 1; j < nj - 1; ++j) {
+            dist[i][j] = SIZE_MAX;
+        }
+    }
+    int(*visited)[nj] = calloc(ni, sizeof(*visited));
+
+    // insert starting tile, set its distance to 0, and mark it as visited
+    queue_push(queue, COPY(((size_t[]) { 0, 1, 1 })));
+    dist[1][1] = 0;
+    visited[1][1] = 1;
+
+    // dijkstra
+    size_t ret = 0;
+    while (queue->len > 0) {
+        // get the highest priority element (shortest distance)
+        list_sort(queue, cmp_size_t_asc);
+        size_t *u = queue_pop(queue);
+        const size_t ui = u[1];
+        const size_t uj = u[2];
+        free(u);
+
+        // check if it is the end
+        if ((ui == ni - 2) && (uj == nj - 2)) {
+            ret = dist[ui][uj];
+            goto cleanup;
+        }
+
+        // mark u as visited
+        visited[ui][uj] = 1;
+
+        // check neighbors
+        for (size_t k = 0; k < 4; ++k) {
+            const size_t vi = ui + di[k];
+            const size_t vj = uj + dj[k];
+
+            // go to valid neighbor, if it has not been visited yet
+            if ((grid[vi][vj] > 0) && !visited[vi][vj]) {
+                // compute total distance to neighbor
+                const size_t alt = dist[ui][uj] + grid[vi][vj];
+
+                // if it is smaller, then update neighbor distance and add neighbor to heap
+                if (alt < dist[vi][vj]) {
+                    dist[vi][vj] = alt;
+                    queue_push(queue, COPY(((size_t[]) { alt, vi, vj })));
+                }
+            }
+        }
+    }
+
+cleanup:
+    queue_free(&queue, free);
     free(dist);
     free(visited);
     return ret;
