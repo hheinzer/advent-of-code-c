@@ -4,8 +4,8 @@
 
 # configuration {on, off}
 assert   = on
-analyzer = on
 debug    = on
+analyzer = off
 sanitize = on
 profile  = off
 
@@ -42,7 +42,7 @@ endif
 # optimization flags
 ifeq ($(debug), on)
 CFLAGS += -Og -fno-omit-frame-pointer
-ifeq ($(analyzer) ($CC), on gcc)
+ifeq ($(analyzer), on)
 CFLAGS += -fanalyzer
 endif
 else
