@@ -102,8 +102,10 @@ Packet *packet_alloc(const char **input)
             assert(length_type == 1);
             packet->operator.n_sub = bin_to_size_t(input, 11);
             packet->operator.sub = calloc(packet->operator.n_sub, sizeof(Packet *));
+            assert(packet->operator.sub);
             for (size_t i = 0; i < packet->operator.n_sub; ++i) {
                 packet->operator.sub[i] = packet_alloc(input);
+                assert(packet->operator.sub[i]);
             }
         }
     }

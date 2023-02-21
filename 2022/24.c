@@ -17,7 +17,7 @@ typedef struct State {
     long j;
 } State;
 
-size_t bfs(size_t ni, size_t nj, char map[ni][nj], const long S[2], const long E[2], size_t t0)
+size_t bfs(long ni, long nj, char map[ni][nj], const long S[2], const long E[2], size_t t0)
 {
     Queue *queue = queue_alloc(sizeof(State));
     Dict *seen = dict_alloc(0, 2 * ni * nj);
@@ -28,7 +28,7 @@ size_t bfs(size_t ni, size_t nj, char map[ni][nj], const long S[2], const long E
     char key[256] = "";
     while (queue->len) {
         State *state = queue_pop(queue);
-        const size_t time = state->time + 1;
+        const long time = state->time + 1;
         const long i = state->i;
         const long j = state->j;
         free(state);
@@ -61,7 +61,7 @@ size_t bfs(size_t ni, size_t nj, char map[ni][nj], const long S[2], const long E
                     }
                 }
             }
-            if (!collision && !dict_find(seen, KEY(key, "%zu,%ld,%ld", time, ii, jj))) {
+            if (!collision && !dict_find(seen, KEY(key, "%ld,%ld,%ld", time, ii, jj))) {
                 dict_insert(seen, key, 0);
                 queue_push(queue, COPY(((State) { time, ii, jj })));
             }

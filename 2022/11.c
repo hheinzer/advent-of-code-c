@@ -47,7 +47,7 @@ void solve(const char **line, size_t n_lines, size_t part)
 
         // read operation
         char tmp[256] = "";
-        sscanf(line[i + 2], " Operation: new = old %[^\n]", tmp);
+        sscanf(line[i + 2], " Operation: new = old %255[^\n]", tmp);
         if (!strcmp(tmp, "* old")) {
             monkey[imonkey].op_type = '^';
             monkey[imonkey].op_value = 2;

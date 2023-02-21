@@ -37,6 +37,7 @@ void face_create(Face face[6], int shape[6][6], size_t n, const char **line)
                 f->g_row = i * n;
                 f->g_col = j * n;
                 f->map = calloc((n + 2) * (n + 2), sizeof(*f->map));
+                assert(f->map);
                 char(*map)[n + 2] = TENSOR(map, f->map);
                 for (size_t ii = 0; ii < n; ++ii) { // read map
                     for (size_t jj = 0; jj < n; ++jj) {

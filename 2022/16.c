@@ -126,7 +126,7 @@ int main(void)
     List *non_zero = list_alloc(sizeof(size_t));
     for (size_t i = 0; i < n_lines; ++i) {
         char key[3] = "";
-        sscanf(line[i], "Valve %s has flow rate=%zu", key, &rate[i]);
+        sscanf(line[i], "Valve %2s has flow rate=%zu", key, &rate[i]);
         dict_insert(v2i, key, COPY(i));
         if (rate[i] > 0) {
             list_insert_last(non_zero, COPY(i));
@@ -139,11 +139,11 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         char key[3] = "";
         char net[256] = "";
-        sscanf(line[i], "Valve %s has flow rate=%*d; %*s %*s to %*s %[^\n]", key, net);
+        sscanf(line[i], "Valve %2s has flow rate=%*d; %*s %*s to %*s %255[^\n]", key, net);
         size_t iv = *(size_t *)dict_find(v2i, key)->data;
         char *tok = strtok(net, ",");
         while (tok) {
-            sscanf(tok, " %s", key);
+            sscanf(tok, " %2s", key);
             size_t jv = *(size_t *)dict_find(v2i, key)->data;
             adj[iv][jv] = 1;
             tok = strtok(0, ",");

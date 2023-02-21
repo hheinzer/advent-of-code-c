@@ -31,7 +31,7 @@ long pos_median(long *pos, size_t n)
     return pos[n / 2];
 }
 
-long pos_cost1(long *pos, size_t n, long p)
+long pos_cost1(const long *pos, size_t n, long p)
 {
     long cost = 0;
     for (size_t i = 0; i < n; ++i) {
@@ -40,7 +40,7 @@ long pos_cost1(long *pos, size_t n, long p)
     return cost;
 }
 
-long pos_mean(long *pos, size_t n)
+long pos_mean(const long *pos, size_t n)
 {
     long mean = 0;
     for (size_t i = 0; i < n; ++i) {
@@ -49,7 +49,7 @@ long pos_mean(long *pos, size_t n)
     return round(mean / (double)n);
 }
 
-long pos_cost2(long *pos, size_t n, long p, long dp)
+long pos_cost2(const long *pos, size_t n, long p, long dp)
 {
     long min_cost = LONG_MAX;
     for (long _dp = -dp; _dp <= dp; ++_dp) {

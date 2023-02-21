@@ -57,6 +57,7 @@ int main(void)
     }
 
     // part 1
+    assert(size_dir);
     qsort(size_dir, n_dirs, sizeof(*size_dir), cmp_size_t_asc);
     size_t total_size = 0;
     for (size_t i = 0; i < n_dirs; ++i) {

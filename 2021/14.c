@@ -26,12 +26,12 @@ void polymer_modify(size_t ni, size_t count[ni], size_t rule[ni][2], size_t n_st
             new_count[rule[i][0]] += count[i];
             new_count[rule[i][1]] += count[i];
         }
-        memcpy(count, new_count, ni * sizeof(new_count));
+        memcpy(count, new_count, ni * sizeof(*new_count));
     }
     free(new_count);
 }
 
-size_t polymer_quantity_diff(size_t ni, char input[ni][3], size_t count[ni], const char *poly)
+size_t polymer_quantity_diff(size_t ni, char input[ni][3], const size_t count[ni], const char *poly)
 {
     // compute histogram of pairs
     size_t hist['Z' - 'A' + 1] = { 0 };
@@ -70,7 +70,7 @@ int main(void)
     char(*input)[3] = calloc(ni, sizeof(*input));
     Dict *imap = dict_alloc(sizeof(size_t), 2 * ni);
     for (size_t i = 0; i < ni; ++i) {
-        sscanf(line[2 + i], "%s", input[i]);
+        sscanf(line[2 + i], "%2s", input[i]);
         dict_insert(imap, input[i], COPY(i));
     }
 

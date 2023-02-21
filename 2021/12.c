@@ -13,6 +13,7 @@
 #include "aoc.h"
 
 #define NL 10
+#define FMT "%9[^-]-%9s"
 
 int is_lowercase(const char *str)
 {
@@ -61,7 +62,7 @@ int main(void)
     Dict *cave = dict_alloc(sizeof(size_t), 1000);
     for (size_t i = 0, i_cave = 0; i < n_lines; ++i) {
         char name1[NL], name2[NL];
-        sscanf(line[i], "%[^-]-%s", name1, name2);
+        sscanf(line[i], FMT, name1, name2);
         if (!dict_find(cave, name1)) {
             dict_insert(cave, name1, COPY((size_t) { i_cave++ }));
         }
@@ -76,7 +77,7 @@ int main(void)
     int(*path)[n_caves] = calloc(n_caves, sizeof(*path));
     for (size_t i = 0; i < n_lines; ++i) {
         char name1[NL], name2[NL];
-        sscanf(line[i], "%[^-]-%s", name1, name2);
+        sscanf(line[i], FMT, name1, name2);
         const size_t i1 = *(size_t *)dict_find(cave, name1)->data;
         const size_t i2 = *(size_t *)dict_find(cave, name2)->data;
         small[i1] = is_lowercase(name1);

@@ -136,12 +136,12 @@ int main(void)
         char *input = STRCOPY(line[i]);
         const char *tok = strtok(input, "| ");
         for (size_t j = 0; j < 10; ++j) {
-            sscanf(tok, "%s", entry[i].signal[j]);
+            sscanf(tok, "%7s", entry[i].signal[j]);
             qsort(entry[i].signal[j], strlen(tok), sizeof(*tok), cmp_char_asc);
             tok = strtok(0, "| ");
         }
         for (size_t j = 0; j < 4; ++j) {
-            sscanf(tok, "%s", entry[i].output[j]);
+            sscanf(tok, "%7s", entry[i].output[j]);
             qsort(entry[i].output[j], strlen(tok), sizeof(*tok), cmp_char_asc);
             tok = strtok(0, "| ");
         }

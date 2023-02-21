@@ -62,6 +62,17 @@ cleanup:
     return length;
 }
 
+const char *strchrnul(const char *s, int c)
+{
+    while (*s) {
+        if (*s == c) {
+            return s;
+        }
+        ++s;
+    }
+    return s;
+}
+
 int main(void)
 {
     // read input
@@ -77,8 +88,8 @@ int main(void)
     }
 
     // find start and end
-    const size_t S = strchr(height, 'S') - height;
-    const size_t E = strchr(height, 'E') - height;
+    const size_t S = strchrnul(height, 'S') - height;
+    const size_t E = strchrnul(height, 'E') - height;
 
     // set height of start and end
     height[S] = 'a';
