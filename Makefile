@@ -112,8 +112,7 @@ clean:
 
 check:
 	-cppcheck --enable=all --inconclusive --suppress=missingIncludeSystem \
-		--suppress=unreadVariable --suppress=unusedFunction \
-		-Iaoc aoc 20*
+		--suppress=unusedFunction --project=compile_commands.json
 
 memcheck:
 	-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
