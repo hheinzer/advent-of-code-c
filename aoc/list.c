@@ -1,9 +1,18 @@
 #include "list.h"
 
+static void *memdup(const void *src, size_t size_bytes)
+{
+    void *dest = malloc(size_bytes);
+    if (dest) {
+        memcpy(dest, src, size_bytes);
+    }
+    return dest;
+}
+
 static Node *node_alloc(void *data)
 {
     const Node node = { .data = data };
-    return memcpy(malloc(sizeof(node)), &node, sizeof(node));
+    return memdup(&node, sizeof(node));
 }
 
 static void node_free(Node *node, void (*data_free)(void *))
@@ -18,7 +27,7 @@ static void node_free(Node *node, void (*data_free)(void *))
 List *list_alloc(size_t data_size)
 {
     const List list = { .data_size = data_size };
-    return memcpy(malloc(sizeof(list)), &list, sizeof(list));
+    return memdup(&list, sizeof(list));
 }
 
 List *list_copy(const List *other, void *(*data_copy)(void *, const void *, size_t))
@@ -222,9 +231,12 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
     return list->len;
 }
 
-void list_sort(List *list, int (*data_cmp)(const void *, const void *))
+int list_sort(List *list, int (*data_cmp)(const void *, const void *))
 {
     char *data = malloc(list->len * list->data_size);
+    if (!data) {
+        return 1;
+    }
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) { // shallow copy to data array
         memcpy(data + i * list->data_size, node->data, list->data_size);
@@ -237,14 +249,5 @@ void list_sort(List *list, int (*data_cmp)(const void *, const void *))
         node = node->next;
     }
     free(data);
-}
-
-int list_traverse(const List *list, int (*func)(void *))
-{
-    for (const Node *node = list->first; node; node = node->next) {
-        if (func(node->data)) {
-            return 1;
-        }
-    }
     return 0;
 }

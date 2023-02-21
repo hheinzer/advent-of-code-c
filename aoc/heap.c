@@ -1,5 +1,14 @@
 #include "heap.h"
 
+static void *memdup(const void *src, size_t size_bytes)
+{
+    void *dest = malloc(size_bytes);
+    if (dest) {
+        memcpy(dest, src, size_bytes);
+    }
+    return dest;
+}
+
 Heap *heap_alloc(size_t data_size, size_t size)
 {
     size = (size ? size : 1);
@@ -8,7 +17,7 @@ Heap *heap_alloc(size_t data_size, size_t size)
         .size = size,
         .elem = calloc(size, sizeof(Elem)),
     };
-    return memcpy(malloc(sizeof(heap)), &heap, sizeof(heap));
+    return memdup(&heap, sizeof(heap));
 }
 
 Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size_t))

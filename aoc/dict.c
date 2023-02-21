@@ -1,19 +1,22 @@
 #include "dict.h"
 
-static Item item_create(const char *key, size_t key_size, void *data)
+static void *memdup(const void *src, size_t size_bytes)
 {
-    const Item item = {
-        .key = strcpy(malloc(key_size + 1), key),
-        .key_size = key_size,
-        .data = data,
-    };
-    return item;
+    void *dest = malloc(size_bytes);
+    if (dest) {
+        memcpy(dest, src, size_bytes);
+    }
+    return dest;
 }
 
 static Item *item_alloc(const char *key, size_t key_size, void *data)
 {
-    const Item item = item_create(key, key_size, data);
-    return memcpy(malloc(sizeof(item)), &item, sizeof(item));
+    const Item item = {
+        .key = memdup(key, key_size + 1),
+        .key_size = key_size,
+        .data = data,
+    };
+    return memdup(&item, sizeof(item));
 }
 
 static void item_clear(Item *item, void (*data_free)(void *))
@@ -41,7 +44,7 @@ Dict *dict_alloc(size_t data_size, size_t size)
         .size = size,
         .item = calloc(size, sizeof(Item)),
     };
-    return memcpy(malloc(sizeof(dict)), &dict, sizeof(dict));
+    return memdup(&dict, sizeof(dict));
 }
 
 Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t))
@@ -109,7 +112,7 @@ void *dict_insert(Dict *dict, const char *key, void *data)
     const size_t key_size = strlen(key);
     const size_t i = hash(key) % dict->size;
     Item *item = &dict->item[i];
-    Item *prev = 0;
+    Item *prev = item;
     while (item && item->key && keycmp(item->key, item->key_size, key, key_size)) {
         prev = item;
         item = item->next;
@@ -121,7 +124,13 @@ void *dict_insert(Dict *dict, const char *key, void *data)
         return 0;
 
     } else if (!item->key) { // empty spot: insert item
-        *item = item_create(key, key_size, data);
+        memcpy(item,
+            &(Item) {
+                .key = memdup(key, key_size + 1),
+                .key_size = key_size,
+                .data = data,
+            },
+            sizeof(*item));
         ++dict->len;
         return 0;
 
@@ -173,16 +182,4 @@ Item *dict_find(const Dict *dict, const char *key)
         item = item->next;
     }
     return (!item || !item->key ? 0 : item);
-}
-
-int dict_traverse(const Dict *dict, int (*func)(const char *, void *))
-{
-    for (size_t i = 0; i < dict->size; ++i) {
-        for (const Item *item = &dict->item[i]; item && item->key; item = item->next) {
-            if (func(item->key, item->data)) {
-                return 1;
-            }
-        }
-    }
-    return 0;
 }

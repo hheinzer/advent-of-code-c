@@ -23,11 +23,13 @@ struct Elem {
     void *data; // pointer to element data
 };
 
-// allocate heap
+// allocate heap,
+// return 0 on memory failure
 Heap *heap_alloc(size_t data_size, size_t size);
 
 // allocate copy of heap,
-// use data_copy to copy data from other, if 0 do not copy data
+// use data_copy to copy data from other, if 0 do not copy data,
+// return 0 on memory failure
 Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size_t));
 
 // free heap,
