@@ -16,6 +16,14 @@ __attribute__((destructor)) static void run_after_main(void)
     }
 }
 
+void *aoc_malloc(size_t size);
+
+void *aoc_calloc(size_t nmemb, size_t size);
+
+void *aoc_realloc(void *ptr, size_t size);
+
+void *memdup(const void *src, size_t size_bytes);
+
 size_t lines_read(const char ***line, const char *fname)
 {
     // open file
