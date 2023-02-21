@@ -5,7 +5,7 @@
 # configuration {on, off}
 assert   = on
 debug    = on
-analyzer = off
+analyzer = on
 sanitize = on
 profile  = off
 
