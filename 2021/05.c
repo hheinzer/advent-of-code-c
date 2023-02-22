@@ -46,7 +46,7 @@ int main(void)
                     size_t *count = item->data;
                     ++(*count);
                 } else {
-                    dict_insert(grid, key, COPY((size_t) { 1 }));
+                    dict_insert(grid, key, memdup(&(size_t) { 1 }, sizeof(size_t)));
                 }
             }
 
@@ -57,7 +57,7 @@ int main(void)
                     size_t *count = item->data;
                     ++(*count);
                 } else {
-                    dict_insert(grid, key, COPY((size_t) { 1 }));
+                    dict_insert(grid, key, memdup(&(size_t) { 1 }, sizeof(size_t)));
                 }
             }
         }
@@ -82,7 +82,7 @@ int main(void)
                     size_t *count = item->data;
                     ++(*count);
                 } else {
-                    dict_insert(grid, key, COPY((size_t) { 1 }));
+                    dict_insert(grid, key, memdup(&(size_t) { 1 }, sizeof(size_t)));
                 }
             }
         }

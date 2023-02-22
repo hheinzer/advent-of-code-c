@@ -41,7 +41,7 @@ void solve(const char **line, size_t n_lines, size_t part)
         char *c = strchr(line[i + 1], ':');
         long item = 0;
         while (c && sscanf(c + 1, " %ld", &item)) {
-            queue_push(monkey[imonkey].item, COPY(item));
+            queue_push(monkey[imonkey].item, memdup(&item, sizeof(item)));
             c = strchr(c + 1, ',');
         }
 

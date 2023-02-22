@@ -6,7 +6,7 @@
 assert   = on
 debug    = on
 analyzer = on
-sanitize = on
+sanitize = off
 profile  = off
 
 # compiler
@@ -18,7 +18,7 @@ AR = gcc-ar rcs
 #
 
 # targets
-.PHONY: default lib run clean check memcheck format
+.PHONY: default lib run clean check memcheck test format
 
 # default target
 default: run
@@ -117,6 +117,12 @@ check:
 memcheck:
 	-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 		--suppressions=.memcheck.supp $(BIN)
+
+test: $(BIN)
+	@for prog in $(sort $(BIN)); do \
+		echo "--- $$prog ---" && \
+		./$$prog; \
+	done | grep -v wtime | diff --color=auto -c solutions.txt -
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')

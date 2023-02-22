@@ -71,7 +71,7 @@ int main(void)
     Dict *imap = dict_alloc(sizeof(size_t), 2 * ni);
     for (size_t i = 0; i < ni; ++i) {
         sscanf(line[2 + i], "%2s", input[i]);
-        dict_insert(imap, input[i], COPY(i));
+        dict_insert(imap, input[i], memdup(&i, sizeof(i)));
     }
 
     // read rules

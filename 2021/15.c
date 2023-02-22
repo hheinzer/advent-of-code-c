@@ -29,7 +29,7 @@ size_t dijkstra(size_t ni, size_t nj, int grid[ni][nj])
     int(*visited)[nj] = calloc(ni, sizeof(*visited));
 
     // insert starting tile, set its distance to 0, and mark it as visited
-    heap_insert(heap, 0, COPY(((size_t[]) { 1, 1 })));
+    heap_insert(heap, 0, memdup((size_t[2]) { 1, 1 }, sizeof(size_t[2])));
     dist[1][1] = 0;
     visited[1][1] = 1;
 
@@ -64,7 +64,7 @@ size_t dijkstra(size_t ni, size_t nj, int grid[ni][nj])
                 // if it is smaller, then update neighbor distance and add neighbor to heap
                 if (alt < dist[vi][vj]) {
                     dist[vi][vj] = alt;
-                    heap_insert(heap, -alt, COPY(((size_t[]) { vi, vj })));
+                    heap_insert(heap, -alt, memdup((size_t[2]) { vi, vj }, sizeof(size_t[2])));
                 }
             }
         }
@@ -98,7 +98,7 @@ size_t dijkstra_sorted_list(size_t ni, size_t nj, int grid[ni][nj])
     int(*visited)[nj] = calloc(ni, sizeof(*visited));
 
     // insert starting tile, set its distance to 0, and mark it as visited
-    queue_push(queue, COPY(((size_t[]) { 0, 1, 1 })));
+    queue_push(queue, memdup(&(size_t[3]) { 0, 1, 1 }, sizeof(size_t[3])));
     dist[1][1] = 0;
     visited[1][1] = 1;
 
@@ -134,7 +134,7 @@ size_t dijkstra_sorted_list(size_t ni, size_t nj, int grid[ni][nj])
                 // if it is smaller, then update neighbor distance and add neighbor to heap
                 if (alt < dist[vi][vj]) {
                     dist[vi][vj] = alt;
-                    queue_push(queue, COPY(((size_t[]) { alt, vi, vj })));
+                    queue_push(queue, memdup((size_t[3]) { alt, vi, vj }, sizeof(size_t[3])));
                 }
             }
         }

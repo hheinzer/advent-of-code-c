@@ -87,7 +87,7 @@ size_t elf_simulate(List *elf, size_t n_round)
                     dict_insert(prop, key, count);
                 } else {
                     size_t count = 1;
-                    dict_insert(prop, key, COPY(count));
+                    dict_insert(prop, key, memdup(&count, sizeof(count)));
                 }
             }
         }
@@ -153,7 +153,7 @@ int main(void)
         for (size_t j = 0; j < strlen(line[i]); ++j) {
             if (line[i][j] == '#') {
                 Elf e = { i, j, i, j };
-                list_insert_last(elf, COPY(e));
+                list_insert_last(elf, memdup(&e, sizeof(e)));
             }
         }
     }

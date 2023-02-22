@@ -1,11 +1,11 @@
 #include "aoc.h"
 
-// functions that run before and after main, used for timing
 static double _timer_start = 0;
 __attribute__((constructor)) static void run_before_main(void)
 {
     _timer_start = clock();
 }
+
 __attribute__((destructor)) static void run_after_main(void)
 {
     const double wtime = (clock() - _timer_start) / CLOCKS_PER_SEC;
@@ -15,14 +15,6 @@ __attribute__((destructor)) static void run_after_main(void)
         printf("wtime = %g s\n", wtime);
     }
 }
-
-void *aoc_malloc(size_t size);
-
-void *aoc_calloc(size_t nmemb, size_t size);
-
-void *aoc_realloc(void *ptr, size_t size);
-
-void *memdup(const void *src, size_t size_bytes);
 
 size_t lines_read(const char ***line, const char *fname)
 {

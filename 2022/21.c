@@ -198,7 +198,7 @@ int main(void)
             job.type = JOB_NUM;
             job.number = strtod(inp[1], 0);
         }
-        dict_insert(monkey, inp[0], COPY(job));
+        dict_insert(monkey, inp[0], memdup(&job, sizeof(job)));
     }
 
     // part 1

@@ -87,7 +87,7 @@ int main(void)
     for (size_t i = 0; i < n; ++i) {
         long val = 0;
         sscanf(line[i], "%ld", &val);
-        list_insert_last(list, COPY(val));
+        list_insert_last(list, memdup(&val, sizeof(val)));
     }
 
     // part 1

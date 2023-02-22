@@ -42,7 +42,7 @@ size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
         const long w = ps->d - labs(ps->y - y0);
         if (w >= 0) {
             Range r = { .x0 = ps->x - w, .x1 = ps->x + w };
-            list_insert_last(range, COPY(r));
+            list_insert_last(range, memdup(&r, sizeof(r)));
         }
     }
 
@@ -151,8 +151,8 @@ int main(void)
         sscanf(line[i], "Sensor at x=%ld, y=%ld: closest beacon is at x=%ld, y=%ld",
             &ps.x, &ps.y, &pb.x, &pb.y);
         ps.d = point_distance(&ps, &pb);
-        list_insert_last(sensor, COPY(ps));
-        free(dict_insert(beacon, KEY(key, "%ld,%ld", pb.x, pb.y), COPY(pb)));
+        list_insert_last(sensor, memdup(&ps, sizeof(ps)));
+        free(dict_insert(beacon, KEY(key, "%ld,%ld", pb.x, pb.y), memdup(&pb, sizeof(pb))));
     }
 
     // part 1

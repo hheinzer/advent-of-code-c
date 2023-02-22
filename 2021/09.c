@@ -73,7 +73,7 @@ int main(void)
         for (size_t j = 1; j < nj - 1; ++j) {
             if (!seen[i][j] && (map[i][j] < '9')) {
                 size_t _size = compute_basin_size(&map[i][j], &seen[i][j], nj);
-                list_insert_last(size, COPY(_size));
+                list_insert_last(size, memdup(&_size, sizeof(_size)));
             }
         }
     }

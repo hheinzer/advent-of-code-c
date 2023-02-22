@@ -64,10 +64,10 @@ int main(void)
         char name1[NL], name2[NL];
         sscanf(line[i], FMT, name1, name2);
         if (!dict_find(cave, name1)) {
-            dict_insert(cave, name1, COPY((size_t) { i_cave++ }));
+            dict_insert(cave, name1, memdup(&(size_t) { i_cave++ }, sizeof(size_t)));
         }
         if (!dict_find(cave, name2)) {
-            dict_insert(cave, name2, COPY((size_t) { i_cave++ }));
+            dict_insert(cave, name2, memdup(&(size_t) { i_cave++ }, sizeof(size_t)));
         }
     }
 

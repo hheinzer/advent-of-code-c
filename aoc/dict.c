@@ -1,14 +1,5 @@
 #include "dict.h"
 
-static void *memdup(const void *src, size_t size_bytes)
-{
-    void *dest = malloc(size_bytes);
-    if (dest) {
-        memcpy(dest, src, size_bytes);
-    }
-    return dest;
-}
-
 static Item *item_alloc(const char *key, size_t key_size, void *data)
 {
     const Item item = {
@@ -58,7 +49,7 @@ Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size
             } else {
                 copy = item->data;
             }
-            dict_insert(dict, item->key, copy);
+            free(dict_insert(dict, item->key, copy));
         }
     }
     return dict;

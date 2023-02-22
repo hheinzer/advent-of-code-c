@@ -110,7 +110,7 @@ long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
     }
 
     // cache max_geo
-    dict_insert(cache, key, COPY(max_geo));
+    dict_insert(cache, key, memdup(&max_geo, sizeof(max_geo)));
 
     // update global best
     *best = MAX(*best, max_geo);

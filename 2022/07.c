@@ -37,7 +37,7 @@ int main(void)
 
         } else if (!strncmp(line[i], "$ cd", 4)) {
             // go down a directory, add directory to path
-            stack_push(path, COPY(n_dirs));
+            stack_push(path, memdup(&n_dirs, sizeof(n_dirs)));
             size_dir = realloc(size_dir, ++n_dirs * sizeof(*size_dir));
             size_dir[n_dirs - 1] = 0;
 

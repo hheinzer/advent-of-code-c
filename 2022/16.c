@@ -22,7 +22,7 @@ size_t bfs(size_t n, const size_t *_adj, size_t S, size_t E)
     size_t *distance = calloc(n, sizeof(*distance));
     visited[S] = 1;
     distance[S] = 0;
-    queue_push(q, COPY(S));
+    queue_push(q, memdup(&S, sizeof(S)));
     size_t min_distance = 0;
     const size_t(*adj)[n] = TENSOR(adj, _adj);
     while (q->len > 0) {
@@ -37,7 +37,7 @@ size_t bfs(size_t n, const size_t *_adj, size_t S, size_t E)
                 }
                 visited[j] = 1;
                 distance[j] = distance[i] + 1;
-                queue_push(q, COPY(j));
+                queue_push(q, memdup(&j, sizeof(j)));
             }
         }
     }
@@ -93,7 +93,7 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
     seen[loc] = reset;
 
     // add state to cache
-    dict_insert(cache, key, COPY(flow));
+    dict_insert(cache, key, memdup(&flow, sizeof(flow)));
 
     return flow;
 }
@@ -127,9 +127,9 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         char key[3] = "";
         sscanf(line[i], "Valve %2s has flow rate=%zu", key, &rate[i]);
-        dict_insert(v2i, key, COPY(i));
+        dict_insert(v2i, key, memdup(&i, sizeof(i)));
         if (rate[i] > 0) {
-            list_insert_last(non_zero, COPY(i));
+            list_insert_last(non_zero, memdup(&i, sizeof(i)));
         }
     }
     const size_t AA = *(size_t *)dict_find(v2i, "AA")->data;
@@ -152,7 +152,7 @@ int main(void)
 
     // compute cost of moving between non-zero valves and turning them on
     size_t(*cost)[n_lines] = calloc(n_lines, sizeof(*cost));
-    list_insert_first(non_zero, COPY(AA));
+    list_insert_first(non_zero, memdup(&AA, sizeof(AA)));
     for (const Node *start = non_zero->first; start; start = start->next) {
         const size_t S = *(size_t *)start->data;
         for (const Node *end = non_zero->first; end; end = end->next) {

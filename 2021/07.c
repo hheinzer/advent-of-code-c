@@ -72,7 +72,7 @@ int main(void)
     // read crab submarine positions
     const size_t n = strcnt(line[0], ',') + 1;
     long *pos = calloc(n, sizeof(*pos));
-    char *input = STRCOPY(line[0]);
+    char *input = strdup(line[0]);
     const char *tok = strtok(input, ",");
     for (size_t i = 0; i < n; ++i) {
         sscanf(tok, "%ld", &pos[i]);

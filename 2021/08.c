@@ -133,7 +133,7 @@ int main(void)
     // create entries
     Entry *entry = calloc(n_lines, sizeof(*entry));
     for (size_t i = 0; i < n_lines; ++i) {
-        char *input = STRCOPY(line[i]);
+        char *input = strdup(line[i]);
         const char *tok = strtok(input, "| ");
         for (size_t j = 0; j < 10; ++j) {
             sscanf(tok, "%7s", entry[i].signal[j]);

@@ -4,8 +4,11 @@
 #ifndef HEAP_H
 #define HEAP_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "memory.h"
 
 // heap is a complete binary tree of elements
 typedef struct Heap Heap;

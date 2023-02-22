@@ -4,8 +4,11 @@
 #ifndef DICT_H
 #define DICT_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "memory.h"
 
 // dict is a collection of items
 typedef struct Dict Dict;

@@ -18,6 +18,7 @@
 #include "dict.h"
 #include "heap.h"
 #include "list.h"
+#include "memory.h"
 #include "queue.h"
 #include "stack.h"
 
@@ -58,43 +59,6 @@
     {                                                     \
         return (*(T *)a < *(T *)b) - (*(T *)a > *(T *)b); \
     }
-
-// malloc with assert
-inline void *aoc_malloc(size_t size)
-{
-    void *ptr = malloc(size);
-    assert(ptr && "Could not malloc memory.");
-    return ptr;
-}
-#define malloc(s) aoc_malloc(s)
-
-// calloc with assert
-inline void *aoc_calloc(size_t nmemb, size_t size)
-{
-    void *ptr = calloc(nmemb, size);
-    assert(ptr && "Could not calloc memory.");
-    return ptr;
-}
-#define calloc(n, s) aoc_calloc(n, s)
-
-// realloc with assert
-inline void *aoc_realloc(void *ptr, size_t size)
-{
-    ptr = realloc(ptr, size);
-    assert(ptr && "Could not realloc memory.");
-    return ptr;
-}
-#define realloc(p, s) aoc_realloc(p, s)
-
-// duplicate memory
-inline void *memdup(const void *src, size_t size_bytes)
-{
-    return memcpy(malloc(size_bytes), src, size_bytes);
-}
-
-// simple copy macro
-#define COPY(a) memdup(&a, sizeof(a))
-#define STRCOPY(s) memdup(s, strlen(s) + 1)
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
 size_t lines_read(const char ***line, const char *fname);

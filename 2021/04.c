@@ -54,7 +54,7 @@ long board_sum_unmakred(long board[5][5])
 void play_bingo(long *score, size_t *rank, long (*board)[5][5], size_t nb,
     const char *_numbers)
 {
-    char *numbers = STRCOPY(_numbers);
+    char *numbers = strdup(_numbers);
     char *tok = strtok(numbers, ",");
     size_t irank = 1;
     while (tok) {

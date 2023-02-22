@@ -37,7 +37,7 @@ int main(void)
 
     // initialize fish count
     size_t n_fish_of_age[9] = { 0 };
-    char *input = STRCOPY(line[0]);
+    char *input = strdup(line[0]);
     const char *tok = strtok(input, ",");
     while (tok) {
         size_t age = -1;

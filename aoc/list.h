@@ -4,8 +4,11 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "memory.h"
 
 // list is a chain of nodes
 typedef struct List List;

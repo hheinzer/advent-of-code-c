@@ -22,7 +22,7 @@ size_t bfs(long ni, long nj, char map[ni][nj], const long S[2], const long E[2],
     Queue *queue = queue_alloc(sizeof(State));
     Dict *seen = dict_alloc(0, 2 * ni * nj);
 
-    queue_push(queue, COPY(((State) { t0, S[0], S[1] })));
+    queue_push(queue, memdup(&(State) { t0, S[0], S[1] }, sizeof(State)));
 
     size_t ret = -1;
     char key[256] = "";
@@ -63,7 +63,7 @@ size_t bfs(long ni, long nj, char map[ni][nj], const long S[2], const long E[2],
             }
             if (!collision && !dict_find(seen, KEY(key, "%ld,%ld,%ld", time, ii, jj))) {
                 dict_insert(seen, key, 0);
-                queue_push(queue, COPY(((State) { time, ii, jj })));
+                queue_push(queue, memdup(&(State) { time, ii, jj }, sizeof(State)));
             }
         }
     }
