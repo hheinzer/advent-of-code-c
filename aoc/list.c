@@ -222,12 +222,9 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
     return list->len;
 }
 
-int list_sort(List *list, int (*data_cmp)(const void *, const void *))
+void list_sort(List *list, int (*data_cmp)(const void *, const void *))
 {
     char *data = malloc(list->len * list->data_size);
-    if (!data) {
-        return 1;
-    }
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) { // shallow copy to data array
         memcpy(data + i * list->data_size, node->data, list->data_size);
@@ -240,5 +237,4 @@ int list_sort(List *list, int (*data_cmp)(const void *, const void *))
         node = node->next;
     }
     free(data);
-    return 0;
 }

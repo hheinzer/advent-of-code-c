@@ -39,10 +39,8 @@ Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size
 // use data_free to free data, if 0 do not free data
 void heap_free(Heap **heap, void (*data_free)(void *));
 
-// insert data into heap with specified priority,
-// return 0 for success,
-// return 1 for failure
-int heap_insert(Heap *heap, long priority, void *data);
+// insert data into heap with specified priority
+void heap_insert(Heap *heap, long priority, void *data);
 
 // remove highest priority element from heap,
 // return 0, if heap is empty

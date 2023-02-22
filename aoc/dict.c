@@ -49,7 +49,7 @@ Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size
             } else {
                 copy = item->data;
             }
-            free(dict_insert(dict, item->key, copy));
+            dict_insert(dict, item->key, copy);
         }
     }
     return dict;
@@ -115,13 +115,9 @@ void *dict_insert(Dict *dict, const char *key, void *data)
         return 0;
 
     } else if (!item->key) { // empty spot: insert item
-        memcpy(item,
-            &(Item) {
-                .key = memdup(key, key_size + 1),
-                .key_size = key_size,
-                .data = data,
-            },
-            sizeof(*item));
+        item->key = memdup(key, key_size + 1);
+        item->key_size = key_size;
+        item->data = data;
         ++dict->len;
         return 0;
 

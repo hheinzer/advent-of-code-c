@@ -54,14 +54,11 @@ static void elem_swap(Elem *a, Elem *b)
     b->data = swap_data;
 }
 
-int heap_insert(Heap *heap, long priority, void *data)
+void heap_insert(Heap *heap, long priority, void *data)
 {
     if (heap->len == heap->size) { // grow heap if necessary
         heap->size *= 2;
         heap->elem = realloc(heap->elem, heap->size * sizeof(Elem));
-        if (!heap->elem) {
-            return 1;
-        }
     }
     size_t i = heap->len++;
     Elem *elem = heap->elem;
@@ -71,7 +68,6 @@ int heap_insert(Heap *heap, long priority, void *data)
         elem_swap(&elem[parent(i)], &elem[i]);
         i = parent(i);
     }
-    return 0;
 }
 
 static size_t left(size_t i)

@@ -72,7 +72,6 @@ void *list_delete(List *list, Node *node);
 size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *));
 
 // sort list in place,
-// return 1 for memory failure
-int list_sort(List *list, int (*data_cmp)(const void *, const void *));
+void list_sort(List *list, int (*data_cmp)(const void *, const void *));
 
 #endif
