@@ -86,7 +86,7 @@ static size_t hash(const char *str)
     return hash;
 }
 
-int keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
+static int keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
 {
     if (key_size1 != key_size2) {
         return 1;

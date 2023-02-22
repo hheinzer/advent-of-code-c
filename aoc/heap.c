@@ -80,7 +80,7 @@ static size_t right(size_t i)
     return 2 * i + 2;
 }
 
-void heapify(Heap *heap, size_t i)
+static void heapify(Heap *heap, size_t i)
 {
     const size_t l = left(i);
     const size_t r = right(i);

@@ -6,7 +6,7 @@
 assert   = on
 debug    = on
 analyzer = on
-sanitize = off
+sanitize = on
 profile  = off
 
 # compiler
@@ -24,11 +24,11 @@ AR = gcc-ar rcs
 default: run
 
 # default flags
-CFLAGS = -std=c11 -pedantic -g -Wall -Wextra
+CFLAGS = -std=c11 -g -Werror -Wall -Wextra -Wpedantic
 
 # additional warnings
 CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
-		  -Wswitch-enum -Wpointer-arith -Wno-missing-braces -Wwrite-strings
+		  -Wswitch-enum -Wpointer-arith -Wwrite-strings -Wstrict-prototypes
 
 # included directories
 INCS = -Iaoc
@@ -36,7 +36,7 @@ INCS = -Iaoc
 # assert flags
 ifneq ($(assert), on)
 CFLAGS += -DNDEBUG
-CFLAGS += -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-parameter
+CFLAGS += -Wno-return-type
 endif
 
 # optimization flags
@@ -46,7 +46,6 @@ ifeq ($(analyzer), on)
 CFLAGS += -fanalyzer
 endif
 else
-CFLAGS += -Winline
 CFLAGS += -march=native -mtune=native
 CFLAGS += -O3 -ffast-math -funroll-loops
 CFLAGS += -fdata-sections -ffunction-sections
@@ -122,7 +121,8 @@ test: $(BIN)
 	@for prog in $(sort $(BIN)); do \
 		echo "--- $$prog ---" && \
 		./$$prog; \
-	done | grep -v wtime | diff --color=auto -c solutions.txt -
+	done | grep -v wtime | diff --color=auto -c solutions.txt - \
+	&& echo "*** All tests passed. ***"
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
