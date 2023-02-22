@@ -121,7 +121,7 @@ test: $(BIN)
 	@for prog in $(sort $(BIN)); do \
 		echo "--- $$prog ---" && \
 		./$$prog; \
-	done | grep -v wtime | diff --color=auto -c solutions.txt - \
+	done | grep -v wtime | diff --color=auto solutions.txt - \
 	&& echo "*** All tests passed. ***"
 
 format:
