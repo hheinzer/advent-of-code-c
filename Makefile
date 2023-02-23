@@ -24,7 +24,7 @@ AR = gcc-ar rcs
 default: run
 
 # default flags
-CFLAGS = -std=c11 -g -Werror -Wall -Wextra -Wpedantic
+CFLAGS = -std=c11 -g -Wall -Wextra -Wpedantic
 
 # additional warnings
 CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
