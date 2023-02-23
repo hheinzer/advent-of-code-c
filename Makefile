@@ -18,7 +18,7 @@ AR = gcc-ar rcs
 #
 
 # targets
-.PHONY: default lib run clean check memcheck test format
+.PHONY: default lib run clean check memcheck test solutions format
 
 # default target
 default: run
@@ -123,6 +123,12 @@ test: $(BIN)
 		./$$prog; \
 	done | grep -v wtime | diff --color=auto solutions.txt - \
 	&& echo "*** All tests passed. ***"
+
+solutions: $(BIN)
+	@for prog in $(sort $(BIN)); do \
+		echo "--- $$prog ---" && \
+		./$$prog; \
+	done | grep -v wtime > solutions.txt
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
