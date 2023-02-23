@@ -99,7 +99,7 @@ int main(void)
     printf("%ld\n", probe_max_y(&min, &max));
 
     // part 2
-    printf("%ld\n", probe_hit_count(&min, &max));
+    printf("%zu\n", probe_hit_count(&min, &max));
 
     // cleanup
     lines_free(line, n_lines);
