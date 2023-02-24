@@ -43,7 +43,9 @@ endif
 ifeq ($(debug), on)
 CFLAGS += -Og -fno-omit-frame-pointer
 ifeq ($(analyzer), on)
+ifeq ($(CC), gcc)
 CFLAGS += -fanalyzer
+endif
 endif
 else
 CFLAGS += -march=native -mtune=native
