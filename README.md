@@ -1,6 +1,6 @@
 # Advent of Code
 
-This repository contains my solutions for the [advent of code](https://adventofcode.com/) puzzles, all written in beautiful C.
+This repository contains my solutions for the [advent of code](https://adventofcode.com/) puzzles, all written in C.
 
 Compile and run any of the puzzles with:
 
