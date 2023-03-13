@@ -224,17 +224,23 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
 
 void list_sort(List *list, int (*data_cmp)(const void *, const void *))
 {
+    char *data = list_to_array(list);
+    qsort(data, list->len, list->data_size, data_cmp);
+    Node *node = list->first;
+    for (size_t i = 0; i < list->len; ++i) { // shallow copy to list
+        memcpy(node->data, data + i * list->data_size, list->data_size);
+        node = node->next;
+    }
+    free(data);
+}
+
+void *list_to_array(const List *list)
+{
     char *data = malloc(list->len * list->data_size);
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) { // shallow copy to data array
         memcpy(data + i * list->data_size, node->data, list->data_size);
         node = node->next;
     }
-    qsort(data, list->len, list->data_size, data_cmp);
-    node = list->first;
-    for (size_t i = 0; i < list->len; ++i) { // shallow copy to list
-        memcpy(node->data, data + i * list->data_size, list->data_size);
-        node = node->next;
-    }
-    free(data);
+    return data;
 }

@@ -74,4 +74,7 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
 // sort list in place,
 void list_sort(List *list, int (*data_cmp)(const void *, const void *));
 
+// convert list to array
+void *list_to_array(const List *list);
+
 #endif
