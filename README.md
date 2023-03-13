@@ -2,7 +2,7 @@
 
 This repository contains my solutions for the [advent of code](https://adventofcode.com/) puzzles, all written in beautiful C.
 
-To compile and run any of the puzzles, go to the year, compile the program, and run it
+Compile and run any of the puzzles with:
 
     $ make <year>/<day> && ./<year>/<day>
 
