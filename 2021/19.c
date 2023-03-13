@@ -71,6 +71,9 @@ Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate)
     long x[na];
     size_t c = 0;
     long v = 0;
+    long d = -1;
+    long dp = -1;
+    long dpp = -1;
     for (size_t dim = 0; dim < 3; ++dim) {
         // copy all coordinates of one dimension from aligned
         for (size_t i = 0; i < na; ++i) {
@@ -79,9 +82,6 @@ Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate)
 
         // try to match it with all coordinate combinations of candidate
         long t[nc];
-        long d = -1;
-        long dp = -1;
-        long dpp = -1;
         for (size_t i = 0; i < 6; ++i) {
             d = D[i];
             if ((d == dp) || (d == dpp)) {
@@ -134,7 +134,7 @@ cleanup:
     return ret;
 }
 
-size_t manhatten(long a[3], long b[3])
+size_t manhatten(const long a[3], const long b[3])
 {
     return labs(a[0] - b[0]) + labs(a[1] - b[1]) + labs(a[2] - b[2]);
 }
