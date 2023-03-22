@@ -29,14 +29,14 @@ Cube *cube_alloc(const char *line, long limit)
     // create cube
     Cube cube = { 0 };
     char cmd[4] = "";
-    sscanf(line, "%s x=%ld..%ld,y=%ld..%ld,z=%ld..%ld",
+    sscanf(line, "%3s x=%ld..%ld,y=%ld..%ld,z=%ld..%ld",
         cmd, &cube.x0, &cube.x1, &cube.y0, &cube.y1, &cube.z0, &cube.z1);
 
     // apply limit if it exists
     if (limit) {
-        if ((labs(cube.x0) > limit) || (labs(cube.x0) > limit)) return 0;
-        if ((labs(cube.y0) > limit) || (labs(cube.y0) > limit)) return 0;
-        if ((labs(cube.z0) > limit) || (labs(cube.z0) > limit)) return 0;
+        if ((labs(cube.x0) > limit) || (labs(cube.x1) > limit)) return 0;
+        if ((labs(cube.y0) > limit) || (labs(cube.y1) > limit)) return 0;
+        if ((labs(cube.z0) > limit) || (labs(cube.z1) > limit)) return 0;
     }
 
     // check cube
