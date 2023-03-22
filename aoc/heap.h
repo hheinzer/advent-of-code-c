@@ -1,5 +1,5 @@
 /*
- * general purpose binary heap
+ * general purpose binary maximum heap (first item has highest priority)
  */
 #ifndef HEAP_H
 #define HEAP_H
