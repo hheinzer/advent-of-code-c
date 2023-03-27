@@ -1,62 +1,28 @@
-#
 # See LICENSE file for copyright and license details.
-#
 
 # configuration {on, off}
-assert   = on
 debug    = on
-analyzer = on
-sanitize = on
 profile  = off
 
 # compiler
 CC = gcc
 AR = gcc-ar rcs
 
-#
-# compilation recipes
-#
-
-# targets
-.PHONY: default lib run clean check memcheck test solutions format
-
-# default target
-default: run
-
 # default flags
-CFLAGS = -std=c11 -g3 -Wall -Wextra -Wpedantic
-
-# additional warnings
-CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default \
-		  -Wswitch-enum -Wpointer-arith -Wwrite-strings -Wstrict-prototypes
+CFLAGS  = -std=c11 -g3 -Wall -Wextra -Wpedantic
+CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default
+CFLAGS += -Wswitch-enum -Wpointer-arith -Wwrite-strings -Wstrict-prototypes
 
 # included directories
 INCS = -Iaoc
 
-# assert flags
-ifneq ($(assert), on)
-CFLAGS += -DNDEBUG
-CFLAGS += -Wno-return-type
-endif
-
 # optimization flags
 ifeq ($(debug), on)
-CFLAGS += -Og -fno-omit-frame-pointer
-ifeq ($(analyzer), on)
-ifeq ($(CC), gcc)
+CFLAGS += -Og
+CFLAGS += -fsanitize=undefined,address
 CFLAGS += -fanalyzer
-endif
-endif
 else
-CFLAGS += -march=native -mtune=native
-CFLAGS += -O3 -ffast-math -funroll-loops
-CFLAGS += -fdata-sections -ffunction-sections
-CFLAGS += -flto=auto
-endif
-
-# sanitation flags
-ifeq ($(sanitize), on)
-CFLAGS += -fsanitize=undefined -fsanitize=address
+CFLAGS += -O2 -march=native -flto=auto -DNDEBUG #-Wno-return-type
 endif
 
 # profiler flags
@@ -65,7 +31,6 @@ CFLAGS += -pg -fno-lto
 endif
 
 # linking
-LDFLAGS = -Wl,--gc-sections
 LDLIBS  = -lm
 
 # objects
@@ -79,6 +44,9 @@ LIB = aoc/libaoc.a
 RUN = $(shell find 20* -type f -name '*.c')
 BIN = $(RUN:%.c=%)
 
+# default target
+default: $(BIN)
+
 # dependencies
 CFLAGS += -MMD -MP
 DEP = $(OBJ:.o=.d) $(BIN:=.d)
@@ -89,27 +57,16 @@ $(OBJ): %.o: %.c Makefile
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
 # build library
-lib: $(LIB)
-
 $(LIB): $(OBJ)
 	$(AR) $@ $^
 
 # build binaries
-run: $(BIN)
-
 $(BIN): %: %.c $(LIB) Makefile
-	-$(CC) $(CFLAGS) $(INCS) $(LDFLAGS) $< $(LIB) $(LDLIBS) -o $@
+	-$(CC) $(CFLAGS) $(INCS) $< $(LIB) $(LDLIBS) -o $@
 
-# run all
-run: $(BIN)
-	@for prog in $(sort $(BIN)); do \
-		echo "--- $$prog ---" && \
-		./$$prog; \
-	done
-
-# auxiliary functions
+# functions
 clean:
-	rm -rf $(OBJ) $(BIN) $(DEP) $(LIB) gmon.out perf.data*
+	rm -rf $(BIN) $(LIB) $(OBJ) $(DEP) gmon.out perf.data*
 
 check:
 	-cppcheck --enable=all --inconclusive --suppress=missingIncludeSystem \
@@ -118,6 +75,12 @@ check:
 memcheck:
 	-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 		--suppressions=.memcheck.supp $(BIN)
+
+run: $(BIN)
+	@for prog in $(sort $(BIN)); do \
+		echo "--- $$prog ---" && \
+		./$$prog; \
+	done
 
 test: $(BIN)
 	@for prog in $(sort $(BIN)); do \
@@ -134,3 +97,5 @@ solutions: $(BIN)
 
 format:
 	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
+
+.PHONY: default clean check memcheck run test solutions format
