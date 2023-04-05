@@ -22,7 +22,8 @@ CFLAGS += -Og
 CFLAGS += -fsanitize=undefined,address
 CFLAGS += -fanalyzer
 else
-CFLAGS += -O2 -march=native -flto=auto -DNDEBUG #-Wno-return-type
+CFLAGS += -O2 -march=native -flto=auto
+CFLAGS += -DNDEBUG -Wno-return-type
 endif
 
 # profiler flags
