@@ -77,11 +77,12 @@ void dict_free(Dict **dict, void (*data_free)(void *))
 
 static size_t hash(const char *str)
 {
-    // djb2 (http://www.cse.yorku.ca/~oz/hash.html)
-    size_t hash = 5381;
-    int c;
-    while ((c = *(str++))) {
-        hash = ((hash << 5) + hash) + c; // hash * 33 + c
+    // source: https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
+    size_t hash = 14695981039346656037ULL;
+    unsigned char c;
+    while ((c = *str++)) {
+        hash ^= c;
+        hash *= 1099511628211ULL;
     }
     return hash;
 }
