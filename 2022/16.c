@@ -108,7 +108,7 @@ size_t dfs(size_t n, const size_t *rate, const List *non_zero, const size_t *cos
     for (const Node *node = non_zero->first; node; node = node->next) {
         seen[*(size_t *)node->data] = '0';
     }
-    Dict *cache = dict_alloc(sizeof(size_t), 3000000);
+    Dict *cache = dict_alloc(sizeof(size_t), (n_players == 1 ? 136518 : 4315224));
     size_t ret = _dfs(cache, n, rate, cost, seen, loc, loc, time_allowed, 0, n_players);
     dict_free(&cache, free);
     return ret;
