@@ -55,4 +55,7 @@ void *dict_remove(Dict *dict, const char *key);
 // return 0 if key not present
 Item *dict_find(const Dict *dict, const char *key);
 
+// print collision histogram of dict
+void dict_histogram(const Dict *dict);
+
 #endif

@@ -171,3 +171,50 @@ Item *dict_find(const Dict *dict, const char *key)
     }
     return (!item || !item->key ? 0 : item);
 }
+
+static int cmp_size_t_asc(const void *a, const void *b)
+{
+    return (*(size_t *)a > *(size_t *)b) - (*(size_t *)a < *(size_t *)b);
+}
+
+void dict_histogram(const Dict *dict)
+{
+    // compute occupation histogram of dict
+    char key[256] = "";
+    Dict *hist = dict_alloc(sizeof(size_t), dict->len);
+    for (size_t i = 0; i < dict->size; ++i) {
+        size_t n = 0;
+        for (const Item *item = &dict->item[i]; item && item->key; item = item->next) ++n;
+        snprintf(key, sizeof(key), "%zu", n);
+        Item *item_hist = dict_find(hist, key);
+        if (item_hist) {
+            ++(*(size_t *)item_hist->data);
+        } else {
+            dict_insert(hist, key, memdup((size_t[1]) { 1 }, sizeof(size_t[1])));
+        }
+    }
+
+    // create sorted array of histogram
+    struct {
+        size_t n;
+        size_t count;
+    } *sorted = calloc(hist->len, sizeof(*sorted));
+    for (size_t i = 0, j = 0; i < hist->size; ++i) {
+        for (const Item *item = &hist->item[i]; item && item->key; item = item->next) {
+            sorted[j].n = strtoul(item->key, 0, 10);
+            sorted[j].count = *(size_t *)item->data;
+            ++j;
+        }
+    }
+    qsort(sorted, hist->len, sizeof(*sorted), cmp_size_t_asc);
+
+    // print load factor and histogram
+    printf("[%f] ", dict->len / (double)dict->size);
+    for (size_t i = 0; i < hist->len; ++i) {
+        printf("%zu: %zu%s", sorted[i].n, sorted[i].count, (i < hist->len - 1 ? ", " : "\n"));
+    }
+
+    // cleanup
+    dict_free(&hist, free);
+    free(sorted);
+}
