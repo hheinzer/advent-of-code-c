@@ -1,6 +1,6 @@
 #include "aoc.h"
 
-static double _timer_start = 0;
+static clock_t _timer_start = 0;
 __attribute__((constructor)) static void run_before_main(void)
 {
     _timer_start = clock();
@@ -8,7 +8,7 @@ __attribute__((constructor)) static void run_before_main(void)
 
 __attribute__((destructor)) static void run_after_main(void)
 {
-    const double wtime = (clock() - _timer_start) / CLOCKS_PER_SEC;
+    const double wtime = (double)(clock() - _timer_start) / CLOCKS_PER_SEC;
     if (wtime > 1.0) {
         printf("wtime = %g s (!!!)\n", wtime);
     } else {
@@ -26,12 +26,12 @@ size_t lines_read(const char ***line, const char *fname)
     size_t n_lines = 0;
     char *l = 0;
     size_t nc = 0;
-    char c = 0;
+    int c = 0;
     while ((c = fgetc(file)) != EOF) {
         if (c != '\n') {
             // append character
             l = realloc(l, ++nc * sizeof(*l));
-            l[nc - 1] = c;
+            l[nc - 1] = (char)c;
         } else {
             // append end of string
             l = realloc(l, ++nc * sizeof(*l));
@@ -69,5 +69,5 @@ size_t line_find(const char **line, size_t n_lines, const char *find)
             return i;
         }
     }
-    assert(!"No matching line found.");
+    assert(0 && "No matching line found.");
 }

@@ -46,7 +46,7 @@ long pos_mean(const long *pos, size_t n)
     for (size_t i = 0; i < n; ++i) {
         mean += pos[i];
     }
-    return round(mean / (double)n);
+    return (long)round((double)mean / (double)n);
 }
 
 long pos_cost2(const long *pos, size_t n, long p, long dp)

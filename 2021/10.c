@@ -13,14 +13,14 @@
 
 CMP(size_t)
 
-static const size_t table1[] = {
+static const int table1[] = {
     [')'] = 3,
     [']'] = 57,
     ['}'] = 1197,
     ['>'] = 25137,
 };
 
-static const size_t table2[] = {
+static const int table2[] = {
     ['('] = 1,
     ['['] = 2,
     ['{'] = 3,

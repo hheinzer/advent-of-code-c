@@ -29,7 +29,7 @@
 #define SIGN(a) (((a) > 0) - ((a) < 0))
 
 // integer ceil division, positive integers only
-#define CEIL(a, b) ((__typeof__(a))ceil((a) / (double)(b)))
+#define CEIL(a, b) ((__typeof__(a))ceil((double)(a) / (double)(b)))
 
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
@@ -46,8 +46,8 @@
 #define KEY(k, ...) (snprintf(k, sizeof(k), __VA_ARGS__), k)
 
 // define simple min and max functions
-#define MIN(a, b) ((__typeof__(a))fmin(a, b))
-#define MAX(a, b) ((__typeof__(a))fmax(a, b))
+#define MIN(a, b) ((__typeof__(a))fmin((double)(a), (double)(b)))
+#define MAX(a, b) ((__typeof__(a))fmax((double)(a), (double)(b)))
 
 // define simple comparison functions for ascending and descending order
 #define CMP(T)                                            \

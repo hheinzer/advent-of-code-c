@@ -50,7 +50,7 @@ typedef struct Entry {
 
 int cmp_strlen_asc(const void *a, const void *b)
 {
-    return strlen(a) - strlen(b);
+    return (int)strlen(a) - (int)strlen(b);
 }
 
 size_t count_common_chars(const char *str1, const char *str2)
@@ -70,7 +70,7 @@ size_t count_common_chars(const char *str1, const char *str2)
 
 size_t entry_decode(size_t common[10][10], const Entry *entry)
 {
-    static const size_t perm1[6][3] = {
+    static const int perm1[6][3] = {
         { 2, 3, 5 },
         { 2, 5, 3 },
         { 3, 2, 5 },
@@ -78,7 +78,7 @@ size_t entry_decode(size_t common[10][10], const Entry *entry)
         { 5, 2, 3 },
         { 5, 3, 2 },
     };
-    static const size_t perm2[6][3] = {
+    static const int perm2[6][3] = {
         { 0, 6, 9 },
         { 0, 9, 6 },
         { 6, 0, 9 },
@@ -113,7 +113,7 @@ size_t entry_decode(size_t common[10][10], const Entry *entry)
                 for (size_t k = 0; k < 4; ++k) {
                     for (size_t l = 0; l < 10; ++l) {
                         if (!strcmp(entry->output[k], entry->signal[l])) {
-                            decode[k] = '0' + code[l];
+                            decode[k] = '0' + (char)code[l];
                         }
                     }
                 }

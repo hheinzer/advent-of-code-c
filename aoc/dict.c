@@ -209,7 +209,7 @@ void dict_histogram(const Dict *dict)
     qsort(sorted, hist->len, sizeof(*sorted), cmp_size_t_asc);
 
     // print load factor and histogram
-    printf("[%f] ", dict->len / (double)dict->size);
+    printf("[%f] ", (double)dict->len / (double)dict->size);
     for (size_t i = 0; i < hist->len; ++i) {
         printf("%zu: %zu%s", sorted[i].n, sorted[i].count, (i < hist->len - 1 ? ", " : "\n"));
     }

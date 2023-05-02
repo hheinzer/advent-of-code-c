@@ -174,7 +174,7 @@ int main(void)
         for (size_t j = 1, addj = 0; j < new_nj - 1; j += nj - 2, ++addj) {
             for (size_t ii = 0; ii < ni - 2; ++ii) {
                 for (size_t jj = 0; jj < nj - 2; ++jj) {
-                    new_grid[i + ii][j + jj] = grid[1 + ii][1 + jj] + addi + addj;
+                    new_grid[i + ii][j + jj] = grid[1 + ii][1 + jj] + (int)addi + (int)addj;
                     if (new_grid[i + ii][j + jj] > 9) {
                         new_grid[i + ii][j + jj] -= 9;
                     }
