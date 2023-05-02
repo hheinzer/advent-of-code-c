@@ -12,6 +12,7 @@ AR = gcc-ar rcs
 CFLAGS  = -std=c11 -g3 -Wall -Wextra -Wpedantic
 CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default
 CFLAGS += -Wswitch-enum -Wpointer-arith -Wwrite-strings -Wstrict-prototypes
+CFLAGS += -Wdouble-promotion -Wconversion -Wno-sign-conversion
 
 # included directories
 INCS = -Iaoc
@@ -19,11 +20,11 @@ INCS = -Iaoc
 # optimization flags
 ifeq ($(debug), on)
 CFLAGS += -Og
-CFLAGS += -fsanitize=undefined,address
-CFLAGS += -fanalyzer
+CFLAGS += -fsanitize=undefined,address -fsanitize-undefined-trap-on-error
+CFLAGS += -fanalyzer -Wno-analyzer-malloc-leak
 else
 CFLAGS += -O2 -march=native -flto=auto
-CFLAGS += -DNDEBUG -Wno-return-type
+CFLAGS += -DNDEBUG -Wno-return-type -Wno-unused-variable
 endif
 
 # profiler flags
