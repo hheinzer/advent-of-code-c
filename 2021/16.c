@@ -77,7 +77,7 @@ Packet *packet_alloc(const char **input)
 {
     Packet *packet = calloc(1, sizeof(*packet));
     packet->version = bin_to_size_t(input, 3);
-    packet->type = bin_to_size_t(input, 3);
+    packet->type = (PacketType)bin_to_size_t(input, 3);
     if (packet->type == PT_LITERAL) {
         char *buf = calloc(strlen(*input) + 1, sizeof(*buf));
         do {
@@ -87,7 +87,7 @@ Packet *packet_alloc(const char **input)
         packet->number = strtoul(buf, 0, 2);
         free(buf);
     } else {
-        const int length_type = bin_to_size_t(input, 1);
+        const int length_type = (int)bin_to_size_t(input, 1);
         if (length_type == 0) { // read fixed bit width sub packets
             const size_t total_length = bin_to_size_t(input, 15);
             size_t *n_sub = &packet->operator.n_sub;

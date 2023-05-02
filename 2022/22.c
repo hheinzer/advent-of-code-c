@@ -248,7 +248,7 @@ int main(void)
         for (size_t j = 0; j < 6; ++j) {
             if ((i * n < n_lines) && (j * n < strlen(line[i * n]))) {
                 if ((line[i * n][j * n] == '.') || (line[i * n][j * n] == '#')) {
-                    shape[i][j] = iface1++;
+                    shape[i][j] = (int)iface1++;
                 }
             }
         }

@@ -30,7 +30,7 @@ typedef struct Range {
 
 int range_cmp_x0(const void *a, const void *b)
 {
-    return ((Range *)a)->x0 - ((Range *)b)->x0;
+    return (int)(((Range *)a)->x0 - ((Range *)b)->x0);
 }
 
 size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
