@@ -76,38 +76,28 @@ Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate)
     long dpp = -1;
     for (size_t dim = 0; dim < 3; ++dim) {
         // copy all coordinates of one dimension from aligned
-        for (size_t i = 0; i < na; ++i) {
-            x[i] = aligned->beacon[i][dim];
-        }
+        for (size_t i = 0; i < na; ++i) { x[i] = aligned->beacon[i][dim]; }
 
         // try to match it with all coordinate combinations of candidate
         long t[nc];
         for (size_t i = 0; i < 6; ++i) {
             d = D[i];
-            if ((d == dp) || (d == dpp)) {
-                continue;
-            }
+            if ((d == dp) || (d == dpp)) { continue; }
 
             // permutate candidate beacon coordinates
-            for (size_t j = 0; j < nc; ++j) {
-                t[j] = s[i] * candidate->beacon[j][d];
-            }
+            for (size_t j = 0; j < nc; ++j) { t[j] = s[i] * candidate->beacon[j][d]; }
 
             // compute all possible differences to aligned beacon coordinates
             long w[na][nc];
             for (size_t j = 0; j < na; ++j) {
-                for (size_t k = 0; k < nc; ++k) {
-                    w[j][k] = t[k] - x[j];
-                }
+                for (size_t k = 0; k < nc; ++k) { w[j][k] = t[k] - x[j]; }
             }
 
             // get the most common difference
             Pair pair = most_common(*w, na * nc);
             v = pair.value;
             c = pair.count;
-            if (c >= 12) {
-                break;
-            }
+            if (c >= 12) { break; }
         }
 
         // check if there were at least 12 matches
@@ -120,9 +110,7 @@ Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate)
 
         // update candidate origin and coordinates
         updated.origin[dim] = v;
-        for (size_t i = 0; i < nc; ++i) {
-            updated.beacon[i][dim] = t[i] - v;
-        }
+        for (size_t i = 0; i < nc; ++i) { updated.beacon[i][dim] = t[i] - v; }
     }
 
     // update candidate
@@ -173,9 +161,7 @@ int main(void)
     List *next = list_alloc(sizeof(Scanner *));
     List *rest = list_alloc(sizeof(Scanner *));
     list_insert_last(next, &scanner[0]);
-    for (size_t s = 1; s < ns; ++s) {
-        list_insert_last(rest, &scanner[s]);
-    }
+    for (size_t s = 1; s < ns; ++s) { list_insert_last(rest, &scanner[s]); }
     char key[256] = "";
     while (next->len) {
         Scanner *aligned = list_remove_first(next);
@@ -196,8 +182,8 @@ int main(void)
 
         // insert beacon coordinates into global field
         for (size_t i = 0; i < aligned->nb; ++i) {
-            KEY(key, "%ld,%ld,%ld",
-                aligned->beacon[i][0], aligned->beacon[i][1], aligned->beacon[i][2]);
+            KEY(key, "%ld,%ld,%ld", aligned->beacon[i][0], aligned->beacon[i][1],
+                aligned->beacon[i][2]);
             dict_insert(field, key, 0);
         }
     }
@@ -218,9 +204,7 @@ int main(void)
 
     // cleanup
     lines_free(line, n_lines);
-    for (size_t s = 0; s < ns; ++s) {
-        free(scanner[s].beacon);
-    }
+    for (size_t s = 0; s < ns; ++s) { free(scanner[s].beacon); }
     free(scanner);
     dict_free(&field, 0);
     list_free(&next, 0);

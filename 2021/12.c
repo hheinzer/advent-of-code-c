@@ -18,21 +18,17 @@
 int is_lowercase(const char *str)
 {
     while (*str) {
-        if (!islower(*str)) {
-            return 0;
-        }
+        if (!islower(*str)) { return 0; }
         ++str;
     }
     return 1;
 }
 
-size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i,
-    size_t iS, size_t iE, int part)
+size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i, size_t iS,
+    size_t iE, int part)
 {
     // return if end was found
-    if (i == iE) {
-        return 1;
-    }
+    if (i == iE) { return 1; }
 
     // go to all adjacent caves, mark small ones as seen, don't revisit them, unless it's
     // part 2, then revisit once

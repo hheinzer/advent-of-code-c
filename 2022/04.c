@@ -25,14 +25,10 @@ int main(void)
         sscanf(line[i], "%ld-%ld,%ld-%ld", &a0, &a1, &b0, &b1);
 
         // check whether b is contained in a or otherwise
-        if (((a0 <= b0) && (b1 <= a1)) || ((b0 <= a0) && (a1 <= b1))) {
-            ++count1;
-        }
+        if (((a0 <= b0) && (b1 <= a1)) || ((b0 <= a0) && (a1 <= b1))) { ++count1; }
 
         // check for no overlap and invert result
-        if (!((a1 < b0) || (b1 < a0))) {
-            ++count2;
-        }
+        if (!((a1 < b0) || (b1 < a0))) { ++count2; }
     }
 
     // part 1

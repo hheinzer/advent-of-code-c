@@ -113,7 +113,8 @@ size_t solve_part_2(const List *sensor, const long clip[2])
                     .x = start[i].x + j * dx[i],
                     .y = start[i].y + j * dy[i],
                 };
-                if ((p.x < clip[0]) || (clip[1] < p.x) || (p.y < clip[0]) || (clip[1] < p.y)) {
+                if ((p.x < clip[0]) || (clip[1] < p.x) || (p.y < clip[0])
+                    || (clip[1] < p.y)) {
                     continue;
                 }
 
@@ -126,9 +127,7 @@ size_t solve_part_2(const List *sensor, const long clip[2])
                         break;
                     }
                 }
-                if (!visible) {
-                    return p.x * 4000000 + p.y;
-                }
+                if (!visible) { return p.x * 4000000 + p.y; }
             }
         }
     }
@@ -152,7 +151,8 @@ int main(void)
             &ps.x, &ps.y, &pb.x, &pb.y);
         ps.d = point_distance(&ps, &pb);
         list_insert_last(sensor, memdup(&ps, sizeof(ps)));
-        free(dict_insert(beacon, KEY(key, "%ld,%ld", pb.x, pb.y), memdup(&pb, sizeof(pb))));
+        free(dict_insert(
+            beacon, KEY(key, "%ld,%ld", pb.x, pb.y), memdup(&pb, sizeof(pb))));
     }
 
     // part 1

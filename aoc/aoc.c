@@ -56,18 +56,14 @@ size_t lines_read(const char ***line, const char *fname)
 
 void lines_free(const char **line, size_t n_lines)
 {
-    for (size_t i = 0; i < n_lines; ++i) {
-        free((void *)line[i]);
-    }
+    for (size_t i = 0; i < n_lines; ++i) { free((void *)line[i]); }
     free(line);
 }
 
 size_t line_find(const char **line, size_t n_lines, const char *find)
 {
     for (size_t i = 0; i < n_lines; ++i) {
-        if (!strcmp(line[i], find)) {
-            return i;
-        }
+        if (!strcmp(line[i], find)) { return i; }
     }
     assert(0 && "No matching line found.");
 }

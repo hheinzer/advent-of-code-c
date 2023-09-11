@@ -14,7 +14,4 @@ void *memdup(const void *src, size_t size)
     return dest;
 }
 
-char *strdup(const char *src)
-{
-    return memdup(src, strlen(src) + 1);
-}
+char *strdup(const char *src) { return memdup(src, strlen(src) + 1); }

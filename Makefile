@@ -6,13 +6,12 @@ profile  = off
 
 # compiler
 CC = gcc
-AR = gcc-ar rcs
 
 # default flags
 CFLAGS  = -std=c11 -g3 -Wall -Wextra -Wpedantic
 CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default
 CFLAGS += -Wswitch-enum -Wpointer-arith -Wwrite-strings -Wstrict-prototypes
-CFLAGS += -Wdouble-promotion -Wconversion -Wno-sign-conversion
+CFLAGS += -Wdouble-promotion -Wconversion
 
 # included directories
 INCS = -Iaoc
@@ -21,10 +20,10 @@ INCS = -Iaoc
 ifeq ($(debug), on)
 CFLAGS += -Og
 CFLAGS += -fsanitize=undefined,address -fsanitize-undefined-trap-on-error
-CFLAGS += -fanalyzer -Wno-analyzer-malloc-leak
+CFLAGS += -fanalyzer
 else
-CFLAGS += -O2 -march=native -flto=auto
-CFLAGS += -DNDEBUG -Wno-return-type -Wno-unused-variable
+CFLAGS += -march=native -Ofast -flto=auto
+CFLAGS += -DNDEBUG
 endif
 
 # profiler flags
@@ -38,9 +37,6 @@ LDLIBS  = -lm
 # objects
 SRC = $(shell find aoc -type f -name '*.c')
 OBJ = $(SRC:%.c=%.o)
-
-# library
-LIB = aoc/libaoc.a
 
 # binaries
 RUN = $(shell find 20* -type f -name '*.c')
@@ -58,17 +54,13 @@ DEP = $(OBJ:.o=.d) $(BIN:=.d)
 $(OBJ): %.o: %.c Makefile
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
-# build library
-$(LIB): $(OBJ)
-	$(AR) $@ $^
-
 # build binaries
-$(BIN): %: %.c $(LIB) Makefile
-	-$(CC) $(CFLAGS) $(INCS) $< $(LIB) $(LDLIBS) -o $@
+$(BIN): %: %.c $(OBJ) Makefile
+	-$(CC) $(CFLAGS) $(INCS) $< $(OBJ) $(LDLIBS) -o $@
 
 # functions
 clean:
-	rm -rf $(BIN) $(LIB) $(OBJ) $(DEP) gmon.out perf.data*
+	rm -rf $(BIN) $(OBJ) $(DEP) gmon.out perf.data*
 
 check:
 	-cppcheck --enable=all --inconclusive --suppress=missingIncludeSystem \

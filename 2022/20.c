@@ -39,9 +39,7 @@ long solve(List *list, long mul, size_t n_mix)
             const long val = *(long *)curr->data;
             Node *prev = curr;
             if (val >= 0) { // move right
-                for (size_t j = 0; j < labs(val) % (n - 1); ++j) {
-                    prev = prev->next;
-                }
+                for (size_t j = 0; j < labs(val) % (n - 1); ++j) { prev = prev->next; }
             } else { // move left
                 for (size_t j = 0; j < (labs(val) + 1) % (n - 1); ++j) {
                     prev = prev->prev;
@@ -63,9 +61,7 @@ long solve(List *list, long mul, size_t n_mix)
     const size_t offset[3] = { 1000, 2000, 3000 };
     for (size_t i = 0; i < 3; ++i) {
         const Node *curr = zero;
-        for (size_t j = 0; j < offset[i] % n; ++j) {
-            curr = curr->next;
-        }
+        for (size_t j = 0; j < offset[i] % n; ++j) { curr = curr->next; }
         sum += *(long *)curr->data;
     }
 

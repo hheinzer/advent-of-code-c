@@ -31,7 +31,8 @@ void polymer_modify(size_t ni, size_t count[ni], size_t rule[ni][2], size_t n_st
     free(new_count);
 }
 
-size_t polymer_quantity_diff(size_t ni, char input[ni][3], const size_t count[ni], const char *poly)
+size_t polymer_quantity_diff(
+    size_t ni, char input[ni][3], const size_t count[ni], const char *poly)
 {
     // compute histogram of pairs
     size_t hist['Z' - 'A' + 1] = { 0 };
@@ -51,9 +52,7 @@ size_t polymer_quantity_diff(size_t ni, char input[ni][3], const size_t count[ni
     size_t max = 0;
     for (char letter = 'A'; letter <= 'Z'; ++letter) {
         hist[letter - 'A'] = hist[letter - 'A'] / 2;
-        if (hist[letter - 'A'] > 0) {
-            min = MIN(min, hist[letter - 'A']);
-        }
+        if (hist[letter - 'A'] > 0) { min = MIN(min, hist[letter - 'A']); }
         max = MAX(max, hist[letter - 'A']);
     }
     return max - min;

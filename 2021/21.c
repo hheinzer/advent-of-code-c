@@ -39,7 +39,8 @@ size_t play_with_deterministic_die(size_t position[2])
     return MIN(score[0], score[1]) * count;
 }
 
-void play_with_dirac_die(size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_, size_t *w1_, Dict *cache)
+void play_with_dirac_die(
+    size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_, size_t *w1_, Dict *cache)
 {
     // check if result exists in cache
     char key[256] = "";

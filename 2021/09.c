@@ -43,9 +43,7 @@ int main(void)
     char(*map)[nj] = calloc(ni, sizeof(*map));
     memset(map, '9', ni * sizeof(*map));
     for (size_t i = 0; i < ni - 2; ++i) {
-        for (size_t j = 0; j < nj - 2; ++j) {
-            map[i + 1][j + 1] = line[i][j];
-        }
+        for (size_t j = 0; j < nj - 2; ++j) { map[i + 1][j + 1] = line[i][j]; }
     }
 
     // compute risk level
@@ -57,9 +55,7 @@ int main(void)
             is_low_point &= (map[i][j] < map[i][j + 1]); // right
             is_low_point &= (map[i][j] < map[i - 1][j]); // up
             is_low_point &= (map[i][j] < map[i + 1][j]); // down
-            if (is_low_point) {
-                risk += 1 + map[i][j] - '0';
-            }
+            if (is_low_point) { risk += 1 + map[i][j] - '0'; }
         }
     }
 

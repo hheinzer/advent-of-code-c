@@ -13,12 +13,7 @@
  */
 #include "aoc.h"
 
-typedef enum Facing {
-    R,
-    D,
-    L,
-    U
-} Facing;
+typedef enum Facing { R, D, L, U } Facing;
 
 typedef struct Face {
     size_t g_row; // global row of top left tile
@@ -200,14 +195,9 @@ void runner_move(Runner *runner, const Face face[6], size_t n, size_t move)
 void runner_turn(Runner *runner, char turn)
 {
     switch (turn) {
-    case 'R':
-        runner->facing = (runner->facing + 1) % 4;
-        break;
-    case 'L':
-        runner->facing = (runner->facing - 1) % 4;
-        break;
-    default:
-        assert(!"Illegal turn signal encountered.");
+    case 'R': runner->facing = (runner->facing + 1) % 4; break;
+    case 'L': runner->facing = (runner->facing - 1) % 4; break;
+    default: assert(!"Illegal turn signal encountered.");
     }
 }
 
@@ -218,9 +208,7 @@ void runner_run(Runner *runner, const Face face[6], size_t n, const char *inst)
         char turn;
         int ret = sscanf(inst, "%zu%c", &move, &turn);
         runner_move(runner, face, n, move);
-        if (ret == 1) {
-            break;
-        }
+        if (ret == 1) { break; }
         runner_turn(runner, turn);
         inst = strchr(inst, turn) + 1;
     }
@@ -281,7 +269,5 @@ int main(void)
 
     // cleanup
     lines_free(line, n_lines);
-    for (size_t i = 0; i < 6; ++i) {
-        free(face[i].map);
-    }
+    for (size_t i = 0; i < 6; ++i) { free(face[i].map); }
 }

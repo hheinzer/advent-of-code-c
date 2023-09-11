@@ -19,9 +19,7 @@ size_t count_overlapping(const Dict *grid)
     for (size_t i = 0; i < grid->size; ++i) {
         for (const Item *item = &grid->item[i]; item && item->key; item = item->next) {
             const size_t *_count = item->data;
-            if (*_count >= 2) {
-                ++count;
-            }
+            if (*_count >= 2) { ++count; }
         }
     }
     return count;

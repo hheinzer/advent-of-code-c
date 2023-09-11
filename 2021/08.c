@@ -60,9 +60,7 @@ size_t count_common_chars(const char *str1, const char *str2)
     size_t n = 0;
     for (size_t i = 0; i < n1; ++i) {
         for (size_t j = 0; j < n2; ++j) {
-            if (str1[i] == str2[j]) {
-                ++n;
-            }
+            if (str1[i] == str2[j]) { ++n; }
         }
     }
     return n;
@@ -91,12 +89,8 @@ size_t entry_decode(size_t common[10][10], const Entry *entry)
     for (size_t i = 0; i < 6; ++i) {
         for (size_t j = 0; j < 6; ++j) {
             // create code
-            const int code[10] = {
-                1, 7, 4,
-                perm1[i][0], perm1[i][1], perm1[i][2],
-                perm2[j][0], perm2[j][1], perm2[j][2],
-                8
-            };
+            const int code[10] = { 1, 7, 4, perm1[i][0], perm1[i][1], perm1[i][2],
+                perm2[j][0], perm2[j][1], perm2[j][2], 8 };
 
             // check if code is valid
             int valid = 1;
@@ -154,8 +148,8 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         for (size_t j = 0; j < 4; ++j) {
             const size_t len = strlen(entry[i].output[j]);
-            if ((len == digit_len[1]) || (len == digit_len[7])
-                || (len == digit_len[4]) || (len == digit_len[8])) {
+            if ((len == digit_len[1]) || (len == digit_len[7]) || (len == digit_len[4])
+                || (len == digit_len[8])) {
                 ++count;
             }
         }
@@ -174,9 +168,7 @@ int main(void)
 
     // compute sum of decoded outputs
     size_t sum = 0;
-    for (size_t i = 0; i < n_lines; ++i) {
-        sum += entry_decode(common, &entry[i]);
-    }
+    for (size_t i = 0; i < n_lines; ++i) { sum += entry_decode(common, &entry[i]); }
 
     // part 2
     printf("%zu\n", sum);

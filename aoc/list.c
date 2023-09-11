@@ -72,14 +72,10 @@ int list_insert(List *list, size_t i, void *data)
         Node *next = 0;
         if (i <= list->len - 1 - i) { // search forward
             next = list->first;
-            for (size_t j = 0; j < i; ++j) {
-                next = next->next;
-            }
+            for (size_t j = 0; j < i; ++j) { next = next->next; }
         } else { // search backward
             next = list->last;
-            for (size_t j = 0; j < list->len - 1 - i; ++j) {
-                next = next->prev;
-            }
+            for (size_t j = 0; j < list->len - 1 - i; ++j) { next = next->prev; }
         }
         node->next = next;
         node->prev = next->prev;
@@ -90,10 +86,7 @@ int list_insert(List *list, size_t i, void *data)
     return 0;
 }
 
-int list_insert_first(List *list, void *data)
-{
-    return list_insert(list, 0, data);
-}
+int list_insert_first(List *list, void *data) { return list_insert(list, 0, data); }
 
 int list_insert_last(List *list, void *data)
 {
@@ -124,14 +117,10 @@ void *list_remove(List *list, size_t i)
     } else { // remove in middle
         if (i <= list->len - 1 - i) { // search forward
             node = list->first;
-            for (size_t j = 0; j < i; ++j) {
-                node = node->next;
-            }
+            for (size_t j = 0; j < i; ++j) { node = node->next; }
         } else { // search backward
             node = list->last;
-            for (size_t j = 0; j < list->len - 1 - i; ++j) {
-                node = node->prev;
-            }
+            for (size_t j = 0; j < list->len - 1 - i; ++j) { node = node->prev; }
         }
         node->next->prev = node->prev;
         node->prev->next = node->next;
@@ -142,15 +131,9 @@ void *list_remove(List *list, size_t i)
     return data;
 }
 
-void *list_remove_first(List *list)
-{
-    return list_remove(list, 0);
-}
+void *list_remove_first(List *list) { return list_remove(list, 0); }
 
-void *list_remove_last(List *list)
-{
-    return list_remove(list, list->len - 1);
-}
+void *list_remove_last(List *list) { return list_remove(list, list->len - 1); }
 
 Node *list_get(const List *list, size_t i)
 {
@@ -167,25 +150,20 @@ Node *list_get(const List *list, size_t i)
         Node *node = 0;
         if (i <= list->len - 1 - i) { // search forward
             node = list->first;
-            for (size_t j = 0; j < i; ++j) {
-                node = node->next;
-            }
+            for (size_t j = 0; j < i; ++j) { node = node->next; }
         } else { // search backward
             node = list->last;
-            for (size_t j = 0; j < list->len - 1 - i; ++j) {
-                node = node->prev;
-            }
+            for (size_t j = 0; j < list->len - 1 - i; ++j) { node = node->prev; }
         }
         return node;
     }
 }
 
-Node *list_find(const List *list, const void *data, int (*data_cmp)(const void *, const void *))
+Node *list_find(
+    const List *list, const void *data, int (*data_cmp)(const void *, const void *))
 {
     for (Node *node = list->first; node; node = node->next) {
-        if (!data_cmp(node->data, data)) {
-            return node;
-        }
+        if (!data_cmp(node->data, data)) { return node; }
     }
     return 0;
 }
@@ -210,13 +188,12 @@ void *list_delete(List *list, Node *node)
     return data;
 }
 
-size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *))
+size_t list_index(
+    const List *list, void *data, int (*data_cmp)(const void *, const void *))
 {
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) {
-        if (!data_cmp(node->data, data)) {
-            return i;
-        }
+        if (!data_cmp(node->data, data)) { return i; }
         node = node->next;
     }
     return list->len;

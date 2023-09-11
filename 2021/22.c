@@ -29,8 +29,8 @@ Cube *cube_alloc(const char *line, long limit)
     // create cube
     Cube cube = { 0 };
     char cmd[4] = "";
-    sscanf(line, "%3s x=%ld..%ld,y=%ld..%ld,z=%ld..%ld",
-        cmd, &cube.x0, &cube.x1, &cube.y0, &cube.y1, &cube.z0, &cube.z1);
+    sscanf(line, "%3s x=%ld..%ld,y=%ld..%ld,z=%ld..%ld", cmd, &cube.x0, &cube.x1,
+        &cube.y0, &cube.y1, &cube.z0, &cube.z1);
 
     // apply limit if it exists
     if (limit) {
@@ -100,7 +100,8 @@ void cube_insert(List *cubes, Cube *new)
 
 long cube_volume(const Cube *cube)
 {
-    return (cube->x1 - cube->x0 + 1) * (cube->y1 - cube->y0 + 1) * (cube->z1 - cube->z0 + 1);
+    return (cube->x1 - cube->x0 + 1) * (cube->y1 - cube->y0 + 1)
+        * (cube->z1 - cube->z0 + 1);
 }
 
 size_t cube_sum_volume(const List *cubes)

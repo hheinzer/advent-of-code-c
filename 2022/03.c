@@ -16,9 +16,7 @@ char find_common_char_2(const char *str1, const char *str2, size_t n)
 {
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < n; ++j) {
-            if (str1[i] == str2[j]) {
-                return str1[i];
-            }
+            if (str1[i] == str2[j]) { return str1[i]; }
         }
     }
     assert(!"No common character found.");
@@ -43,9 +41,7 @@ char find_common_char_3(const char *str1, const char *str2, const char *str3)
         for (size_t j = 0; j < nj; ++j) {
             if (str1[i] == str2[j]) {
                 for (size_t k = 0; k < nk; ++k) {
-                    if (str1[i] == str3[k]) {
-                        return str1[i];
-                    }
+                    if (str1[i] == str3[k]) { return str1[i]; }
                 }
             }
         }
@@ -72,7 +68,8 @@ int main(void)
     // find common char of three lines at a time
     long sum_prio2 = 0;
     for (size_t i = 0; i < n_lines; i += 3) {
-        sum_prio2 += item2prio(find_common_char_3(line[i + 0], line[i + 1], line[i + 2]));
+        sum_prio2
+            += item2prio(find_common_char_3(line[i + 0], line[i + 1], line[i + 2]));
     }
 
     // part 2

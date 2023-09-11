@@ -52,7 +52,8 @@ int main(void)
         Dict *z_values_new = dict_alloc(sizeof(long[2]), 1000000);
         // iterate through current z_values
         for (size_t i = 0; i < z_values->size; ++i) {
-            for (const Item *z_item = &z_values->item[i]; z_item && z_item->key; z_item = z_item->next) {
+            for (const Item *z_item = &z_values->item[i]; z_item && z_item->key;
+                 z_item = z_item->next) {
                 // extract current z and min/max
                 const long z = strtol(z_item->key, 0, 10);
                 const long min = ((long *)z_item->data)[0];
@@ -66,7 +67,8 @@ int main(void)
                         const long min_new = min * 10 + digit;
                         const long max_new = max * 10 + digit;
                         // update existing or insert new z value
-                        Item *z_item_new = dict_find(z_values_new, KEY(key, "%ld", z_new));
+                        Item *z_item_new
+                            = dict_find(z_values_new, KEY(key, "%ld", z_new));
                         if (z_item_new) {
                             const long min_prev = ((long *)z_item_new->data)[0];
                             const long max_prev = ((long *)z_item_new->data)[1];

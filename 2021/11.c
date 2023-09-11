@@ -19,9 +19,7 @@ size_t simulate(int grid[N + 2][N + 2], size_t n_steps)
     for (size_t step = 0; step < n_steps; ++step) {
         // increase energy level by 1
         for (size_t i = 1; i <= N; ++i) {
-            for (size_t j = 1; j <= N; ++j) {
-                ++grid[i][j];
-            }
+            for (size_t j = 1; j <= N; ++j) { ++grid[i][j]; }
         }
 
         // flash
@@ -36,9 +34,7 @@ size_t simulate(int grid[N + 2][N + 2], size_t n_steps)
                         ++count;
                         for (size_t ii = i - 1; ii <= i + 1; ++ii) {
                             for (size_t jj = j - 1; jj <= j + 1; ++jj) {
-                                if (!has_flashed[ii][jj]) {
-                                    ++grid[ii][jj];
-                                }
+                                if (!has_flashed[ii][jj]) { ++grid[ii][jj]; }
                             }
                         }
                         grid[i][j] = 0;
@@ -51,13 +47,9 @@ size_t simulate(int grid[N + 2][N + 2], size_t n_steps)
         // check if all have flashed
         int all_have_flashed = 1;
         for (size_t i = 1; i <= N; ++i) {
-            for (size_t j = 1; j <= N; ++j) {
-                all_have_flashed &= has_flashed[i][j];
-            }
+            for (size_t j = 1; j <= N; ++j) { all_have_flashed &= has_flashed[i][j]; }
         }
-        if (all_have_flashed) {
-            return step;
-        }
+        if (all_have_flashed) { return step; }
     }
     return count;
 }
@@ -71,9 +63,7 @@ int main(void)
     // create Octopus grid with padding
     int grid[N + 2][N + 2] = { 0 };
     for (size_t i = 0; i < N; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-            grid[i + 1][j + 1] = line[i][j] - '0';
-        }
+        for (size_t j = 0; j < N; ++j) { grid[i + 1][j + 1] = line[i][j] - '0'; }
     }
 
     // part 1

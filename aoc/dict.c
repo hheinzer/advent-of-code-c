@@ -89,9 +89,7 @@ static size_t hash(const char *str)
 
 static int keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
 {
-    if (key_size1 != key_size2) {
-        return 1;
-    }
+    if (key_size1 != key_size2) { return 1; }
     while (*key1 && (*key1 == *key2)) {
         ++key1;
         ++key2;
@@ -184,7 +182,8 @@ void dict_histogram(const Dict *dict)
     Dict *hist = dict_alloc(sizeof(size_t), dict->len);
     for (size_t i = 0; i < dict->size; ++i) {
         size_t n = 0;
-        for (const Item *item = &dict->item[i]; item && item->key; item = item->next) ++n;
+        for (const Item *item = &dict->item[i]; item && item->key; item = item->next)
+            ++n;
         snprintf(key, sizeof(key), "%zu", n);
         Item *item_hist = dict_find(hist, key);
         if (item_hist) {
@@ -211,7 +210,8 @@ void dict_histogram(const Dict *dict)
     // print load factor and histogram
     printf("[%f] ", (double)dict->len / (double)dict->size);
     for (size_t i = 0; i < hist->len; ++i) {
-        printf("%zu: %zu%s", sorted[i].n, sorted[i].count, (i < hist->len - 1 ? ", " : "\n"));
+        printf("%zu: %zu%s", sorted[i].n, sorted[i].count,
+            (i < hist->len - 1 ? ", " : "\n"));
     }
 
     // cleanup

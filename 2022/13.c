@@ -57,9 +57,7 @@ PacketData *pd_create(const char **line_ptr)
             list_insert_last(pd->pd_list, _pd);
 
             // in case integer had more than one digit, push line pointer forward
-            while (isdigit(*(line + 1))) {
-                ++line;
-            }
+            while (isdigit(*(line + 1))) { ++line; }
         }
         ++line;
     }

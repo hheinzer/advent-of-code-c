@@ -19,8 +19,7 @@ int does_collide(long r[5][2], const Dict *cave, long dx, long dy)
     for (size_t j = 0; j < 5; ++j) {
         const long rx = r[j][0] + dx;
         const long ry = r[j][1] + dy;
-        if ((rx < 0) || (6 < rx)
-            || (ry < 0)
+        if ((rx < 0) || (6 < rx) || (ry < 0)
             || dict_find(cave, KEY(key, "%ld,%ld", rx, ry))) {
             return 1;
         }
@@ -31,9 +30,7 @@ int does_collide(long r[5][2], const Dict *cave, long dx, long dy)
 int array_repeats(const long *a, const long *b, size_t n)
 {
     for (size_t i = 0; i < n; ++i) {
-        if (a[i] != b[i]) {
-            return 0;
-        }
+        if (a[i] != b[i]) { return 0; }
     }
     return 1;
 }
@@ -77,23 +74,17 @@ size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
         // get current rock
         long r[5][2] = { 0 };
         memcpy(r, rock[i % 5], sizeof(r));
-        for (size_t j = 0; j < 5; ++j) {
-            r[j][1] += height[i] + 3;
-        }
+        for (size_t j = 0; j < 5; ++j) { r[j][1] += height[i] + 3; }
 
         // move rock until it lands
         while (1) {
             const long dx = (jet[(ijet++) % njet] == '<' ? -1 : +1);
             if (!does_collide(r, cave, dx, 0)) {
-                for (size_t j = 0; j < 5; ++j) {
-                    r[j][0] += dx;
-                }
+                for (size_t j = 0; j < 5; ++j) { r[j][0] += dx; }
             }
             const long dy = -1;
             if (!does_collide(r, cave, 0, dy)) {
-                for (size_t j = 0; j < 5; ++j) {
-                    r[j][1] += dy;
-                }
+                for (size_t j = 0; j < 5; ++j) { r[j][1] += dy; }
             } else {
                 for (size_t j = 0; j < 5; ++j) {
                     dict_insert(cave, KEY(key, "%ld,%ld", r[j][0], r[j][1]), 0);
@@ -103,17 +94,13 @@ size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
         }
 
         // determine new height
-        for (size_t j = 0; j < 5; ++j) {
-            height[i + 1] = MAX(height[i], r[j][1] + 1);
-        }
+        for (size_t j = 0; j < 5; ++j) { height[i + 1] = MAX(height[i], r[j][1] + 1); }
     }
 
     if (n < _n) {
         // compute height increment
         long *dh = calloc(n, sizeof(*dh));
-        for (size_t i = 0; i < n; ++i) {
-            dh[i] = height[i + 1] - height[i];
-        }
+        for (size_t i = 0; i < n; ++i) { dh[i] = height[i + 1] - height[i]; }
 
         // check for repeating pattern
         size_t np = 0;
@@ -123,21 +110,15 @@ size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
 
         // compute height of preamble
         long hp = 0;
-        for (size_t i = 0; i < np; ++i) {
-            hp += dh[i];
-        }
+        for (size_t i = 0; i < np; ++i) { hp += dh[i]; }
 
         // compute height of repeat
         long hr = 0;
-        for (size_t i = 0; i < nr; ++i) {
-            hr += dh[np + i];
-        }
+        for (size_t i = 0; i < nr; ++i) { hr += dh[np + i]; }
 
         // compute final height
         ret = hp + hr * ((_n - np) / nr);
-        for (size_t i = 0; i < (_n - np) % nr; ++i) {
-            ret += dh[np + i];
-        }
+        for (size_t i = 0; i < (_n - np) % nr; ++i) { ret += dh[np + i]; }
 
         // cleanup
         free(dh);

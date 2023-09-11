@@ -18,7 +18,8 @@ Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size
     for (size_t i = 0; i < heap->len; ++i) {
         void *copy = 0;
         if (data_copy) {
-            copy = data_copy(malloc(heap->data_size), other->elem[i].data, heap->data_size);
+            copy = data_copy(
+                malloc(heap->data_size), other->elem[i].data, heap->data_size);
         } else {
             copy = other->elem[i].data;
         }
@@ -30,19 +31,14 @@ Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size
 void heap_free(Heap **heap, void (*data_free)(void *))
 {
     if (data_free) {
-        for (size_t i = 0; i < (*heap)->len; ++i) {
-            data_free((*heap)->elem[i].data);
-        }
+        for (size_t i = 0; i < (*heap)->len; ++i) { data_free((*heap)->elem[i].data); }
     }
     free((*heap)->elem);
     free(*heap);
     *heap = 0;
 }
 
-static size_t parent(size_t i)
-{
-    return (i - 1) / 2;
-}
+static size_t parent(size_t i) { return (i - 1) / 2; }
 
 static void elem_swap(Elem *a, Elem *b)
 {
@@ -70,15 +66,9 @@ void heap_insert(Heap *heap, long priority, void *data)
     }
 }
 
-static size_t left(size_t i)
-{
-    return 2 * i + 1;
-}
+static size_t left(size_t i) { return 2 * i + 1; }
 
-static size_t right(size_t i)
-{
-    return 2 * i + 2;
-}
+static size_t right(size_t i) { return 2 * i + 2; }
 
 static void heapify(Heap *heap, size_t i)
 {
@@ -86,12 +76,8 @@ static void heapify(Heap *heap, size_t i)
     const size_t r = right(i);
     size_t max = i;
     Elem *elem = heap->elem;
-    if ((l < heap->len) && (elem[l].priority > elem[i].priority)) {
-        max = l;
-    }
-    if ((r < heap->len) && (elem[r].priority > elem[max].priority)) {
-        max = r;
-    }
+    if ((l < heap->len) && (elem[l].priority > elem[i].priority)) { max = l; }
+    if ((r < heap->len) && (elem[r].priority > elem[max].priority)) { max = r; }
     if (max != i) {
         elem_swap(&elem[i], &elem[max]);
         heapify(heap, max);
@@ -100,23 +86,17 @@ static void heapify(Heap *heap, size_t i)
 
 void *heap_remove(Heap *heap)
 {
-    if (heap->len == 0) {
-        return 0;
-    }
+    if (heap->len == 0) { return 0; }
     --heap->len;
     Elem *elem = heap->elem;
     void *data = elem[0].data;
     elem_swap(&elem[0], &elem[heap->len]);
-    if (heap->len > 1) {
-        heapify(heap, 0);
-    }
+    if (heap->len > 1) { heapify(heap, 0); }
     return data;
 }
 
 Elem *heap_peek(Heap *heap)
 {
-    if (heap->len == 0) {
-        return 0;
-    }
+    if (heap->len == 0) { return 0; }
     return &heap->elem[0];
 }
