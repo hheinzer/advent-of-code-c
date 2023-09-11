@@ -23,20 +23,11 @@ typedef struct Position {
 void position_move(Position *pos, char dir)
 {
     switch (dir) {
-    case 'L':
-        --pos->x;
-        break;
-    case 'R':
-        ++pos->x;
-        break;
-    case 'U':
-        ++pos->y;
-        break;
-    case 'D':
-        --pos->y;
-        break;
-    default:
-        assert(!"Illegal direction encountered.");
+    case 'L': --pos->x; break;
+    case 'R': ++pos->x; break;
+    case 'U': ++pos->y; break;
+    case 'D': --pos->y; break;
+    default: assert(!"Illegal direction encountered.");
     }
 }
 
@@ -79,8 +70,8 @@ int main(void)
                 }
 
                 // insert tail position into dict
-                dict_insert(pos,
-                    KEY(key, "%ld,%ld", rope[nr[r] - 1].x, rope[nr[r] - 1].y), 0);
+                dict_insert(
+                    pos, KEY(key, "%ld,%ld", rope[nr[r] - 1].x, rope[nr[r] - 1].y), 0);
             }
         }
 

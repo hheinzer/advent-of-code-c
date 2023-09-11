@@ -65,9 +65,7 @@ cleanup:
 const char *strchrnul(const char *s, int c)
 {
     while (*s) {
-        if (*s == c) {
-            return s;
-        }
+        if (*s == c) { return s; }
         ++s;
     }
     return s;
@@ -105,9 +103,7 @@ int main(void)
     while (a) {
         const size_t A = a - height;
         const size_t l = shortest_path_length(height, ni, nj, A, E);
-        if (l) {
-            min_length = MIN(min_length, l + 1);
-        }
+        if (l) { min_length = MIN(min_length, l + 1); }
         a = strchr(a + 1, 'b');
     }
     printf("%zu\n", min_length);

@@ -17,39 +17,23 @@ int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
 {
     // look left
     char max_height = line[i0][0];
-    for (size_t j = 1; j < j0; ++j) {
-        max_height = MAX(max_height, line[i0][j]);
-    }
-    if (line[i0][j0] > max_height) {
-        return 1;
-    }
+    for (size_t j = 1; j < j0; ++j) { max_height = MAX(max_height, line[i0][j]); }
+    if (line[i0][j0] > max_height) { return 1; }
 
     // look right
     max_height = line[i0][j0 + 1];
-    for (size_t j = j0 + 2; j < nj; ++j) {
-        max_height = MAX(max_height, line[i0][j]);
-    }
-    if (line[i0][j0] > max_height) {
-        return 1;
-    }
+    for (size_t j = j0 + 2; j < nj; ++j) { max_height = MAX(max_height, line[i0][j]); }
+    if (line[i0][j0] > max_height) { return 1; }
 
     // look up
     max_height = line[0][j0];
-    for (size_t i = 1; i < i0; ++i) {
-        max_height = MAX(max_height, line[i][j0]);
-    }
-    if (line[i0][j0] > max_height) {
-        return 1;
-    }
+    for (size_t i = 1; i < i0; ++i) { max_height = MAX(max_height, line[i][j0]); }
+    if (line[i0][j0] > max_height) { return 1; }
 
     // look down
     max_height = line[i0 + 1][j0];
-    for (size_t i = i0 + 2; i < ni; ++i) {
-        max_height = MAX(max_height, line[i][j0]);
-    }
-    if (line[i0][j0] > max_height) {
-        return 1;
-    }
+    for (size_t i = i0 + 2; i < ni; ++i) { max_height = MAX(max_height, line[i][j0]); }
+    if (line[i0][j0] > max_height) { return 1; }
 
     return 0;
 }

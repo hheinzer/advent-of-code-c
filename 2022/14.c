@@ -64,15 +64,11 @@ int main(void)
             if (y1 == y0) { // add row
                 const long nj = labs(x1 - x0);
                 const long dx = (x1 - x0) / nj;
-                for (long j = 0; j <= nj; ++j) {
-                    grid[y0][x0 + j * dx] = '#';
-                }
+                for (long j = 0; j <= nj; ++j) { grid[y0][x0 + j * dx] = '#'; }
             } else { // add column
                 const long ni = labs(y1 - y0);
                 const long dy = (y1 - y0) / ni;
-                for (long j = 0; j <= ni; ++j) {
-                    grid[y0 + j * dy][x0] = '#';
-                }
+                for (long j = 0; j <= ni; ++j) { grid[y0 + j * dy][x0] = '#'; }
             }
             x0 = x1;
             y0 = y1;
@@ -86,9 +82,7 @@ int main(void)
 
     // insert floor
     max_y += 2;
-    for (size_t j = 0; j < NX; ++j) {
-        grid[max_y][j] = '#';
-    }
+    for (size_t j = 0; j < NX; ++j) { grid[max_y][j] = '#'; }
 
     // part 2
     ns += drop_sand(grid, max_y);

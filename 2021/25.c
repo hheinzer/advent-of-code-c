@@ -20,9 +20,7 @@ int main(void)
     const size_t nj = strlen(line[0]);
     char(*map)[nj] = calloc(ni, sizeof(*map));
     for (size_t i = 0; i < ni; ++i) {
-        for (size_t j = 0; j < nj; ++j) {
-            map[i][j] = line[i][j];
-        }
+        for (size_t j = 0; j < nj; ++j) { map[i][j] = line[i][j]; }
     }
 
     // create copy of map

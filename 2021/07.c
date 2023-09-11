@@ -18,9 +18,7 @@ size_t strcnt(const char *str, const char c)
 {
     size_t n = 0;
     while (*str) {
-        if (*(str++) == c) {
-            ++n;
-        }
+        if (*(str++) == c) { ++n; }
     }
     return n;
 }
@@ -34,18 +32,14 @@ long pos_median(long *pos, size_t n)
 long pos_cost1(const long *pos, size_t n, long p)
 {
     long cost = 0;
-    for (size_t i = 0; i < n; ++i) {
-        cost += labs(p - pos[i]);
-    }
+    for (size_t i = 0; i < n; ++i) { cost += labs(p - pos[i]); }
     return cost;
 }
 
 long pos_mean(const long *pos, size_t n)
 {
     long mean = 0;
-    for (size_t i = 0; i < n; ++i) {
-        mean += pos[i];
-    }
+    for (size_t i = 0; i < n; ++i) { mean += pos[i]; }
     return (long)round((double)mean / (double)n);
 }
 

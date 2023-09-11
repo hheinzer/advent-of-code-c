@@ -77,9 +77,7 @@ int main(void)
 
     // compute syntax error score
     int score = 0;
-    for (size_t i = 0; i < n_lines; ++i) {
-        score += table1[is_corrupted(line[i])];
-    }
+    for (size_t i = 0; i < n_lines; ++i) { score += table1[is_corrupted(line[i])]; }
 
     // part 1
     printf("%d\n", score);

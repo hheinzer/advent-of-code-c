@@ -13,7 +13,8 @@
  */
 #include "aoc.h"
 
-char *image_enhance(char *image, size_t *ni, size_t *nj, char *outside, const char *enhance)
+char *image_enhance(
+    char *image, size_t *ni, size_t *nj, char *outside, const char *enhance)
 {
     // enhance all outside pixels
     if (*outside == '.') {
@@ -33,15 +34,24 @@ char *image_enhance(char *image, size_t *ni, size_t *nj, char *outside, const ch
         for (size_t j = 0; j < *nj; ++j) {
             if ((2 <= i) && (i < *ni - 2) && (2 <= j) && (j < *nj - 2)) {
                 char mod[10] = "000000000";
-                mod[0] = (image[(i - 1 - 1) * (*nj - 2) + (j - 1 - 1)] == '#' ? '1' : '0');
-                mod[1] = (image[(i - 1 - 1) * (*nj - 2) + (j - 1 + 0)] == '#' ? '1' : '0');
-                mod[2] = (image[(i - 1 - 1) * (*nj - 2) + (j - 1 + 1)] == '#' ? '1' : '0');
-                mod[3] = (image[(i - 1 + 0) * (*nj - 2) + (j - 1 - 1)] == '#' ? '1' : '0');
-                mod[4] = (image[(i - 1 + 0) * (*nj - 2) + (j - 1 + 0)] == '#' ? '1' : '0');
-                mod[5] = (image[(i - 1 + 0) * (*nj - 2) + (j - 1 + 1)] == '#' ? '1' : '0');
-                mod[6] = (image[(i - 1 + 1) * (*nj - 2) + (j - 1 - 1)] == '#' ? '1' : '0');
-                mod[7] = (image[(i - 1 + 1) * (*nj - 2) + (j - 1 + 0)] == '#' ? '1' : '0');
-                mod[8] = (image[(i - 1 + 1) * (*nj - 2) + (j - 1 + 1)] == '#' ? '1' : '0');
+                mod[0]
+                    = (image[(i - 1 - 1) * (*nj - 2) + (j - 1 - 1)] == '#' ? '1' : '0');
+                mod[1]
+                    = (image[(i - 1 - 1) * (*nj - 2) + (j - 1 + 0)] == '#' ? '1' : '0');
+                mod[2]
+                    = (image[(i - 1 - 1) * (*nj - 2) + (j - 1 + 1)] == '#' ? '1' : '0');
+                mod[3]
+                    = (image[(i - 1 + 0) * (*nj - 2) + (j - 1 - 1)] == '#' ? '1' : '0');
+                mod[4]
+                    = (image[(i - 1 + 0) * (*nj - 2) + (j - 1 + 0)] == '#' ? '1' : '0');
+                mod[5]
+                    = (image[(i - 1 + 0) * (*nj - 2) + (j - 1 + 1)] == '#' ? '1' : '0');
+                mod[6]
+                    = (image[(i - 1 + 1) * (*nj - 2) + (j - 1 - 1)] == '#' ? '1' : '0');
+                mod[7]
+                    = (image[(i - 1 + 1) * (*nj - 2) + (j - 1 + 0)] == '#' ? '1' : '0');
+                mod[8]
+                    = (image[(i - 1 + 1) * (*nj - 2) + (j - 1 + 1)] == '#' ? '1' : '0');
                 image_[i * (*nj) + j] = enhance[strtoul(mod, 0, 2)];
             } else {
                 image_[i * (*nj) + j] = *outside;
@@ -80,9 +90,7 @@ int main(void)
     char *image = calloc(ni * nj, sizeof(*image));
     memset(image, '.', ni * nj * sizeof(*image));
     for (size_t i = 2; i < ni - 2; ++i) {
-        for (size_t j = 2; j < nj - 2; ++j) {
-            image[i * nj + j] = line[i][j - 2];
-        }
+        for (size_t j = 2; j < nj - 2; ++j) { image[i * nj + j] = line[i][j - 2]; }
     }
 
     // enhance image

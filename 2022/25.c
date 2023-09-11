@@ -25,9 +25,7 @@ long snafu_to_decimal(const char *snafu)
 char *string_reverse(char *str)
 {
     const size_t n = strlen(str);
-    for (size_t i = 0, j = n - 1; i < n / 2; ++i, --j) {
-        SWAP(str[i], str[j]);
-    }
+    for (size_t i = 0, j = n - 1; i < n / 2; ++i, --j) { SWAP(str[i], str[j]); }
     return str;
 }
 
@@ -39,9 +37,7 @@ char *decimal_to_snafu(long decimal, char *snafu)
         long r = decimal % 5;
         decimal /= 5;
         *s = code[r];
-        if (r > 2) {
-            decimal += 1;
-        }
+        if (r > 2) { decimal += 1; }
         ++s;
     }
     *s = 0;
@@ -57,9 +53,7 @@ int main(void)
     // compute the sum of the snafu numbers
     long sum = 0;
     char snafu[256] = "";
-    for (size_t i = 0; i < n_lines; ++i) {
-        sum += snafu_to_decimal(line[i]);
-    }
+    for (size_t i = 0; i < n_lines; ++i) { sum += snafu_to_decimal(line[i]); }
 
     // part 1
     printf("%s\n", decimal_to_snafu(sum, snafu));

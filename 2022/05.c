@@ -49,15 +49,10 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
             }
             break;
         case 9001:
-            for (size_t i = 0; i < n; ++i) {
-                stack_push(tmp, stack_pop(stack[f - 1]));
-            }
-            for (size_t i = 0; i < n; ++i) {
-                stack_push(stack[t - 1], stack_pop(tmp));
-            }
+            for (size_t i = 0; i < n; ++i) { stack_push(tmp, stack_pop(stack[f - 1])); }
+            for (size_t i = 0; i < n; ++i) { stack_push(stack[t - 1], stack_pop(tmp)); }
             break;
-        default:
-            assert(!"Illegal cratemover encountered.");
+        default: assert(!"Illegal cratemover encountered.");
         }
     }
     stack_free(&tmp, free);
@@ -69,9 +64,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
     printf("\n");
 
     // cleanup
-    for (size_t i = 0; i < n_stacks; ++i) {
-        stack_free(&stack[i], free);
-    }
+    for (size_t i = 0; i < n_stacks; ++i) { stack_free(&stack[i], free); }
 }
 
 int main(void)

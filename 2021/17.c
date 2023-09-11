@@ -35,12 +35,11 @@ ProbeStatus probe_move(Vec *pos, Vec *vel, const Vec *min, const Vec *max)
     pos->y += vel->y;
     vel->x -= SIGN(vel->x);
     vel->y -= 1;
-    if ((min->x <= pos->x) && (pos->x <= max->x) && (min->y <= pos->y) && (pos->y <= max->y)) {
+    if ((min->x <= pos->x) && (pos->x <= max->x) && (min->y <= pos->y)
+        && (pos->y <= max->y)) {
         return PS_TARGET_HIT;
     }
-    if (pos->y < min->y) {
-        return PS_TARGET_MISS;
-    }
+    if (pos->y < min->y) { return PS_TARGET_MISS; }
     return PS_MOVING;
 }
 
@@ -77,9 +76,7 @@ size_t probe_hit_count(const Vec *min, const Vec *max)
     for (long vel_x = 0; vel_x < 200; ++vel_x) {
         for (long vel_y = -200; vel_y < 200; ++vel_y) {
             Vec vel = { vel_x, vel_y };
-            if (_probe_max_y(&vel, min, max) >= max->y) {
-                ++count;
-            }
+            if (_probe_max_y(&vel, min, max) >= max->y) { ++count; }
         }
     }
     return count;
@@ -93,7 +90,8 @@ int main(void)
 
     // read target area
     Vec min, max;
-    sscanf(line[0], "target area: x=%ld..%ld, y=%ld..%ld", &min.x, &max.x, &min.y, &max.y);
+    sscanf(
+        line[0], "target area: x=%ld..%ld, y=%ld..%ld", &min.x, &max.x, &min.y, &max.y);
 
     // part 1
     printf("%ld\n", probe_max_y(&min, &max));

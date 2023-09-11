@@ -16,16 +16,12 @@ size_t reproduce(size_t n_fish_of_age[9], size_t n)
 {
     for (size_t i = 0; i < n; ++i) {
         const size_t n_new_fish = n_fish_of_age[0];
-        for (size_t j = 0; j < 8; ++j) {
-            n_fish_of_age[j] = n_fish_of_age[j + 1];
-        }
+        for (size_t j = 0; j < 8; ++j) { n_fish_of_age[j] = n_fish_of_age[j + 1]; }
         n_fish_of_age[6] += n_new_fish;
         n_fish_of_age[8] = n_new_fish;
     }
     size_t n_fish = 0;
-    for (size_t i = 0; i < 9; ++i) {
-        n_fish += n_fish_of_age[i];
-    }
+    for (size_t i = 0; i < 9; ++i) { n_fish += n_fish_of_age[i]; }
     return n_fish;
 }
 

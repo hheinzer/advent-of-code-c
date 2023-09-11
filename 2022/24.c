@@ -17,7 +17,8 @@ typedef struct State {
     long j;
 } State;
 
-size_t bfs(long ni, long nj, char map[ni][nj], const long S[2], const long E[2], size_t t0)
+size_t bfs(
+    long ni, long nj, char map[ni][nj], const long S[2], const long E[2], size_t t0)
 {
     Queue *queue = queue_alloc(sizeof(State));
     Dict *seen = dict_alloc(0, 2 * ni * nj);
@@ -83,9 +84,7 @@ int main(void)
     const size_t ni = n_lines - 2;
     const size_t nj = strlen(line[0]) - 2;
     char(*map)[nj] = calloc(ni, sizeof(*map));
-    for (size_t i = 0; i < ni; ++i) {
-        memcpy(map[i], &line[1 + i][1], sizeof(map[i]));
-    }
+    for (size_t i = 0; i < ni; ++i) { memcpy(map[i], &line[1 + i][1], sizeof(map[i])); }
 
     // find start and end
     const long S[2] = { -1, 0 };

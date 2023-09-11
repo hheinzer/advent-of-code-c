@@ -15,10 +15,7 @@
 #include "aoc.h"
 
 // a monkey either shouts a number or a math operation
-typedef enum Jobtype {
-    JOB_NUM,
-    JOB_OP
-} Jobtype;
+typedef enum Jobtype { JOB_NUM, JOB_OP } Jobtype;
 typedef struct Monkeyjob {
     Jobtype type;
     union {
@@ -43,20 +40,11 @@ long monkey_compute(const Dict *monkey, const char *root)
         const long num_l = monkey_compute(monkey, job->operation.left);
         const long num_r = monkey_compute(monkey, job->operation.right);
         switch (job->operation.op) {
-        case '+':
-            return num_l + num_r;
-            break;
-        case '-':
-            return num_l - num_r;
-            break;
-        case '*':
-            return num_l * num_r;
-            break;
-        case '/':
-            return num_l / num_r;
-            break;
-        default:
-            assert(!"Illegal math operation encountered.");
+        case '+': return num_l + num_r; break;
+        case '-': return num_l - num_r; break;
+        case '*': return num_l * num_r; break;
+        case '/': return num_l / num_r; break;
+        default: assert(!"Illegal math operation encountered.");
         }
     }
 }
@@ -120,8 +108,7 @@ void monkey_invert(const Dict *monkey, const char *root, const char *humn)
                 job_h->operation.op = '*';
                 strcpy(job_h->operation.right, parent);
                 break;
-            default:
-                assert(!"Illegal math operation encountered.");
+            default: assert(!"Illegal math operation encountered.");
             }
 
         } else {
@@ -151,8 +138,7 @@ void monkey_invert(const Dict *monkey, const char *root, const char *humn)
                 job_h->operation.op = '/';
                 strcpy(job_h->operation.right, parent);
                 break;
-            default:
-                assert(!"Illegal math operation encountered.");
+            default: assert(!"Illegal math operation encountered.");
             }
         }
 

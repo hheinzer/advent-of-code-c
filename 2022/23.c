@@ -44,15 +44,17 @@ size_t elf_simulate(List *elf, size_t n_round)
             const int S = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j)) ? 1 : 0);
             const int W = (dict_find(pos, KEY(key, "%ld,%ld", e->i, e->j - 1)) ? 1 : 0);
             const int E = (dict_find(pos, KEY(key, "%ld,%ld", e->i, e->j + 1)) ? 1 : 0);
-            const int NW = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j - 1)) ? 1 : 0);
-            const int NE = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j + 1)) ? 1 : 0);
-            const int SW = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j - 1)) ? 1 : 0);
-            const int SE = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j + 1)) ? 1 : 0);
+            const int NW
+                = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j - 1)) ? 1 : 0);
+            const int NE
+                = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j + 1)) ? 1 : 0);
+            const int SW
+                = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j - 1)) ? 1 : 0);
+            const int SE
+                = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j + 1)) ? 1 : 0);
 
             // check for any neighbor
-            if ((N + S + W + E + NE + NW + SE + SW) == 0) {
-                continue;
-            }
+            if ((N + S + W + E + NE + NW + SE + SW) == 0) { continue; }
 
             // propose move
             for (size_t d = 0; d < 4; ++d) {
@@ -98,7 +100,8 @@ size_t elf_simulate(List *elf, size_t n_round)
             Elf *e = node->data;
             dict_remove(pos, KEY(key, "%ld,%ld", e->i, e->j));
             if ((e->i != e->prop_i) || (e->j != e->prop_j)) {
-                const Item *item = dict_find(prop, KEY(key, "%ld,%ld", e->prop_i, e->prop_j));
+                const Item *item
+                    = dict_find(prop, KEY(key, "%ld,%ld", e->prop_i, e->prop_j));
                 const size_t count = *(size_t *)item->data;
                 if (count == 1) {
                     e->i = e->prop_i;
@@ -111,9 +114,7 @@ size_t elf_simulate(List *elf, size_t n_round)
         // cleanup
         dict_free(&prop, free);
 
-        if (no_one_moved) {
-            break;
-        }
+        if (no_one_moved) { break; }
     }
 
     size_t ret = 0;

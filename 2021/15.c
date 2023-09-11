@@ -22,9 +22,7 @@ size_t dijkstra(size_t ni, size_t nj, int grid[ni][nj])
     Heap *heap = heap_alloc(sizeof(size_t[2]), ni * nj);
     size_t(*dist)[nj] = malloc(ni * sizeof(*dist));
     for (size_t i = 1; i < ni - 1; ++i) {
-        for (size_t j = 1; j < nj - 1; ++j) {
-            dist[i][j] = SIZE_MAX;
-        }
+        for (size_t j = 1; j < nj - 1; ++j) { dist[i][j] = SIZE_MAX; }
     }
     int(*visited)[nj] = calloc(ni, sizeof(*visited));
 
@@ -61,10 +59,12 @@ size_t dijkstra(size_t ni, size_t nj, int grid[ni][nj])
                 // compute total distance to neighbor
                 const size_t alt = dist[ui][uj] + grid[vi][vj];
 
-                // if it is smaller, then update neighbor distance and add neighbor to heap
+                // if it is smaller, then update neighbor distance and add neighbor to
+                // heap
                 if (alt < dist[vi][vj]) {
                     dist[vi][vj] = alt;
-                    heap_insert(heap, -alt, memdup((size_t[2]) { vi, vj }, sizeof(size_t[2])));
+                    heap_insert(
+                        heap, -alt, memdup((size_t[2]) { vi, vj }, sizeof(size_t[2])));
                 }
             }
         }
@@ -91,9 +91,7 @@ size_t dijkstra_sorted_list(size_t ni, size_t nj, int grid[ni][nj])
     Queue *queue = queue_alloc(sizeof(size_t[3]));
     size_t(*dist)[nj] = malloc(ni * sizeof(*dist));
     for (size_t i = 1; i < ni - 1; ++i) {
-        for (size_t j = 1; j < nj - 1; ++j) {
-            dist[i][j] = SIZE_MAX;
-        }
+        for (size_t j = 1; j < nj - 1; ++j) { dist[i][j] = SIZE_MAX; }
     }
     int(*visited)[nj] = calloc(ni, sizeof(*visited));
 
@@ -131,10 +129,12 @@ size_t dijkstra_sorted_list(size_t ni, size_t nj, int grid[ni][nj])
                 // compute total distance to neighbor
                 const size_t alt = dist[ui][uj] + grid[vi][vj];
 
-                // if it is smaller, then update neighbor distance and add neighbor to heap
+                // if it is smaller, then update neighbor distance and add neighbor to
+                // heap
                 if (alt < dist[vi][vj]) {
                     dist[vi][vj] = alt;
-                    queue_push(queue, memdup((size_t[3]) { alt, vi, vj }, sizeof(size_t[3])));
+                    queue_push(
+                        queue, memdup((size_t[3]) { alt, vi, vj }, sizeof(size_t[3])));
                 }
             }
         }
@@ -158,9 +158,7 @@ int main(void)
     const size_t nj = strlen(line[0]) + 2;
     int(*grid)[nj] = calloc(ni, sizeof(*grid));
     for (size_t i = 0; i < ni - 2; ++i) {
-        for (size_t j = 0; j < nj - 2; ++j) {
-            grid[1 + i][1 + j] = line[i][j] - '0';
-        }
+        for (size_t j = 0; j < nj - 2; ++j) { grid[1 + i][1 + j] = line[i][j] - '0'; }
     }
 
     // part 1
@@ -174,10 +172,9 @@ int main(void)
         for (size_t j = 1, addj = 0; j < new_nj - 1; j += nj - 2, ++addj) {
             for (size_t ii = 0; ii < ni - 2; ++ii) {
                 for (size_t jj = 0; jj < nj - 2; ++jj) {
-                    new_grid[i + ii][j + jj] = grid[1 + ii][1 + jj] + (int)addi + (int)addj;
-                    if (new_grid[i + ii][j + jj] > 9) {
-                        new_grid[i + ii][j + jj] -= 9;
-                    }
+                    new_grid[i + ii][j + jj]
+                        = grid[1 + ii][1 + jj] + (int)addi + (int)addj;
+                    if (new_grid[i + ii][j + jj] > 9) { new_grid[i + ii][j + jj] -= 9; }
                 }
             }
         }

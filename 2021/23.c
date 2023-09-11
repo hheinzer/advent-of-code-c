@@ -3,7 +3,8 @@
  * (https://adventofcode.com/2021/day/23)
  *
  * Part 1:
- * - represent the burrow as one string (hallway + 1st row of rooms + 2nd row of rooms ...)
+ * - represent the burrow as one string (hallway + 1st row of rooms + 2nd row of rooms
+ * ...)
  * - use dijkstra search to find the minimum energy solution
  *
  * Part 2:
@@ -37,8 +38,8 @@ int burrow_is_blocked(size_t a, size_t b, const char *burrow)
     }
 }
 
-size_t burrow_can_enter_room(size_t a, size_t b, char amph, size_t nt, const size_t target[4],
-    const char *burrow)
+size_t burrow_can_enter_room(
+    size_t a, size_t b, char amph, size_t nt, const size_t target[4], const char *burrow)
 {
     size_t best_pos = SIZE_MAX;
     for (const size_t *t = target; t < target + nt; ++t) {
@@ -131,9 +132,7 @@ long dijkstra(const char *burrow)
         const Elem *elem = heap_peek(heap);
         cost = -elem->priority;
         state = elem->data;
-        if (!strncmp(state, solution, nb)) {
-            goto cleanup;
-        }
+        if (!strncmp(state, solution, nb)) { goto cleanup; }
 
         // insert all possible moves
         size_t move[NM][2] = { 0 };

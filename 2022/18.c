@@ -14,9 +14,8 @@
  */
 #include "aoc.h"
 
-void flood_fill(size_t ni, size_t nj, size_t nk,
-    int outside[ni][nj][nk], int cube[ni][nj][nk],
-    size_t i, size_t j, size_t k)
+void flood_fill(size_t ni, size_t nj, size_t nk, int outside[ni][nj][nk],
+    int cube[ni][nj][nk], size_t i, size_t j, size_t k)
 {
     // mark i,j,k as outside
     outside[i][j][k] = 1;
