@@ -41,8 +41,9 @@ int is_corrupted(const char *line)
     while (*line) {
         if (strchr("([{<", *line)) {
             stack[n++] = *line;
-        } else if (closing[stack[--n]] != *line) {
-            return *line;
+        } else {
+            assert(n > 0);
+            if (closing[stack[--n]] != *line) return *line;
         }
         ++line;
     }
@@ -56,8 +57,9 @@ size_t complete_if_not_corrupted(const char *line)
     while (*line) {
         if (strchr("([{<", *line)) {
             stack[n++] = *line;
-        } else if (closing[stack[--n]] != *line) {
-            return 0;
+        } else {
+            assert(n > 0);
+            if (closing[stack[--n]] != *line) return 0;
         }
         ++line;
     }

@@ -138,7 +138,7 @@ int main(void)
     size_t ns = 0;
     Scanner *scanner = 0;
     for (size_t i = 0; i < n_lines; ++i) {
-        if (!line[i][0]) { // empty line
+        if (line[i] && !line[i][0]) { // empty line
             continue;
         }
         if (!strncmp(line[i], "---", 3)) { // beginning of a new scanner

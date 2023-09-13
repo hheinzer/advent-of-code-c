@@ -1,17 +1,13 @@
 # See LICENSE file for copyright and license details.
 
 # configuration {on, off}
-debug    = on
-profile  = off
+debug = on
 
 # compiler
 CC = gcc
 
 # default flags
-CFLAGS  = -std=c11 -g3 -Wall -Wextra -Wpedantic
-CFLAGS += -Wshadow -Wfloat-equal -Wundef -Wunreachable-code -Wswitch-default
-CFLAGS += -Wswitch-enum -Wpointer-arith -Wwrite-strings -Wstrict-prototypes
-CFLAGS += -Wdouble-promotion -Wconversion
+CFLAGS = -std=c11 -g3 -Wall -Wextra -Wpedantic
 
 # included directories
 INCS = -Iaoc
@@ -20,15 +16,10 @@ INCS = -Iaoc
 ifeq ($(debug), on)
 CFLAGS += -Og
 CFLAGS += -fsanitize=undefined,address -fsanitize-undefined-trap-on-error
-CFLAGS += -fanalyzer
+CFLAGS += -fanalyzer -Wno-analyzer-imprecise-fp-arithmetic
 else
 CFLAGS += -march=native -Ofast -flto=auto
 CFLAGS += -DNDEBUG
-endif
-
-# profiler flags
-ifeq ($(profile), on)
-CFLAGS += -pg -fno-lto
 endif
 
 # linking
