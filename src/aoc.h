@@ -35,11 +35,11 @@
 #define TENSOR(t, a) (__typeof__(t))a
 
 // simple swap macro
-#define SWAP(a, b)                                                                      \
-    do {                                                                                \
-        __typeof__(a) swap = a;                                                         \
-        a = b;                                                                          \
-        b = swap;                                                                       \
+#define SWAP(a, b)              \
+    do {                        \
+        __typeof__(a) swap = a; \
+        a = b;                  \
+        b = swap;               \
     } while (0)
 
 // simple key creation macro
@@ -50,14 +50,14 @@
 #define MAX(a, b) ((__typeof__(a))fmax((double)(a), (double)(b)))
 
 // define simple comparison functions for ascending and descending order
-#define CMP(T)                                                                          \
-    int cmp_##T##_asc(const void *a, const void *b)                                     \
-    {                                                                                   \
-        return (*(T *)a > *(T *)b) - (*(T *)a < *(T *)b);                               \
-    }                                                                                   \
-    int cmp_##T##_dsc(const void *a, const void *b)                                     \
-    {                                                                                   \
-        return (*(T *)a < *(T *)b) - (*(T *)a > *(T *)b);                               \
+#define CMP(T)                                            \
+    int cmp_##T##_asc(const void *a, const void *b)       \
+    {                                                     \
+        return (*(T *)a > *(T *)b) - (*(T *)a < *(T *)b); \
+    }                                                     \
+    int cmp_##T##_dsc(const void *a, const void *b)       \
+    {                                                     \
+        return (*(T *)a < *(T *)b) - (*(T *)a > *(T *)b); \
     }
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'

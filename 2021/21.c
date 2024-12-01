@@ -17,7 +17,7 @@ size_t play_with_deterministic_die(size_t position[2])
 {
     size_t die = 0;
     size_t count = 0;
-    size_t score[2] = { 0 };
+    size_t score[2] = {0};
     while ((score[0] < 1000) && (score[1] < 1000)) {
         for (size_t i = 0; i < 2; ++i) {
             // roll die
@@ -39,8 +39,8 @@ size_t play_with_deterministic_die(size_t position[2])
     return MIN(score[0], score[1]) * count;
 }
 
-void play_with_dirac_die(
-    size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_, size_t *w1_, Dict *cache)
+void play_with_dirac_die(size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_, size_t *w1_,
+                         Dict *cache)
 {
     // check if result exists in cache
     char key[256] = "";
@@ -62,7 +62,8 @@ void play_with_dirac_die(
                 const size_t ns0 = s0 + np0;
                 if (ns0 >= 21) {
                     w0 += 1;
-                } else {
+                }
+                else {
                     size_t nw0 = 0;
                     size_t nw1 = 0;
                     play_with_dirac_die(p1, np0, s1, ns0, &nw1, &nw0, cache);
@@ -76,7 +77,7 @@ void play_with_dirac_die(
     *w1_ = w1;
 
     // insert result into cache
-    size_t data[2] = { w0, w1 };
+    size_t data[2] = {w0, w1};
     dict_insert(cache, key, memdup(data, sizeof(data)));
 }
 
@@ -93,7 +94,7 @@ int main(void)
     sscanf(line[1], "Player 2 starting position: %zu", &p1);
 
     // part 1
-    printf("%zu\n", play_with_deterministic_die((size_t[2]) { p0, p1 }));
+    printf("%zu\n", play_with_deterministic_die((size_t[2]){p0, p1}));
 
     // part 2
     size_t w0 = 0;

@@ -30,7 +30,9 @@ int main(void)
     long cycle = 1;
     for (size_t i = 0; i < n_lines; ++i, ++cycle) {
         // compute sum of signal strength
-        if ((cycle - 20) % 40 == 0) { sum_signal_strength += cycle * X; }
+        if ((cycle - 20) % 40 == 0) {
+            sum_signal_strength += cycle * X;
+        }
 
         // update screen
         if ((X - 1 <= (cycle - 1) % 40) && ((cycle - 1) % 40 <= X + 1)) {
@@ -42,8 +44,9 @@ int main(void)
         if (inst[0] == 'a') {
             if (dX == 0) {
                 sscanf(inst, "%*s %ld", &dX);
-                --i; // repeat line
-            } else {
+                --i;  // repeat line
+            }
+            else {
                 X += dX;
                 dX = 0;
             }
@@ -54,7 +57,9 @@ int main(void)
     printf("%ld\n", sum_signal_strength);
 
     // part 2
-    for (size_t i = 0; i < 6; ++i) { printf("%.*s\n", 40, &CRT[i * 40]); }
+    for (size_t i = 0; i < 6; ++i) {
+        printf("%.*s\n", 40, &CRT[i * 40]);
+    }
 
     // cleanup
     lines_free(line, n_lines);

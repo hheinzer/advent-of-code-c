@@ -20,14 +20,15 @@ size_t compute_basin_size(const char *map, int *seen, size_t nj)
 {
     if (*seen || *map >= '9') {
         return 0;
-    } else {
+    }
+    else {
         *seen = 1;
     }
     size_t size = 1;
-    size += compute_basin_size(map - 1, seen - 1, nj); // left
-    size += compute_basin_size(map + 1, seen + 1, nj); // right
-    size += compute_basin_size(map - nj, seen - nj, nj); // up
-    size += compute_basin_size(map + nj, seen + nj, nj); // down
+    size += compute_basin_size(map - 1, seen - 1, nj);    // left
+    size += compute_basin_size(map + 1, seen + 1, nj);    // right
+    size += compute_basin_size(map - nj, seen - nj, nj);  // up
+    size += compute_basin_size(map + nj, seen + nj, nj);  // down
     return size;
 }
 
@@ -43,7 +44,9 @@ int main(void)
     char(*map)[nj] = calloc(ni, sizeof(*map));
     memset(map, '9', ni * sizeof(*map));
     for (size_t i = 0; i < ni - 2; ++i) {
-        for (size_t j = 0; j < nj - 2; ++j) { map[i + 1][j + 1] = line[i][j]; }
+        for (size_t j = 0; j < nj - 2; ++j) {
+            map[i + 1][j + 1] = line[i][j];
+        }
     }
 
     // compute risk level
@@ -51,11 +54,13 @@ int main(void)
     for (size_t i = 1; i < ni - 1; ++i) {
         for (size_t j = 1; j < nj - 1; ++j) {
             int is_low_point = 1;
-            is_low_point &= (map[i][j] < map[i][j - 1]); // left
-            is_low_point &= (map[i][j] < map[i][j + 1]); // right
-            is_low_point &= (map[i][j] < map[i - 1][j]); // up
-            is_low_point &= (map[i][j] < map[i + 1][j]); // down
-            if (is_low_point) { risk += 1 + map[i][j] - '0'; }
+            is_low_point &= (map[i][j] < map[i][j - 1]);  // left
+            is_low_point &= (map[i][j] < map[i][j + 1]);  // right
+            is_low_point &= (map[i][j] < map[i - 1][j]);  // up
+            is_low_point &= (map[i][j] < map[i + 1][j]);  // down
+            if (is_low_point) {
+                risk += 1 + map[i][j] - '0';
+            }
         }
     }
 

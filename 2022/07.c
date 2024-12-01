@@ -34,17 +34,17 @@ int main(void)
         if (!strcmp(line[i], "$ cd ..")) {
             // go up a directory, pop top directory from path
             free(stack_pop(path));
-
-        } else if (!strncmp(line[i], "$ cd", 4)) {
+        }
+        else if (!strncmp(line[i], "$ cd", 4)) {
             // go down a directory, add directory to path
             stack_push(path, memdup(&n_dirs, sizeof(n_dirs)));
             size_dir = realloc(size_dir, ++n_dirs * sizeof(*size_dir));
             size_dir[n_dirs - 1] = 0;
-
-        } else if (!strncmp(line[i], "$ ls", 4)) {
+        }
+        else if (!strncmp(line[i], "$ ls", 4)) {
             // list directory, do nothing
-
-        } else {
+        }
+        else {
             // get file size (if file) and add it to all directories in path
             if (strncmp(line[i], "dir", 3)) {
                 size_t size = 0;
@@ -63,7 +63,8 @@ int main(void)
     for (size_t i = 0; i < n_dirs; ++i) {
         if (size_dir[i] <= 100000) {
             total_size += size_dir[i];
-        } else {
+        }
+        else {
             break;
         }
     }

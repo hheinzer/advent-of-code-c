@@ -15,16 +15,16 @@ typedef struct List List;
 typedef struct Node Node;
 
 struct List {
-    const size_t data_size; // size of data pointed to by node
-    size_t len; // length of list
-    Node *first; // first node of list
-    Node *last; // last node of list
+    const size_t data_size;  // size of data pointed to by node
+    size_t len;              // length of list
+    Node *first;             // first node of list
+    Node *last;              // last node of list
 };
 
 struct Node {
-    void *data; // pointer to node data
-    Node *next; // pointer to next node
-    Node *prev; // pointer to previous node
+    void *data;  // pointer to node data
+    Node *next;  // pointer to next node
+    Node *prev;  // pointer to previous node
 };
 
 // allocate list,
@@ -60,8 +60,7 @@ Node *list_get(const List *list, size_t i);
 // search for first occurrence of data in list,
 // return matching node if found,
 // return 0 if not found
-Node *list_find(
-    const List *list, const void *data, int (*data_cmp)(const void *, const void *));
+Node *list_find(const List *list, const void *data, int (*data_cmp)(const void *, const void *));
 
 // delete specified node,
 // return data pointer
@@ -70,8 +69,7 @@ void *list_delete(List *list, Node *node);
 // search for first occurrence of data in list,
 // return index of matching node if found,
 // return list->len (out of range) if not found
-size_t list_index(
-    const List *list, void *data, int (*data_cmp)(const void *, const void *));
+size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *));
 
 // sort list in place,
 void list_sort(List *list, int (*data_cmp)(const void *, const void *));

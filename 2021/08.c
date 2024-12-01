@@ -18,29 +18,12 @@
 CMP(char)
 
 static const char digit[10][8] = {
-    [1] = "cf",
-    [7] = "acf",
-    [4] = "bcdf",
-    [2] = "acdeg",
-    [3] = "acdfg",
-    [5] = "abdfg",
-    [0] = "abcefg",
-    [6] = "abdefg",
-    [9] = "abcdfg",
-    [8] = "abcdefg",
+    [1] = "cf",    [7] = "acf",    [4] = "bcdf",   [2] = "acdeg",  [3] = "acdfg",
+    [5] = "abdfg", [0] = "abcefg", [6] = "abdefg", [9] = "abcdfg", [8] = "abcdefg",
 };
 
 static const size_t digit_len[10] = {
-    [1] = 2,
-    [7] = 3,
-    [4] = 4,
-    [2] = 5,
-    [3] = 5,
-    [5] = 5,
-    [0] = 6,
-    [6] = 6,
-    [9] = 6,
-    [8] = 7,
+    [1] = 2, [7] = 3, [4] = 4, [2] = 5, [3] = 5, [5] = 5, [0] = 6, [6] = 6, [9] = 6, [8] = 7,
 };
 
 typedef struct Entry {
@@ -60,7 +43,9 @@ size_t count_common_chars(const char *str1, const char *str2)
     size_t n = 0;
     for (size_t i = 0; i < n1; ++i) {
         for (size_t j = 0; j < n2; ++j) {
-            if (str1[i] == str2[j]) { ++n; }
+            if (str1[i] == str2[j]) {
+                ++n;
+            }
         }
     }
     return n;
@@ -69,35 +54,25 @@ size_t count_common_chars(const char *str1, const char *str2)
 size_t entry_decode(size_t common[10][10], const Entry *entry)
 {
     static const int perm1[6][3] = {
-        { 2, 3, 5 },
-        { 2, 5, 3 },
-        { 3, 2, 5 },
-        { 3, 5, 2 },
-        { 5, 2, 3 },
-        { 5, 3, 2 },
+        {2, 3, 5}, {2, 5, 3}, {3, 2, 5}, {3, 5, 2}, {5, 2, 3}, {5, 3, 2},
     };
     static const int perm2[6][3] = {
-        { 0, 6, 9 },
-        { 0, 9, 6 },
-        { 6, 0, 9 },
-        { 6, 9, 0 },
-        { 9, 0, 6 },
-        { 9, 6, 0 },
+        {0, 6, 9}, {0, 9, 6}, {6, 0, 9}, {6, 9, 0}, {9, 0, 6}, {9, 6, 0},
     };
 
     // go through all possible permutations of {2, 3, 5} and {0, 6, 9}
     for (size_t i = 0; i < 6; ++i) {
         for (size_t j = 0; j < 6; ++j) {
             // create code
-            const int code[10] = { 1, 7, 4, perm1[i][0], perm1[i][1], perm1[i][2],
-                perm2[j][0], perm2[j][1], perm2[j][2], 8 };
+            const int code[10] = {1,           7,           4,           perm1[i][0], perm1[i][1],
+                                  perm1[i][2], perm2[j][0], perm2[j][1], perm2[j][2], 8};
 
             // check if code is valid
             int valid = 1;
             for (size_t ii = 0; ii < 10; ++ii) {
                 for (size_t jj = 0; jj < 10; ++jj) {
-                    valid &= (count_common_chars(entry->signal[ii], entry->signal[jj])
-                        == common[code[ii]][code[jj]]);
+                    valid &= (count_common_chars(entry->signal[ii], entry->signal[jj]) ==
+                              common[code[ii]][code[jj]]);
                 }
             }
 
@@ -148,8 +123,8 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         for (size_t j = 0; j < 4; ++j) {
             const size_t len = strlen(entry[i].output[j]);
-            if ((len == digit_len[1]) || (len == digit_len[7]) || (len == digit_len[4])
-                || (len == digit_len[8])) {
+            if ((len == digit_len[1]) || (len == digit_len[7]) || (len == digit_len[4]) ||
+                (len == digit_len[8])) {
                 ++count;
             }
         }
@@ -159,7 +134,7 @@ int main(void)
     printf("%zu\n", count);
 
     // count common segments between digits
-    size_t common[10][10] = { 0 };
+    size_t common[10][10] = {0};
     for (size_t i = 0; i < 10; ++i) {
         for (size_t j = 0; j < 10; ++j) {
             common[i][j] = count_common_chars(digit[i], digit[j]);
@@ -168,7 +143,9 @@ int main(void)
 
     // compute sum of decoded outputs
     size_t sum = 0;
-    for (size_t i = 0; i < n_lines; ++i) { sum += entry_decode(common, &entry[i]); }
+    for (size_t i = 0; i < n_lines; ++i) {
+        sum += entry_decode(common, &entry[i]);
+    }
 
     // part 2
     printf("%zu\n", sum);

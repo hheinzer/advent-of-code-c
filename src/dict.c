@@ -46,7 +46,8 @@ Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size
             void *copy = 0;
             if (data_copy) {
                 copy = data_copy(malloc(dict->data_size), item->data, dict->data_size);
-            } else {
+            }
+            else {
                 copy = item->data;
             }
             dict_insert(dict, item->key, copy);
@@ -89,7 +90,9 @@ static size_t hash(const char *str)
 
 static int keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
 {
-    if (key_size1 != key_size2) { return 1; }
+    if (key_size1 != key_size2) {
+        return 1;
+    }
     while (*key1 && (*key1 == *key2)) {
         ++key1;
         ++key2;
@@ -107,20 +110,20 @@ void *dict_insert(Dict *dict, const char *key, void *data)
         prev = item;
         item = item->next;
     }
-    if (!item) { // collision: append item
+    if (!item) {  // collision: append item
         item = item_alloc(key, key_size, data);
         prev->next = item;
         ++dict->len;
         return 0;
-
-    } else if (!item->key) { // empty spot: insert item
+    }
+    else if (!item->key) {  // empty spot: insert item
         item->key = memdup(key, key_size + 1);
         item->key_size = key_size;
         item->data = data;
         ++dict->len;
         return 0;
-
-    } else { // same key: update data
+    }
+    else {  // same key: update data
         void *item_data = item->data;
         item->data = data;
         return item_data;
@@ -137,17 +140,17 @@ void *dict_remove(Dict *dict, const char *key)
         prev = item;
         item = item->next;
     }
-    if (!item || !item->key) { // item not in dict
+    if (!item || !item->key) {  // item not in dict
         return 0;
-
-    } else { // delete item, return data pointer
+    }
+    else {  // delete item, return data pointer
         void *data = item->data;
         Item *next = item->next;
-        if (prev) { // chained item: free and update chain
+        if (prev) {  // chained item: free and update chain
             item_free(item, 0);
             prev->next = next;
-
-        } else { // head item: clear and move chain up
+        }
+        else {  // head item: clear and move chain up
             item_clear(item, 0);
             if (next) {
                 *item = *next;
@@ -182,14 +185,14 @@ void dict_histogram(const Dict *dict)
     Dict *hist = dict_alloc(sizeof(size_t), dict->len);
     for (size_t i = 0; i < dict->size; ++i) {
         size_t n = 0;
-        for (const Item *item = &dict->item[i]; item && item->key; item = item->next)
-            ++n;
+        for (const Item *item = &dict->item[i]; item && item->key; item = item->next) ++n;
         snprintf(key, sizeof(key), "%zu", n);
         Item *item_hist = dict_find(hist, key);
         if (item_hist) {
             ++(*(size_t *)item_hist->data);
-        } else {
-            dict_insert(hist, key, memdup((size_t[1]) { 1 }, sizeof(size_t[1])));
+        }
+        else {
+            dict_insert(hist, key, memdup((size_t[1]){1}, sizeof(size_t[1])));
         }
     }
 
@@ -210,8 +213,7 @@ void dict_histogram(const Dict *dict)
     // print load factor and histogram
     printf("[%f] ", (double)dict->len / (double)dict->size);
     for (size_t i = 0; i < hist->len; ++i) {
-        printf("%zu: %zu%s", sorted[i].n, sorted[i].count,
-            (i < hist->len - 1 ? ", " : "\n"));
+        printf("%zu: %zu%s", sorted[i].n, sorted[i].count, (i < hist->len - 1 ? ", " : "\n"));
     }
 
     // cleanup

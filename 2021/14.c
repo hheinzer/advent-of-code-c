@@ -31,11 +31,10 @@ void polymer_modify(size_t ni, size_t count[ni], size_t rule[ni][2], size_t n_st
     free(new_count);
 }
 
-size_t polymer_quantity_diff(
-    size_t ni, char input[ni][3], const size_t count[ni], const char *poly)
+size_t polymer_quantity_diff(size_t ni, char input[ni][3], const size_t count[ni], const char *poly)
 {
     // compute histogram of pairs
-    size_t hist['Z' - 'A' + 1] = { 0 };
+    size_t hist['Z' - 'A' + 1] = {0};
     for (size_t i = 0; i < ni; ++i) {
         hist[input[i][0] - 'A'] += count[i];
         hist[input[i][1] - 'A'] += count[i];
@@ -52,7 +51,9 @@ size_t polymer_quantity_diff(
     size_t max = 0;
     for (char letter = 'A'; letter <= 'Z'; ++letter) {
         hist[letter - 'A'] = hist[letter - 'A'] / 2;
-        if (hist[letter - 'A'] > 0) { min = MIN(min, hist[letter - 'A']); }
+        if (hist[letter - 'A'] > 0) {
+            min = MIN(min, hist[letter - 'A']);
+        }
         max = MAX(max, hist[letter - 'A']);
     }
     return max - min;
@@ -78,8 +79,8 @@ int main(void)
     for (size_t i = 0; i < ni; ++i) {
         char insert;
         sscanf(line[2 + i], "%*s -> %c", &insert);
-        char output0[3] = { input[i][0], insert };
-        char output1[3] = { insert, input[i][1] };
+        char output0[3] = {input[i][0], insert};
+        char output1[3] = {insert, input[i][1]};
         rule[i][0] = *(size_t *)dict_find(imap, output0)->data;
         rule[i][1] = *(size_t *)dict_find(imap, output1)->data;
     }
@@ -87,7 +88,7 @@ int main(void)
     // create initial count
     size_t *count = calloc(ni, sizeof(*count));
     for (size_t j = 0; j < strlen(line[0]) - 1; ++j) {
-        char pair[3] = { line[0][j], line[0][j + 1] };
+        char pair[3] = {line[0][j], line[0][j + 1]};
         ++count[*(size_t *)dict_find(imap, pair)->data];
     }
 

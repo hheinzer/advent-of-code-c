@@ -14,8 +14,7 @@
  */
 #include "aoc.h"
 
-void paper_fold(
-    const char **line, size_t ny, size_t nx, int grid[ny][nx], size_t i0, size_t n)
+void paper_fold(const char **line, size_t ny, size_t nx, int grid[ny][nx], size_t i0, size_t n)
 {
     for (size_t i = i0; i < n; ++i) {
         char axis;
@@ -32,8 +31,8 @@ void paper_fold(
                     }
                 }
             }
-
-        } else if (axis == 'x') {
+        }
+        else if (axis == 'x') {
             for (size_t y = 0; y < ny; ++y) {
                 for (size_t x = value + 1; x < nx; ++x) {
                     if (grid[y][x]) {
@@ -42,8 +41,8 @@ void paper_fold(
                     }
                 }
             }
-
-        } else {
+        }
+        else {
             assert(!"Illegal axis encountered.");
         }
     }
@@ -80,7 +79,9 @@ int main(void)
     // count dots
     size_t count = 0;
     for (size_t y = 0; y < ny; ++y) {
-        for (size_t x = 0; x < nx; ++x) { count += grid[y][x]; }
+        for (size_t x = 0; x < nx; ++x) {
+            count += grid[y][x];
+        }
     }
 
     // part 1
@@ -91,7 +92,9 @@ int main(void)
 
     // part 2
     for (size_t y = 0; y < 6; ++y) {
-        for (size_t x = 0; x < 40; ++x) { printf("%c", (grid[y][x] ? '#' : ' ')); }
+        for (size_t x = 0; x < 40; ++x) {
+            printf("%c", (grid[y][x] ? '#' : ' '));
+        }
         printf("\n");
     }
 

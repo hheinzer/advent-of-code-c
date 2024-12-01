@@ -15,7 +15,9 @@ int all_chars_unique(const char *str, size_t n)
 {
     for (size_t i = 0; i < n - 1; ++i) {
         for (size_t j = i + 1; j < n; ++j) {
-            if (str[i] == str[j]) { return 0; }
+            if (str[i] == str[j]) {
+                return 0;
+            }
         }
     }
     return 1;

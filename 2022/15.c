@@ -15,12 +15,12 @@
 typedef struct Point {
     long x;
     long y;
-    long d; // distance of sensor to beacon, if sensor, else 0
+    long d;  // distance of sensor to beacon, if sensor, else 0
 } Point;
 
 long point_distance(const Point *a, const Point *b)
 {
-    return labs(b->x - a->x) + labs(b->y - a->y); // Manhattan distance
+    return labs(b->x - a->x) + labs(b->y - a->y);  // Manhattan distance
 }
 
 typedef struct Range {
@@ -41,7 +41,7 @@ size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
         const Point *ps = node->data;
         const long w = ps->d - labs(ps->y - y0);
         if (w >= 0) {
-            Range r = { .x0 = ps->x - w, .x1 = ps->x + w };
+            Range r = {.x0 = ps->x - w, .x1 = ps->x + w};
             list_insert_last(range, memdup(&r, sizeof(r)));
         }
     }
@@ -52,7 +52,7 @@ size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
         Node *prev = node->prev;
         Range *r0 = prev->data;
         Range *r1 = node->data;
-        if (r0->x1 >= r1->x0) { // ranges overlap
+        if (r0->x1 >= r1->x0) {  // ranges overlap
             r1->x0 = MIN(r1->x0, r0->x0);
             r1->x1 = MAX(r1->x1, r0->x1);
             free(list_delete(range, prev));
@@ -97,15 +97,15 @@ size_t solve_part_2(const List *sensor, const long clip[2])
 
         // create start points that are just out of range
         const Point start[4] = {
-            { .x = ps0->x, .y = ps0->y - ps0->d - 1 }, // up
-            { .x = ps0->x + ps0->d + 1, .y = ps0->y }, // right
-            { .x = ps0->x, .y = ps0->y + ps0->d + 1 }, // down
-            { .x = ps0->x - ps0->d - 1, .y = ps0->y }, // left
+            {.x = ps0->x, .y = ps0->y - ps0->d - 1},  // up
+            {.x = ps0->x + ps0->d + 1, .y = ps0->y},  // right
+            {.x = ps0->x, .y = ps0->y + ps0->d + 1},  // down
+            {.x = ps0->x - ps0->d - 1, .y = ps0->y},  // left
         };
 
         // check diamond pattern
-        const long dx[4] = { +1, -1, -1, +1 };
-        const long dy[4] = { +1, +1, -1, -1 };
+        const long dx[4] = {+1, -1, -1, +1};
+        const long dy[4] = {+1, +1, -1, -1};
         for (size_t i = 0; i < 4; ++i) {
             for (long j = 0; j < ps0->d + 1; ++j) {
                 // create candidate point
@@ -113,8 +113,7 @@ size_t solve_part_2(const List *sensor, const long clip[2])
                     .x = start[i].x + j * dx[i],
                     .y = start[i].y + j * dy[i],
                 };
-                if ((p.x < clip[0]) || (clip[1] < p.x) || (p.y < clip[0])
-                    || (clip[1] < p.y)) {
+                if ((p.x < clip[0]) || (clip[1] < p.x) || (p.y < clip[0]) || (clip[1] < p.y)) {
                     continue;
                 }
 
@@ -127,7 +126,9 @@ size_t solve_part_2(const List *sensor, const long clip[2])
                         break;
                     }
                 }
-                if (!visible) { return p.x * 4000000 + p.y; }
+                if (!visible) {
+                    return p.x * 4000000 + p.y;
+                }
             }
         }
     }
@@ -145,21 +146,20 @@ int main(void)
     Dict *beacon = dict_alloc(sizeof(Point), 100);
     char key[256] = "";
     for (size_t i = 0; i < n_lines; ++i) {
-        Point ps = { 0 };
-        Point pb = { 0 };
-        sscanf(line[i], "Sensor at x=%ld, y=%ld: closest beacon is at x=%ld, y=%ld",
-            &ps.x, &ps.y, &pb.x, &pb.y);
+        Point ps = {0};
+        Point pb = {0};
+        sscanf(line[i], "Sensor at x=%ld, y=%ld: closest beacon is at x=%ld, y=%ld", &ps.x, &ps.y,
+               &pb.x, &pb.y);
         ps.d = point_distance(&ps, &pb);
         list_insert_last(sensor, memdup(&ps, sizeof(ps)));
-        free(dict_insert(
-            beacon, KEY(key, "%ld,%ld", pb.x, pb.y), memdup(&pb, sizeof(pb))));
+        free(dict_insert(beacon, KEY(key, "%ld,%ld", pb.x, pb.y), memdup(&pb, sizeof(pb))));
     }
 
     // part 1
     printf("%zu\n", solve_part_1(sensor, beacon, 2000000));
 
     // part 2
-    printf("%zu\n", solve_part_2(sensor, (long[]) { 0, 4000000 }));
+    printf("%zu\n", solve_part_2(sensor, (long[]){0, 4000000}));
 
     // cleanup
     lines_free(line, n_lines);

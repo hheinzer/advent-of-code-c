@@ -1,65 +1,44 @@
 # See LICENSE file for copyright and license details.
+CC = clang
+CFLAGS = -std=c23 -g -Isrc -Wall -Wextra -Wpedantic -Wshadow
 
-# configuration {on, off}
-debug = on
+# debug flags
+CFLAGS += -Og -fno-omit-frame-pointer
 
-# compiler
-CC = gcc
+# release flags
+#CFLAGS += -march=native -Ofast -flto=auto -DNDEBUG
 
-# default flags
-CFLAGS = -std=c11 -g3 -Wall -Wextra -Wpedantic
+# libraries
+LDLIBS = -lm
 
-# included directories
-INCS = -Iaoc
-
-# optimization flags
-ifeq ($(debug), on)
-CFLAGS += -Og
-CFLAGS += -fsanitize=undefined,address -fsanitize-undefined-trap-on-error
-CFLAGS += -fanalyzer -Wno-analyzer-imprecise-fp-arithmetic
-else
-CFLAGS += -march=native -Ofast -flto=auto
-CFLAGS += -DNDEBUG
-endif
-
-# linking
-LDLIBS  = -lm
-
-# objects
-SRC = $(shell find aoc -type f -name '*.c')
-OBJ = $(SRC:%.c=%.o)
-
-# binaries
+# sources, objects, and programs
+SRC = $(shell find src -type f -name '*.c')
 RUN = $(shell find 20* -type f -name '*.c')
-BIN = $(RUN:%.c=%)
-
-# default target
-default: $(BIN)
+OBJ = $(patsubst %.c, %.o, $(SRC))
+BIN = $(patsubst %.c, %, $(RUN))
 
 # dependencies
 CFLAGS += -MMD -MP
 DEP = $(OBJ:.o=.d) $(BIN:=.d)
 -include $(DEP)
 
-# build objects
-$(OBJ): %.o: %.c Makefile
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+# make functions
+.PHONY: all clean check format tidy run test solutions
+all: $(OBJ) $(BIN)
 
-# build binaries
-$(BIN): %: %.c $(OBJ) Makefile
-	-$(CC) $(CFLAGS) $(INCS) $< $(OBJ) $(LDLIBS) -o $@
-
-# functions
 clean:
-	rm -rf $(BIN) $(OBJ) $(DEP) gmon.out perf.data*
+	@rm -rf $(BIN) $(OBJ) $(DEP)
 
 check:
-	-cppcheck --enable=all --inconclusive --suppress=missingIncludeSystem \
-		--suppress=unusedFunction --project=compile_commands.json
+	@cppcheck --quiet --project=compile_commands.json \
+		--enable=all --inconclusive --check-level=exhaustive \
+		--suppress=checkersReport --suppress=missingIncludeSystem --suppress=unusedFunction
 
-memcheck:
-	-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-		--suppressions=.memcheck.supp $(BIN)
+format:
+	@clang-format -i $(shell find . -type f -name '*.[ch]')
+
+tidy:
+	@clang-tidy --quiet $(shell find . -type f -name '*.[ch]')
 
 run: $(BIN)
 	@for prog in $(sort $(BIN)); do \
@@ -80,7 +59,10 @@ solutions: $(BIN)
 		./$$prog; \
 	done | grep -v wtime > solutions.txt
 
-format:
-	-clang-format -i $(shell find . -type f -name '*.c' -o -name '*.h')
+# build rules
+.SUFFIXES:
+%.o: %.c Makefile
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: default clean check memcheck run test solutions format
+%: %.c $(OBJ)
+	-@$(CC) $(CFLAGS) $< $(OBJ) $(LDLIBS) -o $@

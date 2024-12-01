@@ -21,7 +21,9 @@ int main(void)
     for (size_t i = 1; i < n_lines; ++i) {
         const long a = strtol(line[i - 1], 0, 10);
         const long b = strtol(line[i], 0, 10);
-        if (b > a) { ++count1; }
+        if (b > a) {
+            ++count1;
+        }
     }
 
     // part 1
@@ -36,7 +38,9 @@ int main(void)
             suma += strtol(line[i - 3 + j], 0, 10);
             sumb += strtol(line[i - 2 + j], 0, 10);
         }
-        if (sumb > suma) { ++count2; }
+        if (sumb > suma) {
+            ++count2;
+        }
     }
 
     // part 2

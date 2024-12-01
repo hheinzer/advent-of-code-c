@@ -19,15 +19,15 @@ typedef enum Jobtype { JOB_NUM, JOB_OP } Jobtype;
 typedef struct Monkeyjob {
     Jobtype type;
     union {
-        long number; // number
+        long number;  // number
         struct {
             char left[5];
             char op;
             char right[5];
-        } operation; // math operation
+        } operation;  // math operation
     };
     char parent[5];
-    char side; // left ('l') or right ('r')
+    char side;  // left ('l') or right ('r')
 } Monkeyjob;
 
 long monkey_compute(const Dict *monkey, const char *root)
@@ -36,15 +36,16 @@ long monkey_compute(const Dict *monkey, const char *root)
     const Monkeyjob *job = dict_find(monkey, root)->data;
     if (job->type == JOB_NUM) {
         return job->number;
-    } else {
+    }
+    else {
         const long num_l = monkey_compute(monkey, job->operation.left);
         const long num_r = monkey_compute(monkey, job->operation.right);
         switch (job->operation.op) {
-        case '+': return num_l + num_r; break;
-        case '-': return num_l - num_r; break;
-        case '*': return num_l * num_r; break;
-        case '/': return num_l / num_r; break;
-        default: assert(!"Illegal math operation encountered.");
+            case '+': return num_l + num_r; break;
+            case '-': return num_l - num_r; break;
+            case '*': return num_l * num_r; break;
+            case '/': return num_l / num_r; break;
+            default: assert(!"Illegal math operation encountered.");
         }
     }
 }
@@ -88,57 +89,57 @@ void monkey_invert(const Dict *monkey, const char *root, const char *humn)
             // p = h / s  ->  h = s * p
             sibling = job_p->operation.right;
             switch (job_p->operation.op) {
-            case '+':
-                strcpy(job_h->operation.left, parent);
-                job_h->operation.op = '-';
-                strcpy(job_h->operation.right, sibling);
-                break;
-            case '-':
-                strcpy(job_h->operation.left, sibling);
-                job_h->operation.op = '+';
-                strcpy(job_h->operation.right, parent);
-                break;
-            case '*':
-                strcpy(job_h->operation.left, parent);
-                job_h->operation.op = '/';
-                strcpy(job_h->operation.right, sibling);
-                break;
-            case '/':
-                strcpy(job_h->operation.left, sibling);
-                job_h->operation.op = '*';
-                strcpy(job_h->operation.right, parent);
-                break;
-            default: assert(!"Illegal math operation encountered.");
+                case '+':
+                    strcpy(job_h->operation.left, parent);
+                    job_h->operation.op = '-';
+                    strcpy(job_h->operation.right, sibling);
+                    break;
+                case '-':
+                    strcpy(job_h->operation.left, sibling);
+                    job_h->operation.op = '+';
+                    strcpy(job_h->operation.right, parent);
+                    break;
+                case '*':
+                    strcpy(job_h->operation.left, parent);
+                    job_h->operation.op = '/';
+                    strcpy(job_h->operation.right, sibling);
+                    break;
+                case '/':
+                    strcpy(job_h->operation.left, sibling);
+                    job_h->operation.op = '*';
+                    strcpy(job_h->operation.right, parent);
+                    break;
+                default: assert(!"Illegal math operation encountered.");
             }
-
-        } else {
+        }
+        else {
             // p = s + h  ->  h = p - s
             // p = s - h  ->  h = s - p
             // p = s * h  ->  h = p / s
             // p = s / h  ->  h = s / p
             sibling = job_p->operation.left;
             switch (job_p->operation.op) {
-            case '+':
-                strcpy(job_h->operation.left, parent);
-                job_h->operation.op = '-';
-                strcpy(job_h->operation.right, sibling);
-                break;
-            case '-':
-                strcpy(job_h->operation.left, sibling);
-                job_h->operation.op = '-';
-                strcpy(job_h->operation.right, parent);
-                break;
-            case '*':
-                strcpy(job_h->operation.left, parent);
-                job_h->operation.op = '/';
-                strcpy(job_h->operation.right, sibling);
-                break;
-            case '/':
-                strcpy(job_h->operation.left, sibling);
-                job_h->operation.op = '/';
-                strcpy(job_h->operation.right, parent);
-                break;
-            default: assert(!"Illegal math operation encountered.");
+                case '+':
+                    strcpy(job_h->operation.left, parent);
+                    job_h->operation.op = '-';
+                    strcpy(job_h->operation.right, sibling);
+                    break;
+                case '-':
+                    strcpy(job_h->operation.left, sibling);
+                    job_h->operation.op = '-';
+                    strcpy(job_h->operation.right, parent);
+                    break;
+                case '*':
+                    strcpy(job_h->operation.left, parent);
+                    job_h->operation.op = '/';
+                    strcpy(job_h->operation.right, sibling);
+                    break;
+                case '/':
+                    strcpy(job_h->operation.left, sibling);
+                    job_h->operation.op = '/';
+                    strcpy(job_h->operation.right, parent);
+                    break;
+                default: assert(!"Illegal math operation encountered.");
             }
         }
 
@@ -154,8 +155,8 @@ void monkey_invert(const Dict *monkey, const char *root, const char *humn)
         }
 
         monkey_invert(monkey, root, parent);
-
-    } else {
+    }
+    else {
         // set root node to 0
         job_h->type = JOB_NUM;
         job_h->number = 0;
@@ -171,16 +172,16 @@ int main(void)
     // create monkeys
     Dict *monkey = dict_alloc(sizeof(Monkeyjob), 2 * n_lines);
     for (size_t i = 0; i < n_lines; ++i) {
-        char inp[4][5] = { 0 };
+        char inp[4][5] = {0};
         sscanf(line[i], "%4s: %4s %4s %4s", inp[0], inp[1], inp[2], inp[3]);
-        Monkeyjob job = { 0 };
+        Monkeyjob job = {0};
         if (strlen(inp[2]) && strlen(inp[3])) {
             job.type = JOB_OP;
             strcpy(job.operation.left, inp[1]);
             job.operation.op = inp[2][0];
             strcpy(job.operation.right, inp[3]);
-
-        } else {
+        }
+        else {
             job.type = JOB_NUM;
             job.number = strtol(inp[1], 0, 10);
         }
