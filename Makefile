@@ -24,7 +24,7 @@ DEP = $(OBJ:.o=.d) $(BIN:=.d)
 
 # make functions
 .PHONY: all clean check format tidy run test solutions
-all: $(OBJ) $(BIN)
+all: $(BIN)
 
 clean:
 	@rm -rf $(BIN) $(OBJ) $(DEP)
