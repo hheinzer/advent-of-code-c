@@ -44,17 +44,15 @@ size_t elf_simulate(List *elf, size_t n_round)
             const int S = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j)) ? 1 : 0);
             const int W = (dict_find(pos, KEY(key, "%ld,%ld", e->i, e->j - 1)) ? 1 : 0);
             const int E = (dict_find(pos, KEY(key, "%ld,%ld", e->i, e->j + 1)) ? 1 : 0);
-            const int NW
-                = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j - 1)) ? 1 : 0);
-            const int NE
-                = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j + 1)) ? 1 : 0);
-            const int SW
-                = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j - 1)) ? 1 : 0);
-            const int SE
-                = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j + 1)) ? 1 : 0);
+            const int NW = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j - 1)) ? 1 : 0);
+            const int NE = (dict_find(pos, KEY(key, "%ld,%ld", e->i - 1, e->j + 1)) ? 1 : 0);
+            const int SW = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j - 1)) ? 1 : 0);
+            const int SE = (dict_find(pos, KEY(key, "%ld,%ld", e->i + 1, e->j + 1)) ? 1 : 0);
 
             // check for any neighbor
-            if ((N + S + W + E + NE + NW + SE + SW) == 0) { continue; }
+            if ((N + S + W + E + NE + NW + SE + SW) == 0) {
+                continue;
+            }
 
             // propose move
             for (size_t d = 0; d < 4; ++d) {
@@ -62,18 +60,18 @@ size_t elf_simulate(List *elf, size_t n_round)
                     e->prop_i = e->i - 1;
                     e->prop_j = e->j;
                     break;
-
-                } else if (((round + d) % 4 == 1) && (S + SE + SW == 0)) {
+                }
+                else if (((round + d) % 4 == 1) && (S + SE + SW == 0)) {
                     e->prop_i = e->i + 1;
                     e->prop_j = e->j;
                     break;
-
-                } else if (((round + d) % 4 == 2) && (W + NW + SW == 0)) {
+                }
+                else if (((round + d) % 4 == 2) && (W + NW + SW == 0)) {
                     e->prop_i = e->i;
                     e->prop_j = e->j - 1;
                     break;
-
-                } else if (((round + d) % 4 == 3) && (E + NE + SE == 0)) {
+                }
+                else if (((round + d) % 4 == 3) && (E + NE + SE == 0)) {
                     e->prop_i = e->i;
                     e->prop_j = e->j + 1;
                     break;
@@ -87,7 +85,8 @@ size_t elf_simulate(List *elf, size_t n_round)
                     size_t *count = item->data;
                     ++(*count);
                     dict_insert(prop, key, count);
-                } else {
+                }
+                else {
                     size_t count = 1;
                     dict_insert(prop, key, memdup(&count, sizeof(count)));
                 }
@@ -100,8 +99,7 @@ size_t elf_simulate(List *elf, size_t n_round)
             Elf *e = node->data;
             dict_remove(pos, KEY(key, "%ld,%ld", e->i, e->j));
             if ((e->i != e->prop_i) || (e->j != e->prop_j)) {
-                const Item *item
-                    = dict_find(prop, KEY(key, "%ld,%ld", e->prop_i, e->prop_j));
+                const Item *item = dict_find(prop, KEY(key, "%ld,%ld", e->prop_i, e->prop_j));
                 const size_t count = *(size_t *)item->data;
                 if (count == 1) {
                     e->i = e->prop_i;
@@ -114,11 +112,13 @@ size_t elf_simulate(List *elf, size_t n_round)
         // cleanup
         dict_free(&prop, free);
 
-        if (no_one_moved) { break; }
+        if (no_one_moved) {
+            break;
+        }
     }
 
     size_t ret = 0;
-    if (round == n_round) { // count empty spots
+    if (round == n_round) {  // count empty spots
         long min_i = LONG_MAX;
         long min_j = LONG_MAX;
         long max_i = LONG_MIN;
@@ -131,7 +131,8 @@ size_t elf_simulate(List *elf, size_t n_round)
             max_j = MAX(max_j, e->j);
         }
         ret = (max_i - min_i + 1) * (max_j - min_j + 1) - elf->len;
-    } else {
+    }
+    else {
         ret = round + 1;
     }
 
@@ -153,7 +154,7 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         for (size_t j = 0; j < strlen(line[i]); ++j) {
             if (line[i][j] == '#') {
-                Elf e = { i, j, i, j };
+                Elf e = {i, j, i, j};
                 list_insert_last(elf, memdup(&e, sizeof(e)));
             }
         }

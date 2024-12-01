@@ -35,17 +35,18 @@ ProbeStatus probe_move(Vec *pos, Vec *vel, const Vec *min, const Vec *max)
     pos->y += vel->y;
     vel->x -= SIGN(vel->x);
     vel->y -= 1;
-    if ((min->x <= pos->x) && (pos->x <= max->x) && (min->y <= pos->y)
-        && (pos->y <= max->y)) {
+    if ((min->x <= pos->x) && (pos->x <= max->x) && (min->y <= pos->y) && (pos->y <= max->y)) {
         return PS_TARGET_HIT;
     }
-    if (pos->y < min->y) { return PS_TARGET_MISS; }
+    if (pos->y < min->y) {
+        return PS_TARGET_MISS;
+    }
     return PS_MOVING;
 }
 
 long _probe_max_y(Vec *vel, const Vec *min, const Vec *max)
 {
-    Vec pos = { 0, 0 };
+    Vec pos = {0, 0};
     ProbeStatus status = PS_MOVING;
     long max_pos_y = 0;
     while ((status = probe_move(&pos, vel, min, max)) == PS_MOVING) {
@@ -53,7 +54,8 @@ long _probe_max_y(Vec *vel, const Vec *min, const Vec *max)
     }
     if (status == PS_TARGET_HIT) {
         return max_pos_y;
-    } else {
+    }
+    else {
         return LONG_MIN;
     }
 }
@@ -63,7 +65,7 @@ long probe_max_y(const Vec *min, const Vec *max)
     long max_pos_y = 0;
     for (long vel_x = 0; vel_x < 200; ++vel_x) {
         for (long vel_y = 0; vel_y < 200; ++vel_y) {
-            Vec vel = { vel_x, vel_y };
+            Vec vel = {vel_x, vel_y};
             max_pos_y = MAX(max_pos_y, _probe_max_y(&vel, min, max));
         }
     }
@@ -75,8 +77,10 @@ size_t probe_hit_count(const Vec *min, const Vec *max)
     size_t count = 0;
     for (long vel_x = 0; vel_x < 200; ++vel_x) {
         for (long vel_y = -200; vel_y < 200; ++vel_y) {
-            Vec vel = { vel_x, vel_y };
-            if (_probe_max_y(&vel, min, max) >= max->y) { ++count; }
+            Vec vel = {vel_x, vel_y};
+            if (_probe_max_y(&vel, min, max) >= max->y) {
+                ++count;
+            }
         }
     }
     return count;
@@ -90,8 +94,7 @@ int main(void)
 
     // read target area
     Vec min, max;
-    sscanf(
-        line[0], "target area: x=%ld..%ld, y=%ld..%ld", &min.x, &max.x, &min.y, &max.y);
+    sscanf(line[0], "target area: x=%ld..%ld, y=%ld..%ld", &min.x, &max.x, &min.y, &max.y);
 
     // part 1
     printf("%ld\n", probe_max_y(&min, &max));

@@ -11,7 +11,8 @@ __attribute__((destructor)) static void run_after_main(void)
     const double wtime = (double)(clock() - _timer_start) / CLOCKS_PER_SEC;
     if (wtime > 1.0) {
         printf("wtime = %g s (!!!)\n", wtime);
-    } else {
+    }
+    else {
         printf("wtime = %g s\n", wtime);
     }
 }
@@ -32,7 +33,8 @@ size_t lines_read(const char ***line, const char *fname)
             // append character
             l = realloc(l, ++nc * sizeof(*l));
             l[nc - 1] = (char)c;
-        } else {
+        }
+        else {
             // append end of string
             l = realloc(l, ++nc * sizeof(*l));
             l[nc - 1] = 0;
@@ -56,14 +58,18 @@ size_t lines_read(const char ***line, const char *fname)
 
 void lines_free(const char **line, size_t n_lines)
 {
-    for (size_t i = 0; i < n_lines; ++i) { free((void *)line[i]); }
+    for (size_t i = 0; i < n_lines; ++i) {
+        free((void *)line[i]);
+    }
     free(line);
 }
 
 size_t line_find(const char **line, size_t n_lines, const char *find)
 {
     for (size_t i = 0; i < n_lines; ++i) {
-        if (!strcmp(line[i], find)) { return i; }
+        if (!strcmp(line[i], find)) {
+            return i;
+        }
     }
     assert(0 && "No matching line found.");
 }

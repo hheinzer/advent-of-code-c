@@ -21,15 +21,18 @@ size_t drop_sand(char grid[NY][NX], long max_y)
     long ys = 0;
     size_t ns = 0;
     while ((ys < max_y) && grid[0][500] == '.') {
-        if (grid[ys + 1][xs] == '.') { // fall down
+        if (grid[ys + 1][xs] == '.') {  // fall down
             ++ys;
-        } else if (grid[ys + 1][xs - 1] == '.') { // fall down left
+        }
+        else if (grid[ys + 1][xs - 1] == '.') {  // fall down left
             --xs;
             ++ys;
-        } else if (grid[ys + 1][xs + 1] == '.') { // fall down right
+        }
+        else if (grid[ys + 1][xs + 1] == '.') {  // fall down right
             ++xs;
             ++ys;
-        } else { // sand has landed
+        }
+        else {  // sand has landed
             grid[ys][xs] = 'o';
             xs = 500;
             ys = 0;
@@ -61,14 +64,19 @@ int main(void)
             long y1 = 0;
             sscanf(tok, " %ld,%ld ", &x1, &y1);
             max_y = MAX(max_y, y1);
-            if (y1 == y0) { // add row
+            if (y1 == y0) {  // add row
                 const long nj = labs(x1 - x0);
                 const long dx = (x1 - x0) / nj;
-                for (long j = 0; j <= nj; ++j) { grid[y0][x0 + j * dx] = '#'; }
-            } else { // add column
+                for (long j = 0; j <= nj; ++j) {
+                    grid[y0][x0 + j * dx] = '#';
+                }
+            }
+            else {  // add column
                 const long ni = labs(y1 - y0);
                 const long dy = (y1 - y0) / ni;
-                for (long j = 0; j <= ni; ++j) { grid[y0 + j * dy][x0] = '#'; }
+                for (long j = 0; j <= ni; ++j) {
+                    grid[y0 + j * dy][x0] = '#';
+                }
             }
             x0 = x1;
             y0 = y1;
@@ -82,7 +90,9 @@ int main(void)
 
     // insert floor
     max_y += 2;
-    for (size_t j = 0; j < NX; ++j) { grid[max_y][j] = '#'; }
+    for (size_t j = 0; j < NX; ++j) {
+        grid[max_y][j] = '#';
+    }
 
     // part 2
     ns += drop_sand(grid, max_y);

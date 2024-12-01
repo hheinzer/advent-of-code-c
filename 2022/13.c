@@ -40,16 +40,16 @@ PacketData *pd_create(const char **line_ptr)
         if (*line == '[') {
             // add new list
             list_insert_last(pd->pd_list, pd_create(&line));
-
-        } else if (*line == ']') {
+        }
+        else if (*line == ']') {
             // end of list: return currently open list and update line pointer
             *line_ptr = line;
             return pd;
-
-        } else if (*line == ',') {
+        }
+        else if (*line == ',') {
             // comma, do nothing
-
-        } else {
+        }
+        else {
             // add integer
             PacketData *_pd = malloc(sizeof(*_pd));
             _pd->type = PDT_INT;
@@ -57,7 +57,9 @@ PacketData *pd_create(const char **line_ptr)
             list_insert_last(pd->pd_list, _pd);
 
             // in case integer had more than one digit, push line pointer forward
-            while (isdigit(*(line + 1))) { ++line; }
+            while (isdigit(*(line + 1))) {
+                ++line;
+            }
         }
         ++line;
     }
@@ -89,7 +91,8 @@ void pd_print(const PacketData *pd)
         const PacketData *_pd = node->data;
         if (_pd->type == PDT_INT) {
             printf("%d%s", _pd->pd_int, (node->next ? "," : ""));
-        } else {
+        }
+        else {
             pd_print(_pd);
             printf("%s", (node->next ? "," : ""));
         }
@@ -106,8 +109,8 @@ PacketData *pd_copy(const PacketData *src)
 
     if (src->type == PDT_INT) {
         dest->pd_int = src->pd_int;
-
-    } else {
+    }
+    else {
         // recursively copy packet
         dest->pd_list = list_alloc(sizeof(PacketData));
         const Node *node = src->pd_list->first;
@@ -128,8 +131,8 @@ int cmp_packet_asc(const void *_a, const void *_b)
     if ((a->type == PDT_INT) && (b->type == PDT_INT)) {
         // both are int: return comparison
         return a->pd_int - b->pd_int;
-
-    } else if ((a->type == PDT_INT) && (b->type == PDT_LIST)) {
+    }
+    else if ((a->type == PDT_INT) && (b->type == PDT_LIST)) {
         // one is int, other is list: convert int to list and recompare
         PacketData a_list = {
             .type = PDT_LIST,
@@ -139,8 +142,8 @@ int cmp_packet_asc(const void *_a, const void *_b)
         int cmp = cmp_packet_asc(&a_list, b);
         list_free(&a_list.pd_list, free);
         return cmp;
-
-    } else if ((a->type == PDT_LIST) && (b->type == PDT_INT)) {
+    }
+    else if ((a->type == PDT_LIST) && (b->type == PDT_INT)) {
         // one is int, other is list: convert int to list and recompare
         PacketData b_list = {
             .type = PDT_LIST,
@@ -150,8 +153,8 @@ int cmp_packet_asc(const void *_a, const void *_b)
         int cmp = cmp_packet_asc(a, &b_list);
         list_free(&b_list.pd_list, free);
         return cmp;
-
-    } else {
+    }
+    else {
         // both are lists: compare packets
         const Node *node_a = a->pd_list->first;
         const Node *node_b = b->pd_list->first;
@@ -198,8 +201,8 @@ int main(void)
     printf("%zu\n", sum_right_order);
 
     // add divider packets
-    PacketData *div1 = pd_create(&(const char *) { "[[2]]" });
-    PacketData *div2 = pd_create(&(const char *) { "[[6]]" });
+    PacketData *div1 = pd_create(&(const char *){"[[2]]"});
+    PacketData *div2 = pd_create(&(const char *){"[[6]]"});
     list_insert_last(packet, pd_copy(div1));
     list_insert_last(packet, pd_copy(div2));
 

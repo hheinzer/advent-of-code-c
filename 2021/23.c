@@ -12,15 +12,15 @@
  */
 #include "aoc.h"
 
-#define NH 11 // maximum number of hallway spots
-#define NR 4 // maximum number of rooms
-#define NS 4 // maximum number of spots per room
+#define NH 11  // maximum number of hallway spots
+#define NR 4   // maximum number of rooms
+#define NS 4   // maximum number of spots per room
 #define NB (NH + NR * NS + 1)
-#define NM (NR * NS * (NH + NR * NS)) // maximum number of moves
+#define NM (NR * NS * (NH + NR * NS))  // maximum number of moves
 
-static const long energy[] = { ['A'] = 1, ['B'] = 10, ['C'] = 100, ['D'] = 1000 };
-static const size_t stepout[] = { ['A'] = 2, ['B'] = 4, ['C'] = 6, ['D'] = 8 };
-static const size_t parc[] = { 0, 1, 3, 5, 7, 9, 10 };
+static const long energy[] = {['A'] = 1, ['B'] = 10, ['C'] = 100, ['D'] = 1000};
+static const size_t stepout[] = {['A'] = 2, ['B'] = 4, ['C'] = 6, ['D'] = 8};
+static const size_t parc[] = {0, 1, 3, 5, 7, 9, 10};
 static const char solution[NB] = "...........ABCDABCDABCDABCD";
 
 int burrow_is_blocked(size_t a, size_t b, const char *burrow)
@@ -30,7 +30,8 @@ int burrow_is_blocked(size_t a, size_t b, const char *burrow)
             if (burrow[p] != '.') return 1;
         }
         return 0;
-    } else {
+    }
+    else {
         for (size_t p = b; p < a; ++p) {
             if (burrow[p] != '.') return 1;
         }
@@ -38,14 +39,15 @@ int burrow_is_blocked(size_t a, size_t b, const char *burrow)
     }
 }
 
-size_t burrow_can_enter_room(
-    size_t a, size_t b, char amph, size_t nt, const size_t target[4], const char *burrow)
+size_t burrow_can_enter_room(size_t a, size_t b, char amph, size_t nt, const size_t target[4],
+                             const char *burrow)
 {
     size_t best_pos = SIZE_MAX;
     for (const size_t *t = target; t < target + nt; ++t) {
         if (burrow[*t] == '.') {
             best_pos = *t;
-        } else if (burrow[*t] != amph) {
+        }
+        else if (burrow[*t] != amph) {
             return SIZE_MAX;
         }
     }
@@ -65,10 +67,10 @@ size_t burrow_can_leave_room(size_t nt, const size_t target[4], const char *burr
 size_t burrow_possible_moves(size_t move[NM][2], const char *burrow, size_t nt)
 {
     static const size_t target[][4] = {
-        ['A'] = { 11, 15, 19, 23 },
-        ['B'] = { 12, 16, 20, 24 },
-        ['C'] = { 13, 17, 21, 25 },
-        ['D'] = { 14, 18, 22, 26 },
+        ['A'] = {11, 15, 19, 23},
+        ['B'] = {12, 16, 20, 24},
+        ['C'] = {13, 17, 21, 25},
+        ['D'] = {14, 18, 22, 26},
     };
     size_t nm = 0;
 
@@ -76,10 +78,10 @@ size_t burrow_possible_moves(size_t move[NM][2], const char *burrow, size_t nt)
     for (const size_t *a = parc; a < parc + LEN(parc); ++a) {
         const char amph = burrow[*a];
         if (amph == '.') continue;
-        const size_t b = burrow_can_enter_room(
-            *a, stepout[(size_t)amph], amph, nt, target[(size_t)amph], burrow);
+        const size_t b = burrow_can_enter_room(*a, stepout[(size_t)amph], amph, nt,
+                                               target[(size_t)amph], burrow);
         if (b == SIZE_MAX) continue;
-        memcpy(move[nm++], (size_t[2]) { *a, b }, sizeof(size_t[2]));
+        memcpy(move[nm++], (size_t[2]){*a, b}, sizeof(size_t[2]));
     }
 
     // generate moves for amphipods in rooms
@@ -89,7 +91,7 @@ size_t burrow_possible_moves(size_t move[NM][2], const char *burrow, size_t nt)
         for (const size_t *b = parc; b < parc + LEN(parc); ++b) {
             if (burrow[*b] != '.') continue;
             if (burrow_is_blocked(stepout[room], *b, burrow)) continue;
-            memcpy(move[nm++], (size_t[2]) { a, *b }, sizeof(size_t[2]));
+            memcpy(move[nm++], (size_t[2]){a, *b}, sizeof(size_t[2]));
         }
     }
 
@@ -132,10 +134,12 @@ long dijkstra(const char *burrow)
         const Elem *elem = heap_peek(heap);
         cost = -elem->priority;
         state = elem->data;
-        if (!strncmp(state, solution, nb)) { goto cleanup; }
+        if (!strncmp(state, solution, nb)) {
+            goto cleanup;
+        }
 
         // insert all possible moves
-        size_t move[NM][2] = { 0 };
+        size_t move[NM][2] = {0};
         const size_t nm = burrow_possible_moves(move, state, nt);
         for (size_t m = 0; m < nm; ++m) {
             // create new state

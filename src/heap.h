@@ -15,15 +15,15 @@ typedef struct Heap Heap;
 typedef struct Elem Elem;
 
 struct Heap {
-    const size_t data_size; // size of data pointed to by element
-    size_t len; // length of list
-    size_t size; // maximum length of list
-    Elem *elem; // element array
+    const size_t data_size;  // size of data pointed to by element
+    size_t len;              // length of list
+    size_t size;             // maximum length of list
+    Elem *elem;              // element array
 };
 
 struct Elem {
-    long priority; // priority of element
-    void *data; // pointer to element data
+    long priority;  // priority of element
+    void *data;     // pointer to element data
 };
 
 // allocate heap,

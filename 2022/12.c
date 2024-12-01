@@ -27,7 +27,7 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, 
 
     // start BFS
     size_t length = 0;
-    const size_t offset[] = { -1, +1, -nj, +nj }; // left, right, up, down
+    const size_t offset[] = {-1, +1, -nj, +nj};  // left, right, up, down
     while (queue->len) {
         // pop front
         size_t *first = queue_pop(queue);
@@ -37,7 +37,7 @@ size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, 
         free(first);
 
         // check left, right, up, down
-        const int check[] = { (fj > 0), (fj < nj - 1), (fi > 0), (fi < ni - 1) };
+        const int check[] = {(fj > 0), (fj < nj - 1), (fi > 0), (fi < ni - 1)};
         for (size_t i = 0; i < 4; ++i) {
             if (check[i]) {
                 const size_t n = f + offset[i];
@@ -65,7 +65,9 @@ cleanup:
 const char *strchrnul(const char *s, int c)
 {
     while (*s) {
-        if (*s == c) { return s; }
+        if (*s == c) {
+            return s;
+        }
         ++s;
     }
     return s;
@@ -103,7 +105,9 @@ int main(void)
     while (a) {
         const size_t A = a - height;
         const size_t l = shortest_path_length(height, ni, nj, A, E);
-        if (l) { min_length = MIN(min_length, l + 1); }
+        if (l) {
+            min_length = MIN(min_length, l + 1);
+        }
         a = strchr(a + 1, 'b');
     }
     printf("%zu\n", min_length);

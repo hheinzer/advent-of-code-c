@@ -15,7 +15,9 @@ void board_mark_number(long board[5][5], long num)
 {
     for (size_t i = 0; i < 5; ++i) {
         for (size_t j = 0; j < 5; ++j) {
-            if (board[i][j] == num) { board[i][j] *= -1; }
+            if (board[i][j] == num) {
+                board[i][j] *= -1;
+            }
         }
     }
 }
@@ -29,7 +31,9 @@ int board_is_winner(long board[5][5])
             row &= (board[i][j] < 0);
             col &= (board[j][i] < 0);
         }
-        if (row || col) { return 1; }
+        if (row || col) {
+            return 1;
+        }
     }
     return 0;
 }
@@ -39,14 +43,15 @@ long board_sum_unmakred(long board[5][5])
     long sum = 0;
     for (size_t i = 0; i < 5; ++i) {
         for (size_t j = 0; j < 5; ++j) {
-            if (board[i][j] >= 0) { sum += board[i][j]; }
+            if (board[i][j] >= 0) {
+                sum += board[i][j];
+            }
         }
     }
     return sum;
 }
 
-void play_bingo(
-    long *score, size_t *rank, long (*board)[5][5], size_t nb, const char *_numbers)
+void play_bingo(long *score, size_t *rank, long (*board)[5][5], size_t nb, const char *_numbers)
 {
     char *numbers = strdup(_numbers);
     char *tok = strtok(numbers, ",");
@@ -76,8 +81,8 @@ int main(void)
     long(*board)[5][5] = calloc(nb, sizeof(*board));
     for (size_t i = 2, ib = 0; i < n_lines; i += 6, ++ib) {
         for (size_t j = 0; j < 5; ++j) {
-            sscanf(line[i + j], "%ld %ld %ld %ld %ld", &board[ib][j][0],
-                &board[ib][j][1], &board[ib][j][2], &board[ib][j][3], &board[ib][j][4]);
+            sscanf(line[i + j], "%ld %ld %ld %ld %ld", &board[ib][j][0], &board[ib][j][1],
+                   &board[ib][j][2], &board[ib][j][3], &board[ib][j][4]);
         }
     }
 
@@ -88,12 +93,16 @@ int main(void)
 
     // part 1
     for (size_t i = 0; i < nb; ++i) {
-        if (rank[i] == 1) { printf("%ld\n", score[i]); }
+        if (rank[i] == 1) {
+            printf("%ld\n", score[i]);
+        }
     }
 
     // part 2
     for (size_t i = 0; i < nb; ++i) {
-        if (rank[i] == nb) { printf("%ld\n", score[i]); }
+        if (rank[i] == nb) {
+            printf("%ld\n", score[i]);
+        }
     }
 
     // cleanup

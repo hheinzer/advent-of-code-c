@@ -30,7 +30,7 @@ long solve(List *list, long mul, size_t n_mix)
     list->last->next = list->first;
 
     // get zero node
-    const Node *zero = list_find(list, &(long) { 0 }, cmp_long_asc);
+    const Node *zero = list_find(list, &(long){0}, cmp_long_asc);
 
     // move nodes
     for (size_t mix = 0; mix < n_mix; ++mix) {
@@ -38,9 +38,12 @@ long solve(List *list, long mul, size_t n_mix)
             Node *curr = node[i];
             const long val = *(long *)curr->data;
             Node *prev = curr;
-            if (val >= 0) { // move right
-                for (size_t j = 0; j < labs(val) % (n - 1); ++j) { prev = prev->next; }
-            } else { // move left
+            if (val >= 0) {  // move right
+                for (size_t j = 0; j < labs(val) % (n - 1); ++j) {
+                    prev = prev->next;
+                }
+            }
+            else {  // move left
                 for (size_t j = 0; j < (labs(val) + 1) % (n - 1); ++j) {
                     prev = prev->prev;
                 }
@@ -58,10 +61,12 @@ long solve(List *list, long mul, size_t n_mix)
 
     // read code
     long sum = 0;
-    const size_t offset[3] = { 1000, 2000, 3000 };
+    const size_t offset[3] = {1000, 2000, 3000};
     for (size_t i = 0; i < 3; ++i) {
         const Node *curr = zero;
-        for (size_t j = 0; j < offset[i] % n; ++j) { curr = curr->next; }
+        for (size_t j = 0; j < offset[i] % n; ++j) {
+            curr = curr->next;
+        }
         sum += *(long *)curr->data;
     }
 

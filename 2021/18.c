@@ -48,7 +48,8 @@ Pair *pair_alloc(const char **line_ptr, Pair *parent)
         sscanf(line, "%ld", &pair->x_num);
         line = strchr(line, ',');
         assert(line);
-    } else {
+    }
+    else {
         pair->x_type = ET_PAIR;
         pair->x_pair = pair_alloc(&line, pair);
     }
@@ -59,7 +60,8 @@ Pair *pair_alloc(const char **line_ptr, Pair *parent)
         sscanf(line, "%ld", &pair->y_num);
         line = strchr(line, ']');
         assert(line);
-    } else {
+    }
+    else {
         pair->y_type = ET_PAIR;
         pair->y_pair = pair_alloc(&line, pair);
     }
@@ -70,8 +72,12 @@ Pair *pair_alloc(const char **line_ptr, Pair *parent)
 
 void pair_free(Pair *pair)
 {
-    if (pair->x_type == ET_PAIR) { pair_free(pair->x_pair); }
-    if (pair->y_type == ET_PAIR) { pair_free(pair->y_pair); }
+    if (pair->x_type == ET_PAIR) {
+        pair_free(pair->x_pair);
+    }
+    if (pair->y_type == ET_PAIR) {
+        pair_free(pair->y_pair);
+    }
     free(pair);
 }
 
@@ -84,7 +90,8 @@ long *get_num_right_down(Pair *pair)
 {
     if (pair->y_type == ET_NUMBER) {
         return &pair->y_num;
-    } else {
+    }
+    else {
         return get_num_right_down(pair->y_pair);
     }
 }
@@ -96,10 +103,12 @@ long *get_num_left_up(Pair *pair)
         if ((parent->y_type == ET_PAIR) && (parent->y_pair == pair)) {
             if (parent->x_type == ET_NUMBER) {
                 return &parent->x_num;
-            } else {
+            }
+            else {
                 return get_num_right_down(parent->x_pair);
             }
-        } else {
+        }
+        else {
             return get_num_left_up(parent);
         }
     }
@@ -110,7 +119,8 @@ long *get_num_left_down(Pair *pair)
 {
     if (pair->x_type == ET_NUMBER) {
         return &pair->x_num;
-    } else {
+    }
+    else {
         return get_num_left_down(pair->x_pair);
     }
 }
@@ -122,10 +132,12 @@ long *get_num_right_up(Pair *pair)
         if ((parent->x_type == ET_PAIR) && (parent->x_pair == pair)) {
             if (parent->y_type == ET_NUMBER) {
                 return &parent->y_num;
-            } else {
+            }
+            else {
                 return get_num_left_down(parent->y_pair);
             }
-        } else {
+        }
+        else {
             return get_num_right_up(parent);
         }
     }
@@ -143,20 +155,25 @@ int pair_explode(Pair *pair, size_t depth)
             did_explode |= pair_explode(pair->y_pair, depth + 1);
         }
         return did_explode;
-
-    } else {
+    }
+    else {
         assert(pair->x_type == ET_NUMBER);
         long *num_left = get_num_left_up(pair);
-        if (num_left) { *num_left += pair->x_num; }
+        if (num_left) {
+            *num_left += pair->x_num;
+        }
 
         assert(pair->y_type == ET_NUMBER);
         long *num_right = get_num_right_up(pair);
-        if (num_right) { *num_right += pair->y_num; }
+        if (num_right) {
+            *num_right += pair->y_num;
+        }
 
         if ((pair->parent->x_type == ET_PAIR) && (pair->parent->x_pair == pair)) {
             pair->parent->x_type = ET_NUMBER;
             pair->parent->x_num = 0;
-        } else {
+        }
+        else {
             pair->parent->y_type = ET_NUMBER;
             pair->parent->y_num = 0;
         }
@@ -181,7 +198,8 @@ int pair_split(Pair *pair)
     int did_split = 0;
     if (pair->x_type == ET_PAIR) {
         did_split |= pair_split(pair->x_pair);
-    } else {
+    }
+    else {
         if (pair->x_num >= 10) {
             pair->x_type = ET_PAIR;
             pair->x_pair = num_to_pair(pair->x_num);
@@ -189,10 +207,13 @@ int pair_split(Pair *pair)
             return 1;
         }
     }
-    if (did_split) { return did_split; }
+    if (did_split) {
+        return did_split;
+    }
     if (pair->y_type == ET_PAIR) {
         did_split |= pair_split(pair->y_pair);
-    } else {
+    }
+    else {
         if (pair->y_num >= 10) {
             pair->y_type = ET_PAIR;
             pair->y_pair = num_to_pair(pair->y_num);
@@ -205,8 +226,12 @@ int pair_split(Pair *pair)
 
 void pair_reduce(Pair *pair)
 {
-    if (pair_explode(pair, 0)) { pair_reduce(pair); }
-    if (pair_split(pair)) { pair_reduce(pair); }
+    if (pair_explode(pair, 0)) {
+        pair_reduce(pair);
+    }
+    if (pair_split(pair)) {
+        pair_reduce(pair);
+    }
 }
 
 Pair *pair_add(Pair *left, Pair *right)
@@ -230,12 +255,14 @@ long pair_magnitude(const Pair *pair)
     long mag = 0;
     if (pair->x_type == ET_PAIR) {
         mag += 3 * pair_magnitude(pair->x_pair);
-    } else {
+    }
+    else {
         mag += 3 * pair->x_num;
     }
     if (pair->y_type == ET_PAIR) {
         mag += 2 * pair_magnitude(pair->y_pair);
-    } else {
+    }
+    else {
         mag += 2 * pair->y_num;
     }
     return mag;
@@ -248,9 +275,9 @@ int main(void)
     const size_t n_lines = lines_read(&line, "2021/input/18.txt");
 
     // sum pairs
-    Pair *sum = pair_alloc(&(const char *) { line[0] }, 0);
+    Pair *sum = pair_alloc(&(const char *){line[0]}, 0);
     for (size_t i = 1; i < n_lines; ++i) {
-        sum = pair_add(sum, pair_alloc(&(const char *) { line[i] }, 0));
+        sum = pair_add(sum, pair_alloc(&(const char *){line[i]}, 0));
     }
 
     // part 1
@@ -261,8 +288,8 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         for (size_t j = 0; j < n_lines; ++j) {
             if (i != j) {
-                Pair *a = pair_alloc(&(const char *) { line[i] }, 0);
-                Pair *b = pair_alloc(&(const char *) { line[j] }, 0);
+                Pair *a = pair_alloc(&(const char *){line[i]}, 0);
+                Pair *b = pair_alloc(&(const char *){line[j]}, 0);
                 Pair *ab = pair_add(a, b);
                 max_sum = MAX(max_sum, pair_magnitude(ab));
                 pair_free(ab);

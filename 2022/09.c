@@ -23,11 +23,11 @@ typedef struct Position {
 void position_move(Position *pos, char dir)
 {
     switch (dir) {
-    case 'L': --pos->x; break;
-    case 'R': ++pos->x; break;
-    case 'U': ++pos->y; break;
-    case 'D': --pos->y; break;
-    default: assert(!"Illegal direction encountered.");
+        case 'L': --pos->x; break;
+        case 'R': ++pos->x; break;
+        case 'U': ++pos->y; break;
+        case 'D': --pos->y; break;
+        default: assert(!"Illegal direction encountered.");
     }
 }
 
@@ -48,7 +48,7 @@ int main(void)
     const size_t n_lines = lines_read(&line, "2022/input/09.txt");
 
     // simulate rope with 2 and 10 knots
-    const size_t nr[] = { 2, 10 };
+    const size_t nr[] = {2, 10};
     char key[256] = "";
     for (size_t r = 0; r < LEN(nr); ++r) {
         // initialize rope
@@ -70,8 +70,7 @@ int main(void)
                 }
 
                 // insert tail position into dict
-                dict_insert(
-                    pos, KEY(key, "%ld,%ld", rope[nr[r] - 1].x, rope[nr[r] - 1].y), 0);
+                dict_insert(pos, KEY(key, "%ld,%ld", rope[nr[r] - 1].x, rope[nr[r] - 1].y), 0);
             }
         }
 

@@ -36,12 +36,13 @@ static const char closing[] = {
 
 int is_corrupted(const char *line)
 {
-    int stack[256] = { 0 };
+    int stack[256] = {0};
     size_t n = 0;
     while (*line) {
         if (strchr("([{<", *line)) {
             stack[n++] = *line;
-        } else {
+        }
+        else {
             assert(n > 0);
             if (closing[stack[--n]] != *line) return *line;
         }
@@ -52,12 +53,13 @@ int is_corrupted(const char *line)
 
 size_t complete_if_not_corrupted(const char *line)
 {
-    int stack[256] = { 0 };
+    int stack[256] = {0};
     size_t n = 0;
     while (*line) {
         if (strchr("([{<", *line)) {
             stack[n++] = *line;
-        } else {
+        }
+        else {
             assert(n > 0);
             if (closing[stack[--n]] != *line) return 0;
         }
@@ -79,7 +81,9 @@ int main(void)
 
     // compute syntax error score
     int score = 0;
-    for (size_t i = 0; i < n_lines; ++i) { score += table1[is_corrupted(line[i])]; }
+    for (size_t i = 0; i < n_lines; ++i) {
+        score += table1[is_corrupted(line[i])];
+    }
 
     // part 1
     printf("%d\n", score);

@@ -48,14 +48,14 @@ cleanup:
     return min_distance;
 }
 
-size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char *seen,
-    size_t loc, size_t AA, size_t time_allowed, size_t time_taken, size_t n_players)
+size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char *seen, size_t loc,
+            size_t AA, size_t time_allowed, size_t time_taken, size_t n_players)
 {
     if (time_taken == time_allowed) {
         if (n_players > 1) {
-            return _dfs(
-                cache, n, rate, _cost, seen, AA, AA, time_allowed, 0, n_players - 1);
-        } else {
+            return _dfs(cache, n, rate, _cost, seen, AA, AA, time_allowed, 0, n_players - 1);
+        }
+        else {
             return 0;
         }
     }
@@ -65,7 +65,9 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
     const size_t time_remaining = time_allowed - time_taken;
     snprintf(key, sizeof(key), "%zu %zu %s %zu", loc, time_remaining, seen, n_players);
     Item *item = dict_find(cache, key);
-    if (item) { return *(size_t *)item->data; }
+    if (item) {
+        return *(size_t *)item->data;
+    }
 
     // mark valve at location as seen
     char reset = seen[loc];
@@ -77,17 +79,16 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
     for (size_t i = 0; i < n; ++i) {
         // go to unseen valve if there is enough time
         if ((seen[i] == '0') && (cost[loc][i] < time_remaining)) {
-            size_t _flow = (time_remaining - cost[loc][i]) * rate[i]
-                + _dfs(cache, n, rate, _cost, seen, i, AA, time_allowed,
-                    time_taken + cost[loc][i], n_players);
+            size_t _flow = (time_remaining - cost[loc][i]) * rate[i] +
+                           _dfs(cache, n, rate, _cost, seen, i, AA, time_allowed,
+                                time_taken + cost[loc][i], n_players);
             flow = MAX(flow, _flow);
         }
     }
 
     // stop opening valves
     flow = MAX(flow,
-        _dfs(cache, n, rate, _cost, seen, loc, AA, time_allowed, time_allowed,
-            n_players));
+               _dfs(cache, n, rate, _cost, seen, loc, AA, time_allowed, time_allowed, n_players));
 
     // reset valve at location
     seen[loc] = reset;
@@ -98,8 +99,8 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
     return flow;
 }
 
-size_t dfs(size_t n, const size_t *rate, const List *non_zero, const size_t *cost,
-    size_t loc, size_t time_allowed, size_t n_players)
+size_t dfs(size_t n, const size_t *rate, const List *non_zero, const size_t *cost, size_t loc,
+           size_t time_allowed, size_t n_players)
 {
     // create array that marks closed, non-zero valves as '0'
     char seen[n + 1];
@@ -128,7 +129,9 @@ int main(void)
         char key[3] = "";
         sscanf(line[i], "Valve %2s has flow rate=%zu", key, &rate[i]);
         dict_insert(v2i, key, memdup(&i, sizeof(i)));
-        if (rate[i] > 0) { list_insert_last(non_zero, memdup(&i, sizeof(i))); }
+        if (rate[i] > 0) {
+            list_insert_last(non_zero, memdup(&i, sizeof(i)));
+        }
     }
     const size_t AA = *(size_t *)dict_find(v2i, "AA")->data;
 
@@ -137,8 +140,7 @@ int main(void)
     for (size_t i = 0; i < n_lines; ++i) {
         char key[3] = "";
         char net[256] = "";
-        sscanf(
-            line[i], "Valve %2s has flow rate=%*d; %*s %*s to %*s %255[^\n]", key, net);
+        sscanf(line[i], "Valve %2s has flow rate=%*d; %*s %*s to %*s %255[^\n]", key, net);
         size_t iv = *(size_t *)dict_find(v2i, key)->data;
         char *tok = strtok(net, ",");
         while (tok) {
@@ -156,7 +158,9 @@ int main(void)
         const size_t S = *(size_t *)start->data;
         for (const Node *end = non_zero->first; end; end = end->next) {
             const size_t E = *(size_t *)end->data;
-            if ((S != E) && (E != AA)) { cost[S][E] = bfs(n_lines, *adj, S, E) + 1; }
+            if ((S != E) && (E != AA)) {
+                cost[S][E] = bfs(n_lines, *adj, S, E) + 1;
+            }
         }
     }
     free(list_remove_first(non_zero));

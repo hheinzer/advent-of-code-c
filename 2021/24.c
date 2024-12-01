@@ -14,8 +14,8 @@
  */
 #include "aoc.h"
 
-#define NI 14 // number of sections
-#define NJ 18 // number of lines per section
+#define NI 14  // number of sections
+#define NJ 18  // number of lines per section
 
 typedef struct Parameters {
     long a, b, c;
@@ -23,8 +23,10 @@ typedef struct Parameters {
 
 long alu_chunk_func(Parameters param, long z, long w)
 {
-    if (z % 26 + param.b != w) return ((z / param.a) * 26) + w + param.c;
-    else return z / param.a;
+    if (z % 26 + param.b != w)
+        return ((z / param.a) * 26) + w + param.c;
+    else
+        return z / param.a;
 }
 
 int main(void)
@@ -34,7 +36,7 @@ int main(void)
     const size_t n_lines = lines_read(&line, "2021/input/24.txt");
 
     // read parameters
-    Parameters Param[NI] = { 0 };
+    Parameters Param[NI] = {0};
     for (size_t i = 0, iline = 0; i < NI; ++i) {
         for (size_t j = 0; j < NJ; ++j, ++iline) {
             if (j == 4) sscanf(line[iline], "%*s %*s %ld", &Param[i].a);
@@ -45,7 +47,7 @@ int main(void)
 
     // find smallest and largest model number
     Dict *z_values = dict_alloc(sizeof(long[2]), 1000000);
-    dict_insert(z_values, "0", memdup((long[2]) { 0, 0 }, sizeof(long[2])));
+    dict_insert(z_values, "0", memdup((long[2]){0, 0}, sizeof(long[2])));
     char key[256] = "";
     for (const Parameters *param = Param; param < Param + NI; ++param) {
         // create temporary z_values dict
@@ -67,16 +69,16 @@ int main(void)
                         const long min_new = min * 10 + digit;
                         const long max_new = max * 10 + digit;
                         // update existing or insert new z value
-                        Item *z_item_new
-                            = dict_find(z_values_new, KEY(key, "%ld", z_new));
+                        Item *z_item_new = dict_find(z_values_new, KEY(key, "%ld", z_new));
                         if (z_item_new) {
                             const long min_prev = ((long *)z_item_new->data)[0];
                             const long max_prev = ((long *)z_item_new->data)[1];
                             ((long *)z_item_new->data)[0] = MIN(min_prev, min_new);
                             ((long *)z_item_new->data)[1] = MAX(max_prev, max_new);
-                        } else {
+                        }
+                        else {
                             dict_insert(z_values_new, key,
-                                memdup((long[2]) { min_new, max_new }, sizeof(long[2])));
+                                        memdup((long[2]){min_new, max_new}, sizeof(long[2])));
                         }
                     }
                 }

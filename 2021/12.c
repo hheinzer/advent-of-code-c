@@ -18,17 +18,21 @@
 int is_lowercase(const char *str)
 {
     while (*str) {
-        if (!islower(*str)) { return 0; }
+        if (!islower(*str)) {
+            return 0;
+        }
         ++str;
     }
     return 1;
 }
 
-size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i, size_t iS,
-    size_t iE, int part)
+size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i, size_t iS, size_t iE,
+           int part)
 {
     // return if end was found
-    if (i == iE) { return 1; }
+    if (i == iE) {
+        return 1;
+    }
 
     // go to all adjacent caves, mark small ones as seen, don't revisit them, unless it's
     // part 2, then revisit once
@@ -39,8 +43,8 @@ size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i, size_t
                 seen[j] = (small[j] ? 1 : seen[j]);
                 count += dfs(n, small, path, seen, j, iS, iE, part);
                 seen[j] = (small[j] ? 0 : seen[j]);
-
-            } else if ((j != iS) && (part == 2)) {
+            }
+            else if ((j != iS) && (part == 2)) {
                 count += dfs(n, small, path, seen, j, iS, iE, 1);
             }
         }
@@ -60,10 +64,10 @@ int main(void)
         char name1[NL], name2[NL];
         sscanf(line[i], FMT, name1, name2);
         if (!dict_find(cave, name1)) {
-            dict_insert(cave, name1, memdup(&(size_t) { i_cave++ }, sizeof(size_t)));
+            dict_insert(cave, name1, memdup(&(size_t){i_cave++}, sizeof(size_t)));
         }
         if (!dict_find(cave, name2)) {
-            dict_insert(cave, name2, memdup(&(size_t) { i_cave++ }, sizeof(size_t)));
+            dict_insert(cave, name2, memdup(&(size_t){i_cave++}, sizeof(size_t)));
         }
     }
 

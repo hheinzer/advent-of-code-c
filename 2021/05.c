@@ -19,7 +19,9 @@ size_t count_overlapping(const Dict *grid)
     for (size_t i = 0; i < grid->size; ++i) {
         for (const Item *item = &grid->item[i]; item && item->key; item = item->next) {
             const size_t *_count = item->data;
-            if (*_count >= 2) { ++count; }
+            if (*_count >= 2) {
+                ++count;
+            }
         }
     }
     return count;
@@ -43,19 +45,21 @@ int main(void)
                 if (item) {
                     size_t *count = item->data;
                     ++(*count);
-                } else {
-                    dict_insert(grid, key, memdup(&(size_t) { 1 }, sizeof(size_t)));
+                }
+                else {
+                    dict_insert(grid, key, memdup(&(size_t){1}, sizeof(size_t)));
                 }
             }
-
-        } else if (y0 == y1) {
+        }
+        else if (y0 == y1) {
             for (long x = MIN(x0, x1); x <= MAX(x0, x1); ++x) {
                 Item *item = dict_find(grid, KEY(key, "%ld,%ld", x, y0));
                 if (item) {
                     size_t *count = item->data;
                     ++(*count);
-                } else {
-                    dict_insert(grid, key, memdup(&(size_t) { 1 }, sizeof(size_t)));
+                }
+                else {
+                    dict_insert(grid, key, memdup(&(size_t){1}, sizeof(size_t)));
                 }
             }
         }
@@ -79,8 +83,9 @@ int main(void)
                 if (item) {
                     size_t *count = item->data;
                     ++(*count);
-                } else {
-                    dict_insert(grid, key, memdup(&(size_t) { 1 }, sizeof(size_t)));
+                }
+                else {
+                    dict_insert(grid, key, memdup(&(size_t){1}, sizeof(size_t)));
                 }
             }
         }

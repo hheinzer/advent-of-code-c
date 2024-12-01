@@ -15,17 +15,17 @@ typedef struct Dict Dict;
 typedef struct Item Item;
 
 struct Dict {
-    const size_t data_size; // size of data pointed to by item
-    size_t len; // number of items in dict
-    size_t size; // number of buckets in dict
-    Item *item; // bucket array
+    const size_t data_size;  // size of data pointed to by item
+    size_t len;              // number of items in dict
+    size_t size;             // number of buckets in dict
+    Item *item;              // bucket array
 };
 
 struct Item {
-    const char *key; // pointer to item key
-    size_t key_size; // key size
-    void *data; // pointer to item data
-    Item *next; // pointer to next item in bucket
+    const char *key;  // pointer to item key
+    size_t key_size;  // key size
+    void *data;       // pointer to item data
+    Item *next;       // pointer to next item in bucket
 };
 
 // allocate dict
