@@ -1,8 +1,4 @@
-/*
- * helper functions for advent of code puzzles
- */
-#ifndef AOC_H
-#define AOC_H
+#pragma once
 
 #include <assert.h>
 #include <ctype.h>
@@ -61,12 +57,79 @@
     }
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
-size_t lines_read(const char ***line, const char *fname);
+size_t lines_read(const char ***line, const char *fname)
+{
+    // open file
+    FILE *file = fopen(fname, "r");
+    assert(file && "Could not open file.");
+
+    // read file line by line
+    size_t n_lines = 0;
+    char *l = 0;
+    size_t nc = 0;
+    int c = 0;
+    while ((c = fgetc(file)) != EOF) {
+        if (c != '\n') {
+            // append character
+            l = realloc(l, ++nc * sizeof(*l));
+            l[nc - 1] = (char)c;
+        }
+        else {
+            // append end of string
+            l = realloc(l, ++nc * sizeof(*l));
+            l[nc - 1] = 0;
+
+            // append line
+            *line = realloc(*line, ++n_lines * sizeof(**line));
+            (*line)[n_lines - 1] = l;
+
+            // initialize line
+            l = calloc(0, sizeof(*l));
+            nc = 0;
+        }
+    }
+    free(l);
+
+    // close file
+    fclose(file);
+
+    return n_lines;
+}
 
 // free all lines
-void lines_free(const char **line, size_t n_lines);
+static void lines_free(const char **line, size_t n_lines)
+{
+    for (size_t i = 0; i < n_lines; ++i) {
+        free((void *)line[i]);
+    }
+    free(line);
+}
 
 // find index of first line that matches
-size_t line_find(const char **line, size_t n_lines, const char *find);
+static size_t line_find(const char **line, size_t n_lines, const char *find)
+{
+    for (size_t i = 0; i < n_lines; ++i) {
+        if (!strcmp(line[i], find)) {
+            return i;
+        }
+    }
+    assert(0 && "No matching line found.");
+}
 
-#endif
+static clock_t _timer_start = 0;
+
+__attribute__((constructor)) static void run_before_main(void)
+{
+    _timer_start = clock();
+}
+
+__attribute__((destructor)) static void run_after_main(void)
+{
+    const double wtime = (double)(clock() - _timer_start) / CLOCKS_PER_SEC;
+    if (wtime > 1.0) {
+        printf("wtime = %g s (!!!)\n", wtime);
+    }
+    else {
+        printf("wtime = %g s\n", wtime);
+    }
+}

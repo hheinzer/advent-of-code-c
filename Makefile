@@ -1,9 +1,11 @@
-# See LICENSE file for copyright and license details.
+# compiler and default flags
 CC = clang
-CFLAGS = -std=c23 -g -Isrc -Wall -Wextra -Wpedantic -Wshadow
+CFLAGS = -std=c23 -g -Wall -Wextra -Wpedantic -Wshadow -Wno-unused-function
 
 # debug flags
-CFLAGS += -Og -fno-omit-frame-pointer
+CFLAGS += -Og -fno-omit-frame-pointer -fsanitize=undefined
+CFLAGS += -fsanitize=address
+#CFLAGS += -fsanitize=memory -fPIE -pie
 
 # release flags
 #CFLAGS += -march=native -Ofast -flto=auto -DNDEBUG
@@ -12,33 +14,26 @@ CFLAGS += -Og -fno-omit-frame-pointer
 LDLIBS = -lm
 
 # sources, objects, and programs
-SRC = $(shell find src -type f -name '*.c')
-RUN = $(shell find 20* -type f -name '*.c')
-OBJ = $(patsubst %.c, %.o, $(SRC))
+RUN = $(shell find . -type f -name '*.c')
 BIN = $(patsubst %.c, %, $(RUN))
 
-# dependencies
-CFLAGS += -MMD -MP
-DEP = $(OBJ:.o=.d) $(BIN:=.d)
--include $(DEP)
-
 # make functions
-.PHONY: all clean check format tidy run test solutions
+.PHONY: all clean check tidy format run test solutions
 all: $(BIN)
 
 clean:
-	@rm -rf $(BIN) $(OBJ) $(DEP)
+	@rm -rf $(BIN)
 
 check:
 	@cppcheck --quiet --project=compile_commands.json \
 		--enable=all --inconclusive --check-level=exhaustive \
-		--suppress=checkersReport --suppress=missingIncludeSystem --suppress=unusedFunction
-
-format:
-	@clang-format -i $(shell find . -type f -name '*.[ch]')
+		--suppress=missingIncludeSystem --suppress=checkersReport #--suppress=unusedFunction
 
 tidy:
 	@clang-tidy --quiet $(shell find . -type f -name '*.[ch]')
+
+format:
+	@clang-format -i $(shell find . -type f -name '*.[ch]')
 
 run: $(BIN)
 	@for prog in $(sort $(BIN)); do \
@@ -61,8 +56,5 @@ solutions: $(BIN)
 
 # build rules
 .SUFFIXES:
-%.o: %.c Makefile
-	@$(CC) $(CFLAGS) -c $< -o $@
-
 %: %.c $(OBJ)
-	-@$(CC) $(CFLAGS) $< $(OBJ) $(LDLIBS) -o $@
+	-@$(CC) $(CFLAGS) $< $(LDLIBS) -o $@

@@ -1,4 +1,27 @@
-#include "list.h"
+#pragma once
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "memory.h"
+
+// list is a chain of nodes
+typedef struct List List;
+typedef struct Node Node;
+
+struct List {
+    const size_t data_size;  // size of data pointed to by node
+    size_t len;              // length of list
+    Node *first;             // first node of list
+    Node *last;              // last node of list
+};
+
+struct Node {
+    void *data;  // pointer to node data
+    Node *next;  // pointer to next node
+    Node *prev;  // pointer to previous node
+};
 
 static Node *node_alloc(void *data)
 {
@@ -15,41 +38,17 @@ static void node_free(Node *node, void (*data_free)(void *))
     free(node);
 }
 
-List *list_alloc(size_t data_size)
+// allocate list,
+// return 0 on memory failure
+static List *list_alloc(size_t data_size)
 {
     const List list = {.data_size = data_size};
     return memdup(&list, sizeof(list));
 }
 
-List *list_copy(const List *other, void *(*data_copy)(void *, const void *, size_t))
-{
-    List *list = list_alloc(other->data_size);
-    for (const Node *node = other->first; node; node = node->next) {
-        void *copy = 0;
-        if (data_copy) {
-            copy = data_copy(malloc(list->data_size), node->data, list->data_size);
-        }
-        else {
-            copy = node->data;
-        }
-        list_insert_last(list, copy);
-    }
-    return list;
-}
-
-void list_free(List **list, void (*data_free)(void *))
-{
-    Node *node = (*list)->first;
-    for (size_t i = 0; i < (*list)->len; ++i) {
-        Node *next = node->next;
-        node_free(node, data_free);
-        node = next;
-    }
-    free(*list);
-    *list = 0;
-}
-
-int list_insert(List *list, size_t i, void *data)
+// insert data into list at specified location,
+// return 1 on out of range failure
+static int list_insert(List *list, size_t i, void *data)
 {
     if (i > list->len) {
         return 1;  // index out of range
@@ -92,17 +91,53 @@ int list_insert(List *list, size_t i, void *data)
     return 0;
 }
 
-int list_insert_first(List *list, void *data)
+static int list_insert_first(List *list, void *data)
 {
     return list_insert(list, 0, data);
 }
 
-int list_insert_last(List *list, void *data)
+static int list_insert_last(List *list, void *data)
 {
     return list_insert(list, list->len, data);
 }
 
-void *list_remove(List *list, size_t i)
+// allocate copy of other,
+// use data_copy to copy data from other, if 0 do not copy data,
+// return 0 on memory failure
+static List *list_copy(const List *other, void *(*data_copy)(void *, const void *, size_t))
+{
+    List *list = list_alloc(other->data_size);
+    for (const Node *node = other->first; node; node = node->next) {
+        void *copy = 0;
+        if (data_copy) {
+            copy = data_copy(malloc(list->data_size), node->data, list->data_size);
+        }
+        else {
+            copy = node->data;
+        }
+        list_insert_last(list, copy);
+    }
+    return list;
+}
+
+// free list,
+// use data_free to free data, use 0 to not free data
+static void list_free(List **list, void (*data_free)(void *))
+{
+    Node *node = (*list)->first;
+    for (size_t i = 0; i < (*list)->len; ++i) {
+        Node *next = node->next;
+        node_free(node, data_free);
+        node = next;
+    }
+    free(*list);
+    *list = 0;
+}
+
+// remove node from list at specified location,
+// return data pointer,
+// return 0 on out of range failure
+static void *list_remove(List *list, size_t i)
 {
     if (i >= list->len) {
         return 0;  // index out of range
@@ -145,17 +180,19 @@ void *list_remove(List *list, size_t i)
     return data;
 }
 
-void *list_remove_first(List *list)
+static void *list_remove_first(List *list)
 {
     return list_remove(list, 0);
 }
 
-void *list_remove_last(List *list)
+static void *list_remove_last(List *list)
 {
     return list_remove(list, list->len - 1);
 }
 
-Node *list_get(const List *list, size_t i)
+// return node at specified location,
+// return 0 on out of range failure
+static Node *list_get(const List *list, size_t i)
 {
     if (i >= list->len) {
         return 0;  // index out of range
@@ -184,7 +221,11 @@ Node *list_get(const List *list, size_t i)
     }
 }
 
-Node *list_find(const List *list, const void *data, int (*data_cmp)(const void *, const void *))
+// search for first occurrence of data in list,
+// return matching node if found,
+// return 0 if not found
+static Node *list_find(const List *list, const void *data,
+                       int (*data_cmp)(const void *, const void *))
 {
     for (Node *node = list->first; node; node = node->next) {
         if (!data_cmp(node->data, data)) {
@@ -194,7 +235,9 @@ Node *list_find(const List *list, const void *data, int (*data_cmp)(const void *
     return 0;
 }
 
-void *list_delete(List *list, Node *node)
+// delete specified node,
+// return data pointer
+static void *list_delete(List *list, Node *node)
 {
     if (node == list->first) {  // delete first node
         list->first = list->first->next;
@@ -214,7 +257,10 @@ void *list_delete(List *list, Node *node)
     return data;
 }
 
-size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *))
+// search for first occurrence of data in list,
+// return index of matching node if found,
+// return list->len (out of range) if not found
+static size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, const void *))
 {
     Node *node = list->first;
     for (size_t i = 0; i < list->len; ++i) {
@@ -226,7 +272,20 @@ size_t list_index(const List *list, void *data, int (*data_cmp)(const void *, co
     return list->len;
 }
 
-void list_sort(List *list, int (*data_cmp)(const void *, const void *))
+// convert list to array
+static void *list_to_array(const List *list)
+{
+    char *data = malloc(list->len * list->data_size);
+    Node *node = list->first;
+    for (size_t i = 0; i < list->len; ++i) {  // shallow copy to data array
+        memcpy(data + i * list->data_size, node->data, list->data_size);
+        node = node->next;
+    }
+    return data;
+}
+
+// sort list in place,
+static void list_sort(List *list, int (*data_cmp)(const void *, const void *))
 {
     char *data = list_to_array(list);
     qsort(data, list->len, list->data_size, data_cmp);
@@ -236,15 +295,4 @@ void list_sort(List *list, int (*data_cmp)(const void *, const void *))
         node = node->next;
     }
     free(data);
-}
-
-void *list_to_array(const List *list)
-{
-    char *data = malloc(list->len * list->data_size);
-    Node *node = list->first;
-    for (size_t i = 0; i < list->len; ++i) {  // shallow copy to data array
-        memcpy(data + i * list->data_size, node->data, list->data_size);
-        node = node->next;
-    }
-    return data;
 }
