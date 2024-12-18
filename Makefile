@@ -18,22 +18,11 @@ RUN = $(shell find . -type f -name '*.c')
 BIN = $(patsubst %.c, %, $(RUN))
 
 # make functions
-.PHONY: all clean check tidy format run test solutions
+.PHONY: all clean run test solutions
 all: $(BIN)
 
 clean:
 	@rm -rf $(BIN)
-
-check:
-	@cppcheck --quiet --project=compile_commands.json \
-		--enable=all --inconclusive --check-level=exhaustive \
-		--suppress=missingIncludeSystem --suppress=checkersReport #--suppress=unusedFunction
-
-tidy:
-	@clang-tidy --quiet $(shell find . -type f -name '*.[ch]')
-
-format:
-	@clang-format -i $(shell find . -type f -name '*.[ch]')
 
 run: $(BIN)
 	@for prog in $(sort $(BIN)); do \
