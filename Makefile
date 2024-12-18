@@ -14,7 +14,7 @@ CFLAGS += -fsanitize=address
 LDLIBS = -lm
 
 # sources, objects, and programs
-RUN = $(shell find . -type f -name '*.c')
+RUN = $(shell find 20* -type f -name '*.c')
 BIN = $(patsubst %.c, %, $(RUN))
 
 # make functions
