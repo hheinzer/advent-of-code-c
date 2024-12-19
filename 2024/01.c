@@ -16,20 +16,9 @@ int main(void)
     printf("%ld\n", sum1);
 
     // part two
-    defer(hmap_clear) Hmap lcount = hmap_create_default(lines.size, sizeof(long));
-    defer(hmap_clear) Hmap rcount = hmap_create_default(lines.size, sizeof(long));
-    for (long i = 0, *cnt; i < lines.size; ++i) {
-        if ((cnt = hmap_insert(&lcount, keyprint("%ld", left[i]), (long[]){1}, 1))) *cnt += 1;
-        if ((cnt = hmap_insert(&rcount, keyprint("%ld", right[i]), (long[]){1}, 1))) *cnt += 1;
-    }
     long sum2 = 0;
-    HmapForEach(item, &lcount)
-    {
-        const long lval = strtol(item->key, 0, 10);
-        const long *lcnt = item->data;
-        const long *rcnt = hmap_find(&rcount, item->key);
-        if (!rcnt) continue;
-        sum2 += lval * *lcnt * *rcnt;
-    }
+    for (long i = 0; i < lines.size; ++i)
+        for (long j = 0; j < lines.size; ++j)
+            if (left[i] == right[j]) sum2 += left[i];
     printf("%ld\n", sum2);
 }
