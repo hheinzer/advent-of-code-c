@@ -77,7 +77,7 @@ int doublecmp(const void *a, const void *b)
 // read input files
 Array read_lines(const char *fname)
 {
-    Array lines = array_create(1000, sizeof(char *), 0, 0, free);
+    Array lines = array_create_full(1000, sizeof(char *), 0, 0, free);
     FILE *file = fopen(fname, "r");
     assert(file);
     size_t size = 0, capacity = 256;
@@ -100,16 +100,6 @@ Array read_lines(const char *fname)
     fclose(file);
     return lines;
 }
-
-// default create functions
-#define array_create_default(capacity, data_size, data_cmp) \
-    array_create(capacity, data_size, data_cmp, memcpy, free)
-#define list_create_default(data_size, data_cmp) list_create(data_size, data_cmp, memcpy, free)
-#define hmap_create_default(capacity, data_size) \
-    hmap_create(capacity, data_size, 0.75, strhash_fnv1a, memcpy, free)
-#define set_create_default(capacity, data_size) \
-    set_create(capacity, data_size, 0.75, memhash_fnv1a, memcpy, free)
-#define heap_create_default(capacity, data_size) heap_create(capacity, data_size, memcpy, free)
 
 // key creation on the fly
 char *keyprint(const char *restrict format, ...)
