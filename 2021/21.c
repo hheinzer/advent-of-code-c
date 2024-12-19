@@ -44,7 +44,7 @@ void play_with_dirac_die(size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_
 {
     // check if result exists in cache
     char key[256] = "";
-    Item *item = dict_find(cache, KEY(key, "%zu,%zu,%zu,%zu", p0, p1, s0, s1));
+    const Item *item = dict_find(cache, KEY(key, "%zu,%zu,%zu,%zu", p0, p1, s0, s1));
     if (item) {
         const size_t *w = item->data;
         *w0_ = w[0];

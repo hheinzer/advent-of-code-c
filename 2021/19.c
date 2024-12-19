@@ -27,7 +27,7 @@ typedef struct Pair {
     size_t count;
 } Pair;
 
-Pair most_common(long *a, size_t n)
+Pair most_common(const long *a, size_t n)
 {
     size_t count_max = 0;
     const char *key_max = 0;
@@ -96,6 +96,7 @@ Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate)
 
             // compute all possible differences to aligned beacon coordinates
             long w[na][nc];
+            memset(w, 0, sizeof(w));
             for (size_t j = 0; j < na; ++j) {
                 for (size_t k = 0; k < nc; ++k) {
                     w[j][k] = t[k] - x[j];
@@ -179,7 +180,7 @@ int main(void)
     }
     char key[256] = "";
     while (next->len) {
-        Scanner *aligned = list_remove_first(next);
+        const Scanner *aligned = list_remove_first(next);
 
         // try to align all scanners in rest
         List *new_rest = list_alloc(sizeof(Scanner *));

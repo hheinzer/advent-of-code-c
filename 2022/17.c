@@ -12,7 +12,7 @@
  */
 #include "aoc.h"
 
-int does_collide(long r[5][2], const Dict *cave, long dx, long dy)
+int does_collide(const long r[5][2], const Dict *cave, long dx, long dy)
 {
     // check for collision with wall, floor, or other rock
     char key[256] = "";

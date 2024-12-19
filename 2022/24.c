@@ -17,7 +17,7 @@ typedef struct State {
     long j;
 } State;
 
-size_t bfs(long ni, long nj, char map[ni][nj], const long S[2], const long E[2], size_t t0)
+size_t bfs(long ni, long nj, const char map[ni][nj], const long S[2], const long E[2], size_t t0)
 {
     Queue *queue = queue_alloc(sizeof(State));
     Dict *seen = dict_alloc(0, 2 * ni * nj);

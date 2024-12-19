@@ -79,7 +79,7 @@ void cube_insert(List *cubes, Cube *new)
     const size_t n = cubes->len;
     Node *node = cubes->first;
     for (size_t i = 0; i < n; ++i) {
-        Cube *cube = node->data;
+        const Cube *cube = node->data;
 
         // insert intersection with inverse sign
         Cube *intr = cube_intersection(cube, new);

@@ -55,9 +55,7 @@ long _probe_max_y(Vec *vel, const Vec *min, const Vec *max)
     if (status == PS_TARGET_HIT) {
         return max_pos_y;
     }
-    else {
-        return LONG_MIN;
-    }
+    return LONG_MIN;
 }
 
 long probe_max_y(const Vec *min, const Vec *max)

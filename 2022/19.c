@@ -63,7 +63,7 @@ long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
         for (size_t j = 0; j < N; ++j) {
             if (bp->amt[ibot][j]) {
                 if (s.bot[j] > 0) {
-                    wait = MAX(wait, CEIL(bp->amt[ibot][j] - s.amt[j], s.bot[j]));
+                    wait = MAX(wait, ceil((bp->amt[ibot][j] - s.amt[j]) / (double)s.bot[j]));
                 }
                 else {
                     can_wait = 0;  // we cannot wait to build this robot

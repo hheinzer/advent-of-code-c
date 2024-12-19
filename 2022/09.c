@@ -36,8 +36,8 @@ void position_follow(Position *tail, const Position *head)
     const long dx = head->x - tail->x;
     const long dy = head->y - tail->y;
     if ((labs(dx) == 2) || labs(dy) == 2) {
-        tail->x += SIGN(dx) * CEIL(labs(dx), 2);
-        tail->y += SIGN(dy) * CEIL(labs(dy), 2);
+        tail->x += SIGN(dx) * ceil(labs(dx) / 2.0);
+        tail->y += SIGN(dy) * ceil(labs(dy) / 2.0);
     }
 }
 

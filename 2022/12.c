@@ -101,7 +101,7 @@ int main(void)
 
     // part 2
     size_t min_length = length;
-    char *a = strchr(height, 'b');
+    const char *a = strchr(height, 'b');
     while (a) {
         const size_t A = a - height;
         const size_t l = shortest_path_length(height, ni, nj, A, E);
