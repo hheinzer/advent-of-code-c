@@ -1,6 +1,6 @@
 # compiler and default flags
 CC = clang
-CFLAGS = -std=c23 -g -Wall -Wextra -Wpedantic -Wshadow
+CFLAGS = -std=c23 -g -Wall -Wextra -Wpedantic -Wshadow -Wno-unused-function
 
 # debug flags
 CFLAGS += -Og -fno-omit-frame-pointer -fsanitize=undefined
