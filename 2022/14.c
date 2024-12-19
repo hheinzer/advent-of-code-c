@@ -54,7 +54,7 @@ int main(void)
     memset(grid, '.', sizeof(grid));
     for (size_t i = 0; i < n_lines; ++i) {
         char *buf = strcpy(malloc(strlen(line[i]) + 1), line[i]);
-        char *tok = strtok(buf, "->");
+        const char *tok = strtok(buf, "->");
         long x0 = 0;
         long y0 = 0;
         sscanf(tok, " %ld,%ld ", &x0, &y0);

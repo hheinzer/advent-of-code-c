@@ -142,7 +142,7 @@ int main(void)
         char net[256] = "";
         sscanf(line[i], "Valve %2s has flow rate=%*d; %*s %*s to %*s %255[^\n]", key, net);
         size_t iv = *(size_t *)dict_find(v2i, key)->data;
-        char *tok = strtok(net, ",");
+        const char *tok = strtok(net, ",");
         while (tok) {
             sscanf(tok, " %2s", key);
             size_t jv = *(size_t *)dict_find(v2i, key)->data;

@@ -22,7 +22,7 @@ void board_mark_number(long board[5][5], long num)
     }
 }
 
-int board_is_winner(long board[5][5])
+int board_is_winner(const long board[5][5])
 {
     for (size_t i = 0; i < 5; ++i) {
         int row = 1;
@@ -54,7 +54,7 @@ long board_sum_unmakred(long board[5][5])
 void play_bingo(long *score, size_t *rank, long (*board)[5][5], size_t nb, const char *_numbers)
 {
     char *numbers = strdup(_numbers);
-    char *tok = strtok(numbers, ",");
+    const char *tok = strtok(numbers, ",");
     size_t irank = 1;
     while (tok) {
         const long num = strtol(tok, 0, 10);

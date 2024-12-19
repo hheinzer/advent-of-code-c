@@ -12,7 +12,7 @@
  */
 #include "aoc.h"
 
-size_t dijkstra(size_t ni, size_t nj, int grid[ni][nj])
+size_t dijkstra(size_t ni, size_t nj, const int grid[ni][nj])
 {
     // static offsets to reach neighbors
     static const long di[4] = {-1, +1, +0, +0};
@@ -82,7 +82,7 @@ CMP(size_t)
 
 // this is just here for a speed comparison, don't use it,
 // it is slower than dijkstra with heap
-size_t dijkstra_sorted_list(size_t ni, size_t nj, int grid[ni][nj])
+size_t dijkstra_sorted_list(size_t ni, size_t nj, const int grid[ni][nj])
 {
     // static offsets to reach neighbors
     static const long di[4] = {-1, +1, +0, +0};

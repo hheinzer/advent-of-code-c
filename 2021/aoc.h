@@ -24,9 +24,6 @@
 // sign of an integer
 #define SIGN(a) (((a) > 0) - ((a) < 0))
 
-// integer ceil division, positive integers only
-#define CEIL(a, b) ((__typeof__(a))ceil((double)(a) / (double)(b)))
-
 // cast a flat array to a multidimensional one
 #define TENSOR(t, a) (__typeof__(t))a
 
@@ -97,7 +94,7 @@ size_t lines_read(const char ***line, const char *fname)
 }
 
 // free all lines
-static void lines_free(const char **line, size_t n_lines)
+void lines_free(const char **line, size_t n_lines)
 {
     for (size_t i = 0; i < n_lines; ++i) {
         free((void *)line[i]);
@@ -106,7 +103,7 @@ static void lines_free(const char **line, size_t n_lines)
 }
 
 // find index of first line that matches
-static size_t line_find(const char **line, size_t n_lines, const char *find)
+size_t line_find(const char **line, size_t n_lines, const char *find)
 {
     for (size_t i = 0; i < n_lines; ++i) {
         if (!strcmp(line[i], find)) {
@@ -116,14 +113,14 @@ static size_t line_find(const char **line, size_t n_lines, const char *find)
     assert(0 && "No matching line found.");
 }
 
-static clock_t _timer_start = 0;
+clock_t _timer_start = 0;
 
-__attribute__((constructor)) static void run_before_main(void)
+__attribute__((constructor)) void _constructor(void)
 {
     _timer_start = clock();
 }
 
-__attribute__((destructor)) static void run_after_main(void)
+__attribute__((destructor)) void _destructor(void)
 {
     const double wtime = (double)(clock() - _timer_start) / CLOCKS_PER_SEC;
     if (wtime > 1.0) {

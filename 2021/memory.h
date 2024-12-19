@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-inline void *malloc_assert(size_t size)
+void *malloc_assert(size_t size)
 {
     void *ptr = malloc(size);
     assert(ptr && "Could not malloc memory.");
@@ -12,7 +12,7 @@ inline void *malloc_assert(size_t size)
 }
 #define malloc malloc_assert
 
-inline void *calloc_assert(size_t nmemb, size_t size)
+void *calloc_assert(size_t nmemb, size_t size)
 {
     void *ptr = calloc(nmemb, size);
     assert(ptr && "Could not calloc memory.");
@@ -20,23 +20,13 @@ inline void *calloc_assert(size_t nmemb, size_t size)
 }
 #define calloc calloc_assert
 
-inline void *realloc_assert(void *ptr, size_t size)
+void *realloc_assert(void *ptr, size_t size)
 {
     ptr = realloc(ptr, size);
     assert(ptr && "Could not realloc memory.");
     return ptr;
 }
 #define realloc realloc_assert
-
-void *memdup(const void *src, size_t size);
-
-// char *strdup(const char *src);
-
-void *malloc_assert(size_t size);
-
-void *calloc_assert(size_t nmemb, size_t size);
-
-void *realloc_assert(void *ptr, size_t size);
 
 void *memdup(const void *src, size_t size)
 {
@@ -45,8 +35,3 @@ void *memdup(const void *src, size_t size)
     assert(ret);
     return dest;
 }
-
-// char *strdup(const char *src)
-//{
-//     return memdup(src, strlen(src) + 1);
-// }

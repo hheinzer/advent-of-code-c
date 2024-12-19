@@ -50,7 +50,7 @@ size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
     list_sort(range, range_cmp_x0);
     for (Node *node = range->first->next; node; node = node->next) {
         Node *prev = node->prev;
-        Range *r0 = prev->data;
+        const Range *r0 = prev->data;
         Range *r1 = node->data;
         if (r0->x1 >= r1->x0) {  // ranges overlap
             r1->x0 = MIN(r1->x0, r0->x0);

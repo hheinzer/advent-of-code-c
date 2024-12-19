@@ -51,7 +51,7 @@ size_t count_common_chars(const char *str1, const char *str2)
     return n;
 }
 
-size_t entry_decode(size_t common[10][10], const Entry *entry)
+size_t entry_decode(const size_t common[10][10], const Entry *entry)
 {
     static const int perm1[6][3] = {
         {2, 3, 5}, {2, 5, 3}, {3, 2, 5}, {3, 5, 2}, {5, 2, 3}, {5, 3, 2},

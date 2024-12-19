@@ -25,13 +25,36 @@ clock_t _clock_start = 0;
     printf("wtime = %g s %s\n", wtime, (wtime > 1 ? "(!!!)" : ""));
 }
 
+// memory allocation
+void *_malloc(size_t size)
+{
+    void *ptr = malloc(size);
+    assert(ptr);
+    return ptr;
+}
+#define malloc _malloc
+void *_calloc(size_t count, size_t size)
+{
+    void *ptr = calloc(count, size);
+    assert(ptr);
+    return ptr;
+}
+#define calloc _calloc
+void *_realloc(void *ptr, size_t size)
+{
+    ptr = realloc(ptr, size);
+    assert(ptr);
+    return ptr;
+}
+#define realloc _realloc
+
 // automatic memory management
 #define defer(func) [[gnu::cleanup(func)]]
-#define smart defer(_smart)
 void _smart(void *ptr)
 {
     free(*(void **)ptr);
 }
+#define smart defer(_smart)
 
 // comparison functions
 int longcmp(const void *a, const void *b)
@@ -53,7 +76,6 @@ Array read_lines(const char *fname)
     assert(file);
     size_t size = 0, capacity = 256;
     smart char *line = calloc(capacity, sizeof(*line));
-    assert(line);
     int c;
     while ((c = fgetc(file)) != EOF) {
         if (c == '\n') {
@@ -65,7 +87,6 @@ Array read_lines(const char *fname)
         if (size + 2 > capacity) {
             capacity *= 2;
             line = realloc(line, capacity * sizeof(*line));
-            assert(line);
         }
         line[size++] = c;
     }

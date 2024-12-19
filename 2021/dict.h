@@ -24,7 +24,7 @@ struct Item {
     Item *next;       // pointer to next item in bucket
 };
 
-static Item *item_alloc(const char *key, size_t key_size, void *data)
+Item *_item_alloc(const char *key, size_t key_size, void *data)
 {
     const Item item = {
         .key = memdup(key, key_size + 1),
@@ -34,7 +34,7 @@ static Item *item_alloc(const char *key, size_t key_size, void *data)
     return memdup(&item, sizeof(item));
 }
 
-static void item_clear(Item *item, void (*data_free)(void *))
+void _item_clear(Item *item, void (*data_free)(void *))
 {
     free((void *)item->key);
     item->key = 0;
@@ -46,14 +46,14 @@ static void item_clear(Item *item, void (*data_free)(void *))
     item->next = 0;
 }
 
-static void item_free(Item *item, void (*data_free)(void *))
+void _item_free(Item *item, void (*data_free)(void *))
 {
-    item_clear(item, data_free);
+    _item_clear(item, data_free);
     free(item);
 }
 
 // allocate dict
-static Dict *dict_alloc(size_t data_size, size_t size)
+Dict *dict_alloc(size_t data_size, size_t size)
 {
     const Dict dict = {
         .data_size = data_size,
@@ -63,7 +63,7 @@ static Dict *dict_alloc(size_t data_size, size_t size)
     return memdup(&dict, sizeof(dict));
 }
 
-static size_t hash(const char *str)
+size_t _hash(const char *str)
 {
     // source: https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
     size_t hash = 14695981039346656037ULL;
@@ -75,7 +75,7 @@ static size_t hash(const char *str)
     return hash;
 }
 
-static int keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
+int _keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
 {
     if (key_size1 != key_size2) {
         return 1;
@@ -91,39 +91,38 @@ static int keycmp(const char *key1, size_t key_size1, const char *key2, size_t k
 // overwrite data if key present,
 // return data pointer if key present,
 // return 0 if key not present
-static void *dict_insert(Dict *dict, const char *key, void *data)
+void *dict_insert(Dict *dict, const char *key, void *data)
 {
     const size_t key_size = strlen(key);
-    const size_t i = hash(key) % dict->size;
+    const size_t i = _hash(key) % dict->size;
     Item *item = &dict->item[i];
     Item *prev = item;
-    while (item && item->key && keycmp(item->key, item->key_size, key, key_size)) {
+    while (item && item->key && _keycmp(item->key, item->key_size, key, key_size)) {
         prev = item;
         item = item->next;
     }
     if (!item) {  // collision: append item
-        item = item_alloc(key, key_size, data);
+        item = _item_alloc(key, key_size, data);
         prev->next = item;
         ++dict->len;
         return 0;
     }
-    else if (!item->key) {  // empty spot: insert item
+    if (!item->key) {  // empty spot: insert item
         item->key = memdup(key, key_size + 1);
         item->key_size = key_size;
         item->data = data;
         ++dict->len;
         return 0;
     }
-    else {  // same key: update data
-        void *item_data = item->data;
-        item->data = data;
-        return item_data;
-    }
+    // same key: update data
+    void *item_data = item->data;
+    item->data = data;
+    return item_data;
 }
 
 // allocate copy of other,
 // use data_copy to copy data from other, if 0 do not copy data
-static Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t))
+Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t))
 {
     Dict *dict = dict_alloc(other->data_size, other->size);
     for (size_t i = 0; i < other->size; ++i) {
@@ -143,17 +142,17 @@ static Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void 
 
 // free dict,
 // use data_free to free data, if 0 do not free data
-static void dict_free(Dict **dict, void (*data_free)(void *))
+void dict_free(Dict **dict, void (*data_free)(void *))
 {
     for (size_t i = 0; i < (*dict)->size; ++i) {
         Item *item = &(*dict)->item[i];
         if (item->key) {
             Item *next = item->next;
-            item_clear(item, data_free);
+            _item_clear(item, data_free);
             item = next;
             while (item) {
                 next = item->next;
-                item_free(item, data_free);
+                _item_free(item, data_free);
                 item = next;
             }
         }
@@ -166,59 +165,58 @@ static void dict_free(Dict **dict, void (*data_free)(void *))
 // remove item from dict with specified key,
 // return data pointer,
 // return 0 if key not present
-static void *dict_remove(Dict *dict, const char *key)
+void *dict_remove(Dict *dict, const char *key)
 {
     const size_t key_size = strlen(key);
-    const size_t i = hash(key) % dict->size;
+    const size_t i = _hash(key) % dict->size;
     Item *item = &dict->item[i];
     Item *prev = 0;
-    while (item && item->key && keycmp(item->key, item->key_size, key, key_size)) {
+    while (item && item->key && _keycmp(item->key, item->key_size, key, key_size)) {
         prev = item;
         item = item->next;
     }
     if (!item || !item->key) {  // item not in dict
         return 0;
     }
-    else {  // delete item, return data pointer
-        void *data = item->data;
-        Item *next = item->next;
-        if (prev) {  // chained item: free and update chain
-            item_free(item, 0);
-            prev->next = next;
-        }
-        else {  // head item: clear and move chain up
-            item_clear(item, 0);
-            if (next) {
-                *item = *next;
-                free(next);
-            }
-        }
-        --dict->len;
-        return data;
+    // delete item, return data pointer
+    void *data = item->data;
+    Item *next = item->next;
+    if (prev) {  // chained item: free and update chain
+        _item_free(item, 0);
+        prev->next = next;
     }
+    else {  // head item: clear and move chain up
+        _item_clear(item, 0);
+        if (next) {
+            *item = *next;
+            free(next);
+        }
+    }
+    --dict->len;
+    return data;
 }
 
 // search for item in dict,
 // return item if present,
 // return 0 if key not present
-static Item *dict_find(const Dict *dict, const char *key)
+Item *dict_find(const Dict *dict, const char *key)
 {
     const size_t key_size = strlen(key);
-    const size_t i = hash(key) % dict->size;
+    const size_t i = _hash(key) % dict->size;
     Item *item = &dict->item[i];
-    while (item && item->key && keycmp(item->key, item->key_size, key, key_size)) {
+    while (item && item->key && _keycmp(item->key, item->key_size, key, key_size)) {
         item = item->next;
     }
     return (!item || !item->key ? 0 : item);
 }
 
-static int dict_cmp_size_t_asc(const void *a, const void *b)
+int _cmp_size_t_asc(const void *a, const void *b)
 {
     return (*(size_t *)a > *(size_t *)b) - (*(size_t *)a < *(size_t *)b);
 }
 
 // print collision histogram of dict
-static void dict_histogram(const Dict *dict)
+void dict_histogram(const Dict *dict)
 {
     // compute occupation histogram of dict
     char key[256] = "";
@@ -248,7 +246,7 @@ static void dict_histogram(const Dict *dict)
             ++j;
         }
     }
-    qsort(sorted, hist->len, sizeof(*sorted), dict_cmp_size_t_asc);
+    qsort(sorted, hist->len, sizeof(*sorted), _cmp_size_t_asc);
 
     // print load factor and histogram
     printf("[%f] ", (double)dict->len / (double)dict->size);

@@ -218,7 +218,7 @@ void runner_run(Runner *runner, const Face face[6], size_t n, const char *inst)
     }
 }
 
-size_t runner_password(Runner *runner, const Face face[6])
+size_t runner_password(const Runner *runner, const Face face[6])
 {
     size_t row = face[runner->iface].g_row + runner->row;
     size_t col = face[runner->iface].g_col + runner->col;
