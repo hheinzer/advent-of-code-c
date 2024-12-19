@@ -160,6 +160,7 @@ int main(void)
             memset(&scanner[ns - 1], 0, sizeof(*scanner));
             continue;
         }
+        assert(scanner);
 
         // append beacon coordinates
         ++nb_tot;

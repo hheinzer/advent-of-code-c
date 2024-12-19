@@ -28,6 +28,7 @@ clock_t _clock_start = 0;
 // memory allocation
 void *_malloc(size_t size)
 {
+    if (!size) return 0;
     void *ptr = malloc(size);
     assert(ptr);
     return ptr;
@@ -35,6 +36,7 @@ void *_malloc(size_t size)
 #define malloc _malloc
 void *_calloc(size_t count, size_t size)
 {
+    if (!count || !size) return 0;
     void *ptr = calloc(count, size);
     assert(ptr);
     return ptr;
@@ -42,6 +44,10 @@ void *_calloc(size_t count, size_t size)
 #define calloc _calloc
 void *_realloc(void *ptr, size_t size)
 {
+    if (!size) {
+        free(ptr);
+        return 0;
+    }
     ptr = realloc(ptr, size);
     assert(ptr);
     return ptr;
@@ -75,7 +81,7 @@ Array read_lines(const char *fname)
     FILE *file = fopen(fname, "r");
     assert(file);
     size_t size = 0, capacity = 256;
-    smart char *line = calloc(capacity, sizeof(*line));
+    char *line = calloc(capacity, sizeof(*line));
     int c;
     while ((c = fgetc(file)) != EOF) {
         if (c == '\n') {
@@ -90,6 +96,7 @@ Array read_lines(const char *fname)
         }
         line[size++] = c;
     }
+    free(line);
     fclose(file);
     return lines;
 }

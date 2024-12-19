@@ -18,12 +18,8 @@ CMP(size_t)
 
 size_t compute_basin_size(const char *map, int *seen, size_t nj)
 {
-    if (*seen || *map >= '9') {
-        return 0;
-    }
-    else {
-        *seen = 1;
-    }
+    if (*seen || *map >= '9') return 0;
+    *seen = 1;
     size_t size = 1;
     size += compute_basin_size(map - 1, seen - 1, nj);    // left
     size += compute_basin_size(map + 1, seen + 1, nj);    // right
