@@ -2,9 +2,9 @@
 
 int main(void)
 {
-    defer(array_clear) Array lines = read_lines("2024/input/01.txt");
-    smart long *left = calloc(lines.size, sizeof(*left));
-    smart long *right = calloc(lines.size, sizeof(*right));
+    Array lines = read_lines("2024/input/01.txt");
+    long *left = calloc(lines.size, sizeof(*left));
+    long *right = calloc(lines.size, sizeof(*right));
     for (long i = 0; i < lines.size; ++i)
         sscanf(lines.item[i].data, "%ld %ld", &left[i], &right[i]);
 
