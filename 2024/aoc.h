@@ -6,6 +6,27 @@
 #include <string.h>
 #include <time.h>
 
+#include "../cdsa/arena.h"
+
+// memory management
+Arena _arena = {0};
+#define region_push arena_region_push(&_arena)
+#define region_pop arena_region_pop(&_arena)
+#define malloc(size) arena_malloc(&_arena, size)
+#define calloc(count, size) arena_calloc(&_arena, count, size)
+#define realloc(ptr, size) arena_realloc(&_arena, ptr, size)
+#define free(ptr) arena_free(&_arena, ptr)
+#define memdup(ptr, size) memcpy(arena_malloc(&_arena, size), ptr, size)
+#define strdup(str) strcpy(arena_malloc(&_arena, strlen(str) + 1), str)
+[[gnu::constructor(1)]] void _arena_create(void)
+{
+    _arena = arena_create(100 * MB, alignof(size_t));
+}
+[[gnu::destructor(1)]] void _arena_clear(void)
+{
+    arena_clear(&_arena);
+}
+
 #include "../cdsa/array.h"
 #include "../cdsa/hash.h"
 #include "../cdsa/heap.h"
@@ -15,52 +36,15 @@
 
 // automatic timing
 clock_t _clock_start = 0;
-[[gnu::constructor]] void _constructor(void)
+[[gnu::constructor(2)]] void _timer_start(void)
 {
     _clock_start = clock();
 }
-[[gnu::destructor]] void _destructor(void)
+[[gnu::destructor(2)]] void _timer_stop(void)
 {
     const double wtime = (clock() - _clock_start) / (double)CLOCKS_PER_SEC;
     printf("wtime = %g s %s\n", wtime, (wtime > 1 ? "(!!!)" : ""));
 }
-
-// memory allocation
-void *_malloc(size_t size)
-{
-    if (!size) return 0;
-    void *ptr = malloc(size);
-    assert(ptr);
-    return ptr;
-}
-#define malloc _malloc
-void *_calloc(size_t count, size_t size)
-{
-    if (!count || !size) return 0;
-    void *ptr = calloc(count, size);
-    assert(ptr);
-    return ptr;
-}
-#define calloc _calloc
-void *_realloc(void *ptr, size_t size)
-{
-    if (!size) {
-        free(ptr);
-        return 0;
-    }
-    ptr = realloc(ptr, size);
-    assert(ptr);
-    return ptr;
-}
-#define realloc _realloc
-
-// memory deallocation
-#define defer(func) [[gnu::cleanup(func)]]
-void _smart(void *ptr)
-{
-    free(*(void **)ptr);
-}
-#define smart defer(_smart)
 
 // comparison functions
 int longcmp(const void *a, const void *b)
