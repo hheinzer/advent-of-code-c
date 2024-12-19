@@ -91,9 +91,7 @@ long *get_num_right_down(Pair *pair)
     if (pair->y_type == ET_NUMBER) {
         return &pair->y_num;
     }
-    else {
-        return get_num_right_down(pair->y_pair);
-    }
+    return get_num_right_down(pair->y_pair);
 }
 
 long *get_num_left_up(Pair *pair)
@@ -104,13 +102,9 @@ long *get_num_left_up(Pair *pair)
             if (parent->x_type == ET_NUMBER) {
                 return &parent->x_num;
             }
-            else {
-                return get_num_right_down(parent->x_pair);
-            }
+            return get_num_right_down(parent->x_pair);
         }
-        else {
-            return get_num_left_up(parent);
-        }
+        return get_num_left_up(parent);
     }
     return 0;
 }
@@ -120,9 +114,7 @@ long *get_num_left_down(Pair *pair)
     if (pair->x_type == ET_NUMBER) {
         return &pair->x_num;
     }
-    else {
-        return get_num_left_down(pair->x_pair);
-    }
+    return get_num_left_down(pair->x_pair);
 }
 
 long *get_num_right_up(Pair *pair)
@@ -133,13 +125,9 @@ long *get_num_right_up(Pair *pair)
             if (parent->y_type == ET_NUMBER) {
                 return &parent->y_num;
             }
-            else {
-                return get_num_left_down(parent->y_pair);
-            }
+            return get_num_left_down(parent->y_pair);
         }
-        else {
-            return get_num_right_up(parent);
-        }
+        return get_num_right_up(parent);
     }
     return 0;
 }
@@ -156,31 +144,29 @@ int pair_explode(Pair *pair, size_t depth)
         }
         return did_explode;
     }
-    else {
-        assert(pair->x_type == ET_NUMBER);
-        long *num_left = get_num_left_up(pair);
-        if (num_left) {
-            *num_left += pair->x_num;
-        }
-
-        assert(pair->y_type == ET_NUMBER);
-        long *num_right = get_num_right_up(pair);
-        if (num_right) {
-            *num_right += pair->y_num;
-        }
-
-        if ((pair->parent->x_type == ET_PAIR) && (pair->parent->x_pair == pair)) {
-            pair->parent->x_type = ET_NUMBER;
-            pair->parent->x_num = 0;
-        }
-        else {
-            pair->parent->y_type = ET_NUMBER;
-            pair->parent->y_num = 0;
-        }
-
-        pair_free(pair);
-        return 1;
+    assert(pair->x_type == ET_NUMBER);
+    long *num_left = get_num_left_up(pair);
+    if (num_left) {
+        *num_left += pair->x_num;
     }
+
+    assert(pair->y_type == ET_NUMBER);
+    long *num_right = get_num_right_up(pair);
+    if (num_right) {
+        *num_right += pair->y_num;
+    }
+
+    if ((pair->parent->x_type == ET_PAIR) && (pair->parent->x_pair == pair)) {
+        pair->parent->x_type = ET_NUMBER;
+        pair->parent->x_num = 0;
+    }
+    else {
+        pair->parent->y_type = ET_NUMBER;
+        pair->parent->y_num = 0;
+    }
+
+    pair_free(pair);
+    return 1;
 }
 
 Pair *num_to_pair(long num)

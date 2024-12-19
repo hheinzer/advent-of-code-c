@@ -81,7 +81,7 @@ size_t lines_read(const char ***line, const char *fname)
             (*line)[n_lines - 1] = l;
 
             // initialize line
-            l = calloc(0, sizeof(*l));
+            l = 0;
             nc = 0;
         }
     }
@@ -90,6 +90,7 @@ size_t lines_read(const char ***line, const char *fname)
     // close file
     fclose(file);
 
+    assert(n_lines > 0);
     return n_lines;
 }
 
