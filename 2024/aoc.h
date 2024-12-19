@@ -54,7 +54,7 @@ void *_realloc(void *ptr, size_t size)
 }
 #define realloc _realloc
 
-// automatic memory management
+// memory deallocation
 #define defer(func) [[gnu::cleanup(func)]]
 void _smart(void *ptr)
 {
@@ -101,7 +101,7 @@ Array read_lines(const char *fname)
     return lines;
 }
 
-// key creation on the fly
+// key creation
 char *keyprint(const char *restrict format, ...)
 {
     static char buffer[1024];
