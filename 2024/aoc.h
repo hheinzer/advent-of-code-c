@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdarg.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +19,7 @@ Arena _arena = {0};
 #define strdup(str) strcpy(arena_malloc(&_arena, strlen(str) + 1), str)
 [[gnu::constructor(1)]] void _arena_create(void)
 {
-    _arena = arena_create(MB, alignof(size_t));
+    _arena = arena_create(MB, alignof(max_align_t));
 }
 [[gnu::destructor(1)]] void _arena_clear(void)
 {
