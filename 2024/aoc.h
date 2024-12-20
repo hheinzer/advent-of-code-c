@@ -10,8 +10,6 @@
 
 // memory management
 Arena _arena = {0};
-#define region_push arena_region_push(&_arena)
-#define region_pop arena_region_pop(&_arena)
 #define malloc(size) arena_malloc(&_arena, size)
 #define calloc(count, size) arena_calloc(&_arena, count, size)
 #define realloc(ptr, size) arena_realloc(&_arena, ptr, size)
@@ -20,7 +18,7 @@ Arena _arena = {0};
 #define strdup(str) strcpy(arena_malloc(&_arena, strlen(str) + 1), str)
 [[gnu::constructor(1)]] void _arena_create(void)
 {
-    _arena = arena_create(100 * MB, alignof(size_t));
+    _arena = arena_create(MB, alignof(size_t));
 }
 [[gnu::destructor(1)]] void _arena_clear(void)
 {
@@ -61,7 +59,7 @@ int doublecmp(const void *a, const void *b)
 // read input files
 Array read_lines(const char *fname)
 {
-    Array lines = array_create_full(1000, sizeof(char *), 0, 0, free);
+    Array lines = array_create_full(1000, sizeof(char *), 0, 0, 0);
     FILE *file = fopen(fname, "r");
     assert(file);
     size_t size = 0, capacity = 256;
