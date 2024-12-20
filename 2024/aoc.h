@@ -11,15 +11,15 @@
 
 // memory management
 Arena _arena = {0};
-#define malloc(size) arena_malloc(&_arena, size)
-#define calloc(count, size) arena_calloc(&_arena, count, size)
-#define realloc(ptr, size) arena_realloc(&_arena, ptr, size)
-#define free(ptr) arena_free(&_arena, ptr)
-#define memdup(ptr, size) memcpy(arena_malloc(&_arena, size), ptr, size)
-#define strdup(str) strcpy(arena_malloc(&_arena, strlen(str) + 1), str)
+#define malloc(size) arena_alloc(&_arena, 1, size, alignof(max_align_t), 0)
+#define calloc(count, size) arena_alloc(&_arena, count, size, alignof(max_align_t), 1)
+#define realloc(ptr, size) arena_realloc(&_arena, ptr, size, alignof(max_align_t))
+#define free(ptr) (void)ptr
+#define memdup(ptr, size) memcpy(malloc(size), ptr, size)
+#define strdup(str) strcpy(malloc(strlen(str) + 1), str)
 [[gnu::constructor(1)]] void _arena_create(void)
 {
-    _arena = arena_create(MB, alignof(max_align_t));
+    _arena = arena_create(1 << 20);
 }
 [[gnu::destructor(1)]] void _arena_clear(void)
 {
@@ -60,26 +60,23 @@ int doublecmp(const void *a, const void *b)
 // read input files
 Array read_lines(const char *fname)
 {
-    Array lines = array_create_full(1000, sizeof(char *), 0, 0, 0);
+    Array lines = array_create_full(0, sizeof(char *), 0, 0, 0);
     FILE *file = fopen(fname, "r");
     assert(file);
-    size_t size = 0, capacity = 256;
-    char *line = calloc(capacity, sizeof(*line));
+    char *line = 0;
+    long nc = 0;
     int c;
     while ((c = fgetc(file)) != EOF) {
         if (c == '\n') {
+            assert(line);
             array_append(&lines, line);
-            size = 0, capacity = 256;
-            line = calloc(capacity, sizeof(*line));
+            line = 0;
+            nc = 0;
             continue;
         }
-        if (size + 2 > capacity) {
-            capacity *= 2;
-            line = realloc(line, capacity * sizeof(*line));
-        }
-        line[size++] = c;
+        line = realloc(line, (nc + 1) * sizeof(*line));
+        line[nc++] = c;
     }
-    free(line);
     fclose(file);
     return lines;
 }
