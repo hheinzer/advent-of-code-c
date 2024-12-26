@@ -1,24 +1,44 @@
 #include "aoc.h"
 
-int main(void)
-{
-    Array lines = read_lines("2024/input/01.txt");
-    long *left = calloc(lines.size, sizeof(*left));
-    long *right = calloc(lines.size, sizeof(*right));
-    for (long i = 0; i < lines.size; ++i)
-        sscanf(lines.item[i].data, "%ld %ld", &left[i], &right[i]);
+int main(void) {
+    Arena arena = arena_create(1 << 20);
 
-    // part one
-    qsort(left, lines.size, sizeof(*left), longcmp);
-    qsort(right, lines.size, sizeof(*right), longcmp);
-    long sum1 = 0;
-    for (long i = 0; i < lines.size; ++i) sum1 += labs(left[i] - right[i]);
-    printf("%ld\n", sum1);
+    List left = list_create(&arena, sizeof(long), longcmp);
+    List right = list_create(&arena, sizeof(long), longcmp);
+    FILE *file = fopen("2024/input/01.txt", "r");
+    assert(file);
+    while (true) {
+        long a, b;
+        if (fscanf(file, "%ld %ld", &a, &b) != 2) {
+            break;
+        }
+        list_append(&left, &a);
+        list_append(&right, &b);
+    }
+    fclose(file);
 
-    // part two
-    long sum2 = 0;
-    for (long i = 0; i < lines.size; ++i)
-        for (long j = 0; j < lines.size; ++j)
-            if (left[i] == right[j]) sum2 += left[i];
-    printf("%ld\n", sum2);
+    list_sort(&left, 0);
+    list_sort(&right, 0);
+
+    long part1 = 0;
+    ListForEach2(l, r, &left, &right) {
+        long a = *(long *)l->data;
+        long b = *(long *)r->data;
+        part1 += labs(a - b);
+    }
+    printf("%ld\n", part1);
+
+    long part2 = 0;
+    ListForEach(l, &left) {
+        ListForEach(r, &right) {
+            long a = *(long *)l->data;
+            long b = *(long *)r->data;
+            if (a == b) {
+                part2 += a;
+            }
+        }
+    }
+    printf("%ld\n", part2);
+
+    arena_destroy(&arena);
 }

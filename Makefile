@@ -3,10 +3,10 @@ CC = clang
 CFLAGS = -std=c23 -g -Wall -Wextra -Wpedantic -Wshadow -Wno-unused-function
 
 # debug flags
-CFLAGS += -Og -fno-omit-frame-pointer -fsanitize=undefined
+CFLAGS += -fsanitize-trap=undefined
 
 # release flags
-#CFLAGS += -march=native -Ofast -flto=auto -DNDEBUG
+#CFLAGS += -Ofast -march=native -flto=auto
 
 # libraries
 LDLIBS = -lm
