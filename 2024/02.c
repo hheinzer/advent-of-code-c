@@ -36,7 +36,7 @@ void parse(List *reports, const char *fname, Arena *arena) {
     char buffer[128];
     while (fgets(buffer, sizeof(buffer), file)) {
         Report report = {0};
-        char *token = strtok(buffer, " ");
+        const char *token = strtok(buffer, " ");
         while (token) {
             report.level = realloc(arena, report.level, ++report.length);
             report.level[report.length - 1] = strtol(token, 0, 0);
