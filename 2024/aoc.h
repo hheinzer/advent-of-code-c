@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "arena.h"
-#include "list.h"
+#include "../cdsa/arena.h"
+#include "../cdsa/list.h"
 
 // memory management
 #define calloc(a, p, n) arena_alloc(a, n, sizeof(*(p)), alignof(typeof(*(p))), 0)
