@@ -1,21 +1,13 @@
 #include "aoc.h"
 
+void parse(List *left, List *right, const char *fname);
+
 int main(void) {
     Arena arena = arena_create(1 << 20);
 
     List left = list_create(&arena, sizeof(long), longcmp);
     List right = list_create(&arena, sizeof(long), longcmp);
-    FILE *file = fopen("2024/input/01.txt", "r");
-    assert(file);
-    while (true) {
-        long a, b;
-        if (fscanf(file, "%ld %ld", &a, &b) != 2) {
-            break;
-        }
-        list_append(&left, &a);
-        list_append(&right, &b);
-    }
-    fclose(file);
+    parse(&left, &right, "2024/input/01.txt");
 
     list_sort(&left, 0);
     list_sort(&right, 0);
@@ -41,4 +33,15 @@ int main(void) {
     printf("%ld\n", part2);
 
     arena_destroy(&arena);
+}
+
+void parse(List *left, List *right, const char *fname) {
+    FILE *file = fopen(fname, "r");
+    assert(file);
+    long a, b;
+    while (fscanf(file, "%ld %ld", &a, &b) == 2) {
+        list_append(left, &a);
+        list_append(right, &b);
+    }
+    fclose(file);
 }

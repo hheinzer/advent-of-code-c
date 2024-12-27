@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -8,24 +9,21 @@
 #include "list.h"
 
 // memory management
-#define alloc(a, n, t) arena_alloc(a, n, sizeof(t), alignof(typeof(t)), 0)
+#define calloc(a, p, n) arena_alloc(a, n, sizeof(*(p)), alignof(typeof(*(p))), 0)
+#define realloc(a, p, n) arena_realloc(a, p, n, sizeof(*(p)), alignof(typeof(*(p))))
 
 // automatic timing
 clock_t _clock_start = 0;
-[[gnu::constructor]] static void _timer_start(void) {
+[[gnu::constructor]] void _timer_start(void) {
     _clock_start = clock();
 }
-[[gnu::destructor]] static void _timer_stop(void) {
+[[gnu::destructor]] void _timer_stop(void) {
     double wtime = (clock() - _clock_start) / (double)CLOCKS_PER_SEC;
     printf("wtime = %g s %s\n", wtime, (wtime > 1 ? "(!!!)" : ""));
 }
 
 // comparison functions
-static int longcmp(const void *a, const void *b) {
+int longcmp(const void *a, const void *b) {
     const long *_a = a, *_b = b;
-    return (*_a > *_b) - (*_a < *_b);
-}
-static int doublecmp(const void *a, const void *b) {
-    const double *_a = a, *_b = b;
     return (*_a > *_b) - (*_a < *_b);
 }
