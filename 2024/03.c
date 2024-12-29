@@ -17,7 +17,7 @@ int main(void) {
 }
 
 char *parse(const char *fname, Arena *arena) {
-    char *input = 0;
+    char *input = calloc(arena, input, 1);
     FILE *file = fopen(fname, "r");
     assert(file);
     long n = 1;
