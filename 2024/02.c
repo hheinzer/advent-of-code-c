@@ -16,13 +16,13 @@ int main(void) {
     parse(&reports, "2024/input/02.txt", &arena);
 
     long part1 = 0;
-    ListForEach(report, &reports) {
+    list_for_each(report, &reports) {
         part1 += issafe1(report->data);
     }
     printf("%ld\n", part1);
 
     long part2 = 0;
-    ListForEach(report, &reports) {
+    list_for_each(report, &reports) {
         part2 += issafe2(report->data, arena);
     }
     printf("%ld\n", part2);

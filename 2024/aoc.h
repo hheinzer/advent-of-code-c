@@ -6,6 +6,7 @@
 #include <time.h>
 
 #include "../cdsa/arena.h"
+#include "../cdsa/dict.h"
 #include "../cdsa/list.h"
 
 // memory management
@@ -23,7 +24,7 @@ clock_t _clock_start = 0;
 }
 
 // comparison functions
-int longcmp(const void *a, const void *b) {
+int longcmp(const void *a, const void *b, void *) {
     const long *_a = a, *_b = b;
     return (*_a > *_b) - (*_a < *_b);
 }
