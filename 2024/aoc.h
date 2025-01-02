@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <omp.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -15,12 +16,12 @@
 #define realloc(a, p, n) arena_realloc(a, p, n, sizeof(*(p)), alignof(typeof(*(p))))
 
 // automatic timing
-clock_t _clock_start = 0;
+clock_t _wtime_start = 0;
 [[gnu::constructor]] void _timer_start(void) {
-    _clock_start = clock();
+    _wtime_start = omp_get_wtime();
 }
 [[gnu::destructor]] void _timer_stop(void) {
-    double wtime = (clock() - _clock_start) / (double)CLOCKS_PER_SEC;
+    double wtime = omp_get_wtime() - _wtime_start;
     printf("wtime = %g s %s\n", wtime, (wtime > 1 ? "(!!!)" : ""));
 }
 
@@ -64,4 +65,13 @@ char grid_set(Grid *grid, long r, long c, char new) {
         grid->data[r * grid->cols + c] = new;
     }
     return old;
+}
+
+// integer math functions
+long lpow(long a, long b) {
+    long c = 1;
+    for (long i = 0; i < b; i++) {
+        c *= a;
+    }
+    return c;
 }

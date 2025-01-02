@@ -1,9 +1,9 @@
 # compiler and default flags
 CC = clang
-CFLAGS = -std=c23 -g -Wall -Wextra -Wpedantic -Wshadow -Wno-unused-function
+CFLAGS = -std=c23 -g3 -Wall -Wextra -Wpedantic -Wshadow -Wno-unused-function -fopenmp
 
 # debug flags
-CFLAGS += -fsanitize-trap=undefined
+CFLAGS += -fsanitize-trap=undefined #-fsanitize=thread
 
 # release flags
 #CFLAGS += -Ofast -march=native -flto=auto
