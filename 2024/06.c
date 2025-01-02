@@ -11,7 +11,7 @@ typedef struct {
 } State;
 
 State init(const Grid *grid);
-int walk(const Grid *grid, Set *seen, Set *path);
+int walk(const Grid *grid, Set *seen, const Vec2 *obstacle, Arena arena);
 
 int main(void) {
     Arena arena = arena_create(1 << 20);
@@ -19,17 +19,20 @@ int main(void) {
     Grid grid = grid_parse("2024/input/06.txt", &arena);
 
     Set seen = set_create(&arena);
-    walk(&grid, &seen, 0);
+    walk(&grid, &seen, 0, arena);
     printf("%ld\n", seen.length);
 
     long count = 0;
     set_remove(&seen, (Vec2[]){init(&grid).pos}, sizeof(Vec2));
-    set_for_each(item, &seen) {
-        const Vec2 *pos = item->key.data;
-        char old = grid_set(&grid, pos->r, pos->c, '#');
-        Set path = set_create((Arena[]){arena});
-        count += walk(&grid, 0, &path);
-        grid_set(&grid, pos->r, pos->c, old);
+#pragma omp parallel
+    {
+        Arena thread = arena_create(1 << 20);
+        const SetItem *item = set_items(&seen, &thread);
+#pragma omp for reduction(+ : count) schedule(auto)
+        for (long i = 0; i < seen.length; i++) {
+            count += walk(&grid, 0, item[i].key.data, thread);
+        }
+        arena_destroy(&thread);
     }
     printf("%ld\n", count);
 
@@ -47,16 +50,18 @@ State init(const Grid *grid) {
     abort();
 }
 
-int walk(const Grid *grid, Set *seen, Set *path) {
+int walk(const Grid *grid, Set *seen, const Vec2 *obstacle, Arena arena) {
     State s = init(grid);
+    Set path = set_create(&arena);
     while (grid_get(grid, s.pos.r, s.pos.c)) {
         if (seen) set_insert(seen, &s.pos, sizeof(s.pos));
-        if (path) set_insert(path, &s, sizeof(s));
-        while (grid_get(grid, s.pos.r + s.dir.r, s.pos.c + s.dir.c) == '#') {
+        if (!seen) set_insert(&path, &s, sizeof(State));
+        while (grid_get(grid, s.pos.r + s.dir.r, s.pos.c + s.dir.c) == '#' ||
+               (obstacle && s.pos.r + s.dir.r == obstacle->r && s.pos.c + s.dir.c == obstacle->c)) {
             s.dir = (Vec2){s.dir.c, -s.dir.r};
         }
         s.pos = (Vec2){s.pos.r + s.dir.r, s.pos.c + s.dir.c};
-        if (path && set_find(path, &s, sizeof(s))) {
+        if (!seen && set_find(&path, &s, sizeof(State))) {
             return 1;
         }
     }

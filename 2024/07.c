@@ -46,17 +46,18 @@ void parse(List *eqns, const char *fname, Arena *arena) {
 
 long compute(const List *eqns, Operation **op, long nops, Arena arena) {
     long total = 0;
-    Equation *eqn = list_to_array(eqns, &arena);
+    ListItem *item = list_items(eqns, &arena);
 #pragma omp parallel for reduction(+ : total) schedule(auto)
     for (long e = 0; e < eqns->length; e++) {
-        long repeat = eqn[e].length - 1;
+        Equation *eqn = item[e].data;
+        long repeat = eqn->length - 1;
         long ncombs = lpow(nops, repeat);
         for (long comb = 0; comb < ncombs; comb++) {
-            long test = eqn[e].number[0];
+            long test = eqn->number[0];
             for (long i = 0, j = comb; i < repeat; i++, j /= nops) {
-                test = op[j % nops](test, eqn[e].number[i + 1]);
+                test = op[j % nops](test, eqn->number[i + 1]);
             }
-            if (test == eqn[e].test) {
+            if (test == eqn->test) {
                 total += test;
                 break;
             }
