@@ -52,14 +52,14 @@ Grid grid_parse(const char *fname, Arena *arena) {
     fclose(file);
     return grid;
 }
-char grid_get(Grid grid, long r, long c) {
-    if (r < 0 || grid.rows <= r || c < 0 || grid.cols <= c) {
+char grid_get(const Grid *grid, long r, long c) {
+    if (r < 0 || grid->rows <= r || c < 0 || grid->cols <= c) {
         return 0;
     }
-    return grid.data[r * grid.cols + c];
+    return grid->data[r * grid->cols + c];
 }
 char grid_set(Grid *grid, long r, long c, char new) {
-    char old = grid_get(*grid, r, c);
+    char old = grid_get(grid, r, c);
     if (old) {
         grid->data[r * grid->cols + c] = new;
     }

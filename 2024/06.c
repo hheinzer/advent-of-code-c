@@ -10,8 +10,8 @@ typedef struct {
     Vec2 dir;
 } State;
 
-State init(Grid grid);
-int walk(Grid grid, Set *seen, Set *path);
+State init(const Grid *grid);
+int walk(const Grid *grid, Set *seen, Set *path);
 
 int main(void) {
     Arena arena = arena_create(1 << 20);
@@ -19,16 +19,16 @@ int main(void) {
     Grid grid = grid_parse("2024/input/06.txt", &arena);
 
     Set seen = set_create(&arena);
-    walk(grid, &seen, 0);
+    walk(&grid, &seen, 0);
     printf("%ld\n", seen.length);
 
     long count = 0;
-    set_remove(&seen, (Vec2[]){init(grid).pos}, sizeof(Vec2));
+    set_remove(&seen, (Vec2[]){init(&grid).pos}, sizeof(Vec2));
     set_for_each(item, &seen) {
-        Vec2 *pos = item->key.data;
+        const Vec2 *pos = item->key.data;
         char old = grid_set(&grid, pos->r, pos->c, '#');
         Set path = set_create((Arena[]){arena});
-        count += walk(grid, 0, &path);
+        count += walk(&grid, 0, &path);
         grid_set(&grid, pos->r, pos->c, old);
     }
     printf("%ld\n", count);
@@ -36,9 +36,9 @@ int main(void) {
     arena_destroy(&arena);
 }
 
-State init(Grid grid) {
-    for (long r = 0; r < grid.rows; r++) {
-        for (long c = 0; c < grid.cols; c++) {
+State init(const Grid *grid) {
+    for (long r = 0; r < grid->rows; r++) {
+        for (long c = 0; c < grid->cols; c++) {
             if (grid_get(grid, r, c) == '^') {
                 return (State){{r, c}, {-1, 0}};
             }
@@ -47,7 +47,7 @@ State init(Grid grid) {
     abort();
 }
 
-int walk(Grid grid, Set *seen, Set *path) {
+int walk(const Grid *grid, Set *seen, Set *path) {
     State s = init(grid);
     while (grid_get(grid, s.pos.r, s.pos.c)) {
         if (seen) set_insert(seen, &s.pos, sizeof(s.pos));

@@ -13,7 +13,7 @@ int main(void) {
 
     long part1 = 0;
     list_for_each(item, &update) {
-        List *page = item->data;
+        const List *page = item->data;
         if (sorted(page, &rule)) {
             part1 += *(long *)list_get(page, page->length / 2);
         }
@@ -48,7 +48,7 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
     }
     while (fgets(line, sizeof(line), file)) {
         List page = list_create(arena, sizeof(long), compare);
-        char *token = strtok(line, ",");
+        const char *token = strtok(line, ",");
         while (token) {
             list_append(&page, (long[]){strtol(token, 0, 0)});
             token = strtok(0, ",");
@@ -60,7 +60,7 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
 
 int compare(const void *_a, const void *_b, void *_rule) {
     const long *a = _a, *b = _b;
-    Dict *rule = _rule;
+    const Dict *rule = _rule;
     int *order = dict_find(rule, (long[]){*a, *b}, 2 * sizeof(long));
     return order ? *order : 0;
 }

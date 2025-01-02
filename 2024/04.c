@@ -1,7 +1,7 @@
 #include "aoc.h"
 
-long search1(Grid grid, long r, long c);
-long search2(Grid grid, long r, long c);
+long search1(const Grid *grid, long r, long c);
+long search2(const Grid *grid, long r, long c);
 
 int main(void) {
     Arena arena = arena_create(1 << 20);
@@ -11,7 +11,7 @@ int main(void) {
     long part1 = 0;
     for (long r = 0; r < grid.rows; r++) {
         for (long c = 0; c < grid.cols; c++) {
-            part1 += search1(grid, r, c);
+            part1 += search1(&grid, r, c);
         }
     }
     printf("%ld\n", part1);
@@ -19,7 +19,7 @@ int main(void) {
     long part2 = 0;
     for (long r = 0; r < grid.rows; r++) {
         for (long c = 0; c < grid.cols; c++) {
-            part2 += search2(grid, r, c);
+            part2 += search2(&grid, r, c);
         }
     }
     printf("%ld\n", part2);
@@ -27,7 +27,7 @@ int main(void) {
     arena_destroy(&arena);
 }
 
-long search1(Grid grid, long r, long c) {
+long search1(const Grid *grid, long r, long c) {
     if (grid_get(grid, r, c) != 'X') {
         return 0;
     }
@@ -50,7 +50,7 @@ long search1(Grid grid, long r, long c) {
     return count;
 }
 
-long search2(Grid grid, long r, long c) {
+long search2(const Grid *grid, long r, long c) {
     if (grid_get(grid, r, c) != 'A') {
         return 0;
     }
