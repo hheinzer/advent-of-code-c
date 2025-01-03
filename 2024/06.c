@@ -47,15 +47,19 @@ State init(const Grid *grid) {
             }
         }
     }
-    abort();
+    unreachable();
 }
 
 int walk(const Grid *grid, Set *seen, const Vec2 *obstacle, Arena arena) {
     State s = init(grid);
     Set path = set_create(&arena);
     while (grid_get(grid, s.pos.r, s.pos.c)) {
-        if (seen) set_insert(seen, &s.pos, sizeof(s.pos));
-        if (!seen) set_insert(&path, &s, sizeof(State));
+        if (seen) {
+            set_insert(seen, &s.pos, sizeof(s.pos));
+        }
+        if (!seen) {
+            set_insert(&path, &s, sizeof(State));
+        }
         while (grid_get(grid, s.pos.r + s.dir.r, s.pos.c + s.dir.c) == '#' ||
                (obstacle && s.pos.r + s.dir.r == obstacle->r && s.pos.c + s.dir.c == obstacle->c)) {
             s.dir = (Vec2){s.dir.c, -s.dir.r};

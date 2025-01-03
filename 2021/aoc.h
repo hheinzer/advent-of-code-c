@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tgmath.h>
-#include <time.h>
 
 #include "dict.h"
 #include "heap.h"
@@ -44,18 +43,15 @@
 
 // define simple comparison functions for ascending and descending order
 #define CMP(T)                                            \
-    int cmp_##T##_asc(const void *a, const void *b)       \
-    {                                                     \
+    int cmp_##T##_asc(const void *a, const void *b) {     \
         return (*(T *)a > *(T *)b) - (*(T *)a < *(T *)b); \
     }                                                     \
-    int cmp_##T##_dsc(const void *a, const void *b)       \
-    {                                                     \
+    int cmp_##T##_dsc(const void *a, const void *b) {     \
         return (*(T *)a < *(T *)b) - (*(T *)a > *(T *)b); \
     }
 
 // read all lines in file "fname" into lines, replace '\n' with '\0'
-size_t lines_read(const char ***line, const char *fname)
-{
+size_t lines_read(const char ***line, const char *fname) {
     // open file
     FILE *file = fopen(fname, "r");
     assert(file && "Could not open file.");
@@ -70,8 +66,7 @@ size_t lines_read(const char ***line, const char *fname)
             // append character
             l = realloc(l, ++nc * sizeof(*l));
             l[nc - 1] = (char)c;
-        }
-        else {
+        } else {
             // append end of string
             l = realloc(l, ++nc * sizeof(*l));
             l[nc - 1] = 0;
@@ -95,8 +90,7 @@ size_t lines_read(const char ***line, const char *fname)
 }
 
 // free all lines
-void lines_free(const char **line, size_t n_lines)
-{
+void lines_free(const char **line, size_t n_lines) {
     for (size_t i = 0; i < n_lines; ++i) {
         free((void *)line[i]);
     }
@@ -104,30 +98,11 @@ void lines_free(const char **line, size_t n_lines)
 }
 
 // find index of first line that matches
-size_t line_find(const char **line, size_t n_lines, const char *find)
-{
+size_t line_find(const char **line, size_t n_lines, const char *find) {
     for (size_t i = 0; i < n_lines; ++i) {
         if (!strcmp(line[i], find)) {
             return i;
         }
     }
     assert(0 && "No matching line found.");
-}
-
-clock_t _timer_start = 0;
-
-__attribute__((constructor)) void _constructor(void)
-{
-    _timer_start = clock();
-}
-
-__attribute__((destructor)) void _destructor(void)
-{
-    const double wtime = (double)(clock() - _timer_start) / CLOCKS_PER_SEC;
-    if (wtime > 1.0) {
-        printf("wtime = %g s (!!!)\n", wtime);
-    }
-    else {
-        printf("wtime = %g s\n", wtime);
-    }
 }

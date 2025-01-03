@@ -38,14 +38,14 @@ test: $(BIN)
 	@for prog in $(sort $(BIN)); do \
 		echo "--- $$prog ---" && \
 		./$$prog; \
-	done | grep -v wtime | diff --color=auto -U 2 solutions.txt - \
+	done | diff --color=auto -U 2 solutions.txt - \
 	&& echo "*** All tests passed. ***"
 
 solutions: $(BIN)
 	@for prog in $(sort $(BIN)); do \
 		echo "--- $$prog ---" && \
 		./$$prog; \
-	done | grep -v wtime > solutions.txt
+	done > solutions.txt
 
 # build rules
 .SUFFIXES:

@@ -43,9 +43,13 @@ long compute(const char *input) {
         }
         char *c = begin + 4;
         if (isdigit(*c)) {
-            while (isdigit(*(++c)));
+            while (isdigit(*c)) {
+                c++;
+            };
             if (*c == ',' && isdigit(*(++c))) {
-                while (isdigit(*(++c)));
+                while (isdigit(*c)) {
+                    c++;
+                };
                 if (*c == ')') {
                     long x, y;
                     sscanf(begin, "mul(%ld,%ld)", &x, &y);
