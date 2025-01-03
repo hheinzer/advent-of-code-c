@@ -29,6 +29,25 @@ long lpow(long a, long b) {
     return c;
 }
 
+// parse functions
+char *parse_string(const char *fname, const char *skip, Arena *arena) {
+    char *input = calloc(arena, input, 1);
+    FILE *file = fopen(fname, "r");
+    assert(file);
+    long n = 1;
+    int c;
+    while ((c = fgetc(file)) != EOF) {
+        if (skip && strchr(skip, c)) {
+            continue;
+        }
+        input = realloc(arena, input, ++n);
+        input[n - 2] = c;
+    }
+    input[n - 1] = 0;
+    fclose(file);
+    return input;
+}
+
 // grid functions
 typedef struct {
     long rows;
