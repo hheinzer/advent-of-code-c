@@ -6,7 +6,7 @@ typedef struct {
 } Vec2;
 
 Dict freqs_find(const Grid *grid, Arena *arena);
-long count(const Grid *grid, const Dict *freqs, long start, long stop, Arena arena);
+long count(const Grid *grid, const Dict *freq, long start, long stop, Arena arena);
 
 int main(void) {
     Arena arena = arena_create(1 << 20);

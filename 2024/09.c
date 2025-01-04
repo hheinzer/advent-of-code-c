@@ -14,7 +14,7 @@ long checksum(const List *block);
 int main(void) {
     Arena arena = arena_create(1 << 21);
 
-    char *disk = parse_string("2024/input/09.txt", "\n", &arena);
+    const char *disk = parse_string("2024/input/09.txt", "\n", &arena);
 
     {
         Arena scratch = arena;
@@ -113,7 +113,7 @@ List rearrange2(List *before, Arena *arena) {
 long checksum(const List *block) {
     long sum = 0;
     for (ListItem *b = block->begin; b; b = b->next) {
-        Block *file = b->data;
+        const Block *file = b->data;
         for (long i = 0, pos = file->offset; i < file->length; i++, pos++) {
             sum += pos * file->index;
         }
