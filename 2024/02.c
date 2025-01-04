@@ -12,18 +12,18 @@ int issafe2(const Report *report, Arena arena);
 int main(void) {
     Arena arena = arena_create(1 << 20);
 
-    List reports = list_create(&arena, sizeof(Report), 0);
-    parse(&reports, "2024/input/02.txt", &arena);
+    List report = list_create(&arena, sizeof(Report), 0);
+    parse(&report, "2024/input/02.txt", &arena);
 
     long part1 = 0;
-    list_for_each(report, &reports) {
-        part1 += issafe1(report->data);
+    for (ListItem *r = report.begin; r; r = r->next) {
+        part1 += issafe1(r->data);
     }
     printf("%ld\n", part1);
 
     long part2 = 0;
-    list_for_each(report, &reports) {
-        part2 += issafe2(report->data, arena);
+    for (ListItem *r = report.begin; r; r = r->next) {
+        part2 += issafe2(r->data, arena);
     }
     printf("%ld\n", part2);
 

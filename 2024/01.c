@@ -9,11 +9,11 @@ int main(void) {
     List right = list_create(&arena, sizeof(long), longcmp);
     parse(&left, &right, "2024/input/01.txt");
 
-    list_sort(&left, 0, 0);
-    list_sort(&right, 0, 0);
+    list_sort(&left, 0);
+    list_sort(&right, 0);
 
     long part1 = 0;
-    list_for_each_two(l, r, &left, &right) {
+    for (ListItem *l = left.begin, *r = right.begin; l && r; l = l->next, r = r->next) {
         long a = *(long *)l->data;
         long b = *(long *)r->data;
         part1 += labs(a - b);
@@ -21,8 +21,8 @@ int main(void) {
     printf("%ld\n", part1);
 
     long part2 = 0;
-    list_for_each(l, &left) {
-        list_for_each(r, &right) {
+    for (ListItem *l = left.begin; l; l = l->next) {
+        for (ListItem *r = right.begin; r; r = r->next) {
             long a = *(long *)l->data;
             long b = *(long *)r->data;
             if (a == b) {

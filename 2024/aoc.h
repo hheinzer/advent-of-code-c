@@ -7,6 +7,7 @@
 
 #include "../cdsa/arena.h"
 #include "../cdsa/dict.h"
+#include "../cdsa/heap.h"
 #include "../cdsa/list.h"
 #include "../cdsa/set.h"
 

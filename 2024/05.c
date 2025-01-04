@@ -12,8 +12,8 @@ int main(void) {
     parse(&rule, &update, "2024/input/05.txt", &arena);
 
     long part1 = 0;
-    list_for_each(item, &update) {
-        const List *page = item->data;
+    for (ListItem *u = update.begin; u; u = u->next) {
+        const List *page = u->data;
         if (sorted(page, &rule)) {
             part1 += *(long *)list_get(page, page->length / 2);
         }
@@ -21,10 +21,10 @@ int main(void) {
     printf("%ld\n", part1);
 
     long part2 = 0;
-    list_for_each(item, &update) {
-        List *page = item->data;
+    for (ListItem *u = update.begin; u; u = u->next) {
+        List *page = u->data;
         if (!sorted(page, &rule)) {
-            list_sort(page, &rule, 0);
+            list_sort(page, &rule);
             part2 += *(long *)list_get(page, page->length / 2);
         }
     }
