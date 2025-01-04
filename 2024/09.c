@@ -104,8 +104,7 @@ List rearrange2(List *before, Arena *arena) {
             }
         }
         list_append(&after, file);
-    next_file:
-        continue;
+    next_file:;
     }
     return after;
 }
