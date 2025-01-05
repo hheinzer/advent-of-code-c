@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <omp.h>
 #include <stdio.h>
 
 #include "../cdsa/arena.h"
