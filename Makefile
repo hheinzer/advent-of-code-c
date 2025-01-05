@@ -26,7 +26,7 @@ check:
 	@cppcheck --quiet --project=compile_commands.json --inline-suppr \
 		--enable=all --inconclusive --check-level=exhaustive \
 		--suppress=missingIncludeSystem --suppress=checkersReport \
-		--suppress=unusedFunction
+		--suppress=unusedFunction --suppress=shadowFunction
 
 run: $(BIN)
 	@for prog in $(sort $(BIN)); do \

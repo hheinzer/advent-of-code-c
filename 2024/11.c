@@ -9,7 +9,7 @@ int main(void) {
 
     long part1 = 0;
     long part2 = 0;
-    char *stone = strtok(stones, " ");
+    const char *stone = strtok(stones, " ");
     while (stone) {
         part1 += count(stone, 25, &arena);
         part2 += count(stone, 75, &arena);
@@ -21,7 +21,7 @@ int main(void) {
     arena_destroy(&arena);
 }
 
-long cache_count(Dict *cache, long stone, long steps) {
+long cached_count(Dict *cache, long stone, long steps) {
     if (steps == 0) {
         return 1;
     }
@@ -30,18 +30,15 @@ long cache_count(Dict *cache, long stone, long steps) {
         return *cached;
     }
     long count = 0;
-    long length = log10(stone) + 1;
-    if (stone == 0) {
-        count = cache_count(cache, 1, steps - 1);
-    }
-    else if (length % 2 == 0) {
+    long length = stone > 0 ? log10(stone) + 1 : 1;
+    if (length % 2 == 0) {
         long divisor = pow(10, length / 2);
         long a = stone / divisor;
         long b = stone % divisor;
-        count = cache_count(cache, a, steps - 1) + cache_count(cache, b, steps - 1);
+        count = cached_count(cache, a, steps - 1) + cached_count(cache, b, steps - 1);
     }
     else {
-        count = cache_count(cache, stone * 2024, steps - 1);
+        count = cached_count(cache, stone ? stone * 2024 : 1, steps - 1);
     }
     dict_insert(cache, (long[]){stone, steps}, sizeof(long[2]), &count, 0);
     return count;
@@ -52,5 +49,5 @@ long count(const char *stone, long steps, Arena *arena) {
     if (!cache.arena) {
         cache = dict_create(arena, sizeof(long));
     }
-    return cache_count(&cache, strtol(stone, 0, 10), steps);
+    return cached_count(&cache, strtol(stone, 0, 10), steps);
 }
