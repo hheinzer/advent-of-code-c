@@ -16,15 +16,12 @@ int main(void) {
     parse(&report, "2024/input/02.txt", &arena);
 
     long part1 = 0;
-    for (ListItem *r = report.begin; r; r = r->next) {
-        part1 += issafe1(r->data);
-    }
-    printf("%ld\n", part1);
-
     long part2 = 0;
     for (ListItem *r = report.begin; r; r = r->next) {
+        part1 += issafe1(r->data);
         part2 += issafe2(r->data, arena);
     }
+    printf("%ld\n", part1);
     printf("%ld\n", part2);
 
     arena_destroy(&arena);
@@ -39,7 +36,7 @@ void parse(List *reports, const char *fname, Arena *arena) {
         const char *token = strtok(line, " ");
         while (token) {
             report.level = realloc(arena, report.level, ++report.length);
-            report.level[report.length - 1] = strtol(token, 0, 0);
+            report.level[report.length - 1] = strtol(token, 0, 10);
             token = strtok(0, " ");
         }
         list_append(reports, &report);

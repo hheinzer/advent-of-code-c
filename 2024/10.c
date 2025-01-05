@@ -13,23 +13,16 @@ int main(void) {
     Grid grid = grid_parse("2024/input/10.txt", &arena);
 
     long part1 = 0;
-    for (long r = 0; r < grid.rows; r++) {
-        for (long c = 0; c < grid.cols; c++) {
-            if (grid_get(&grid, r, c) == '0') {
-                part1 += score(&grid, r, c, 0, arena);
-            }
-        }
-    }
-    printf("%ld\n", part1);
-
     long part2 = 0;
     for (long r = 0; r < grid.rows; r++) {
         for (long c = 0; c < grid.cols; c++) {
             if (grid_get(&grid, r, c) == '0') {
+                part1 += score(&grid, r, c, 0, arena);
                 part2 += score(&grid, r, c, 1, arena);
             }
         }
     }
+    printf("%ld\n", part1);
     printf("%ld\n", part2);
 
     arena_destroy(&arena);

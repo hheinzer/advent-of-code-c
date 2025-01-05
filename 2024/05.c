@@ -12,22 +12,18 @@ int main(void) {
     parse(&rule, &update, "2024/input/05.txt", &arena);
 
     long part1 = 0;
-    for (ListItem *u = update.begin; u; u = u->next) {
-        const List *page = u->data;
-        if (sorted(page, &rule)) {
-            part1 += *(long *)list_get(page, page->length / 2);
-        }
-    }
-    printf("%ld\n", part1);
-
     long part2 = 0;
     for (ListItem *u = update.begin; u; u = u->next) {
         List *page = u->data;
-        if (!sorted(page, &rule)) {
+        if (sorted(page, &rule)) {
+            part1 += *(long *)list_get(page, page->length / 2);
+        }
+        else {
             list_sort(page, &rule);
             part2 += *(long *)list_get(page, page->length / 2);
         }
     }
+    printf("%ld\n", part1);
     printf("%ld\n", part2);
 
     arena_destroy(&arena);
@@ -50,7 +46,7 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
         List page = list_create(arena, sizeof(long), compare);
         const char *token = strtok(line, ",");
         while (token) {
-            list_append(&page, (long[]){strtol(token, 0, 0)});
+            list_append(&page, (long[]){strtol(token, 0, 10)});
             token = strtok(0, ",");
         }
         list_append(update, &page);

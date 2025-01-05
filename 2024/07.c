@@ -19,7 +19,6 @@ int main(void) {
     parse(&eqns, "2024/input/07.txt", &arena);
 
     printf("%ld\n", compute(&eqns, (Operation *[]){add, mul}, 2, arena));
-
     printf("%ld\n", compute(&eqns, (Operation *[]){add, mul, cat}, 3, arena));
 
     arena_destroy(&arena);
@@ -32,11 +31,11 @@ void parse(List *eqns, const char *fname, Arena *arena) {
     while (fgets(line, sizeof(line), file)) {
         Equation eqn = {0};
         const char *token = strtok(line, " ");
-        eqn.test = strtol(token, 0, 0);
+        eqn.test = strtol(token, 0, 10);
         token = strtok(0, " ");
         while (token) {
             eqn.number = realloc(arena, eqn.number, ++eqn.length);
-            eqn.number[eqn.length - 1] = strtol(token, 0, 0);
+            eqn.number[eqn.length - 1] = strtol(token, 0, 10);
             token = strtok(0, " ");
         }
         list_append(eqns, &eqn);

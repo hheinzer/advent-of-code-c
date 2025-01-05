@@ -9,19 +9,14 @@ int main(void) {
     Grid grid = grid_parse("2024/input/04.txt", &arena);
 
     long part1 = 0;
-    for (long r = 0; r < grid.rows; r++) {
-        for (long c = 0; c < grid.cols; c++) {
-            part1 += search1(&grid, r, c);
-        }
-    }
-    printf("%ld\n", part1);
-
     long part2 = 0;
     for (long r = 0; r < grid.rows; r++) {
         for (long c = 0; c < grid.cols; c++) {
+            part1 += search1(&grid, r, c);
             part2 += search2(&grid, r, c);
         }
     }
+    printf("%ld\n", part1);
     printf("%ld\n", part2);
 
     arena_destroy(&arena);

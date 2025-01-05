@@ -10,7 +10,6 @@ int main(void) {
     char *input = parse_string("2024/input/03.txt", "\n", &arena);
 
     printf("%ld\n", compute(input));
-
     printf("%ld\n", compute(filter(input)));
 
     arena_destroy(&arena);

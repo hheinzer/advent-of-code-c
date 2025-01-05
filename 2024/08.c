@@ -15,7 +15,6 @@ int main(void) {
     Dict freq = freqs_find(&grid, &arena);
 
     printf("%ld\n", count(&grid, &freq, 1, 1, arena));
-
     printf("%ld\n", count(&grid, &freq, 0, 0, arena));
 
     arena_destroy(&arena);
