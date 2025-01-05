@@ -14,7 +14,7 @@ State init(const Grid *grid);
 int walk(const Grid *grid, Set *seen, const Vec2 *obstacle, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(7 << 20);
+    Arena arena = arena_create(6 << 20);
 
     Grid grid = grid_parse("2024/input/06.txt", &arena);
 
@@ -26,7 +26,7 @@ int main(void) {
     set_remove(&seen, (Vec2[]){init(&grid).pos}, sizeof(Vec2));
 #pragma omp parallel
     {
-        Arena thread = arena_scratch(&arena, 1 << 20);
+        Arena thread = arena_thread(&arena);
         const SetItem *item = set_items(&seen, &thread);
 #pragma omp for reduction(+ : count) schedule(auto)
         for (long i = 0; i < seen.length; i++) {
