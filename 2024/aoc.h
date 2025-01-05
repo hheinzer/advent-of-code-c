@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 
 #include "../cdsa/arena.h"
