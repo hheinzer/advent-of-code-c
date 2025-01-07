@@ -5,7 +5,7 @@ long count(const char *stone, long steps, Arena *arena);
 int main(void) {
     Arena arena = arena_create(10 << 20);
 
-    char *stones = parse_string("2024/input/11.txt", "\n", &arena);
+    char *stones = string_parse("2024/input/11.txt", "\n", &arena);
 
     long part1 = 0;
     long part2 = 0;

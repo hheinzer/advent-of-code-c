@@ -1,11 +1,6 @@
 #include "aoc.h"
 
 typedef struct {
-    long r;
-    long c;
-} Vec2;
-
-typedef struct {
     Vec2 pos;
     Vec2 dir;
 } State;

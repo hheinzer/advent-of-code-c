@@ -7,7 +7,7 @@ char *filter(char *input);
 int main(void) {
     Arena arena = arena_create(1 << 20);
 
-    char *input = parse_string("2024/input/03.txt", "\n", &arena);
+    char *input = string_parse("2024/input/03.txt", "\n", &arena);
 
     printf("%ld\n", compute(input));
     printf("%ld\n", compute(filter(input)));

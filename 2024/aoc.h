@@ -15,6 +15,10 @@
 #define calloc(a, p, n) arena_alloc(a, n, sizeof(*(p)), alignof(typeof(*(p))), 0)
 #define realloc(a, p, n) arena_realloc(a, p, n, sizeof(*(p)), alignof(typeof(*(p))))
 
+// convenience functions
+#define countof(a) (sizeof(a) / sizeof(*(a)))
+#define for_each(t, i, ...) for (t _a[] = {__VA_ARGS__}, *i = _a; i < _a + countof(_a); i++)
+
 // comparison functions
 int longcmp(const void *a, const void *b, void *) {
     const long *_a = a, *_b = b;
@@ -31,7 +35,7 @@ long lpow(long a, long b) {
 }
 
 // parse functions
-char *parse_string(const char *fname, const char *skip, Arena *arena) {
+char *string_parse(const char *fname, const char *skip, Arena *arena) {
     char *input = calloc(arena, input, 1);
     FILE *file = fopen(fname, "r");
     assert(file);
@@ -50,6 +54,10 @@ char *parse_string(const char *fname, const char *skip, Arena *arena) {
 }
 
 // grid functions
+typedef struct {
+    long r;
+    long c;
+} Vec2;
 typedef struct {
     long rows;
     long cols;

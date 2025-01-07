@@ -14,7 +14,7 @@ long checksum(const List *block);
 int main(void) {
     Arena arena = arena_create(1 << 21);
 
-    const char *disk = parse_string("2024/input/09.txt", "\n", &arena);
+    const char *disk = string_parse("2024/input/09.txt", "\n", &arena);
 
     {
         Arena scratch = arena;

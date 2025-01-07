@@ -1,10 +1,5 @@
 #include "aoc.h"
 
-typedef struct {
-    long r;
-    long c;
-} Vec2;
-
 Dict freqs_find(const Grid *grid, Arena *arena);
 long count(const Grid *grid, const Dict *freq, long start, long stop, Arena arena);
 

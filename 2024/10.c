@@ -1,10 +1,5 @@
 #include "aoc.h"
 
-typedef struct {
-    long r;
-    long c;
-} Vec2;
-
 long score(const Grid *grid, long r, long c, int all, Arena arena);
 
 int main(void) {
@@ -40,8 +35,7 @@ long score(const Grid *grid, long r, long c, int all, Arena arena) {
             count += 1;
             continue;
         }
-        Vec2 delta[4] = {{-1, 0}, {+1, 0}, {0, -1}, {0, +1}};
-        for (Vec2 *d = delta; d < delta + 4; d++) {
+        for_each(Vec2, d, {-1, 0}, {+1, 0}, {0, -1}, {0, +1}) {
             Vec2 next = {curr->r + d->r, curr->c + d->c};
             if (grid_get(grid, next.r, next.c) - grid_get(grid, curr->r, curr->c) != 1) {
                 continue;
