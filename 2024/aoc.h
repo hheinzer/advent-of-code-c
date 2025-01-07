@@ -12,12 +12,12 @@
 #include "../cdsa/set.h"
 
 // memory management
-#define calloc(a, p, n) arena_alloc(a, n, sizeof(*(p)), alignof(typeof(*(p))), 0)
-#define realloc(a, p, n) arena_realloc(a, p, n, sizeof(*(p)), alignof(typeof(*(p))))
+#define calloc(A, P, N) arena_alloc(A, N, sizeof(*(P)), alignof(typeof(*(P))), 0)
+#define realloc(A, P, N) arena_realloc(A, P, N, sizeof(*(P)), alignof(typeof(*(P))))
 
 // convenience functions
-#define countof(a) (sizeof(a) / sizeof(*(a)))
-#define array_for_each(t, i, ...) for (t _a[] = {__VA_ARGS__}, *i = _a; i < _a + countof(_a); i++)
+#define countof(A) (sizeof(A) / sizeof(*(A)))
+#define array_for_each(T, I, ...) for (T A[] = {__VA_ARGS__}, *I = A; I < A + countof(A); I++)
 
 // comparison functions
 int longcmp(const void *a, const void *b, void *) {

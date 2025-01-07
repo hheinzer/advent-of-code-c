@@ -12,7 +12,7 @@ List rearrange2(List *before, Arena *arena);
 long checksum(const List *block);
 
 int main(void) {
-    Arena arena = arena_create(1 << 21);
+    Arena arena = arena_create(2 << 20);
 
     char *disk = string_parse("2024/input/09.txt", "\n", &arena);
 

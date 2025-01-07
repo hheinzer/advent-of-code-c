@@ -1,5 +1,29 @@
 #include "aoc.h"
 
+void create(List *regions, const Grid *grid, Arena *arena);
+long price1(const Set *region, const Grid *grid);
+long price2(const Set *region);
+
+int main(void) {
+    Arena arena = arena_create(6 << 20);
+
+    Grid grid = grid_parse("2024/input/12.txt", &arena);
+
+    List regions = list_create(&arena, sizeof(Set), 0);
+    create(&regions, &grid, &arena);
+
+    long part1 = 0;
+    long part2 = 0;
+    list_for_each(region, &regions) {
+        part1 += price1(region->data, &grid);
+        part2 += price2(region->data);
+    }
+    printf("%ld\n", part1);
+    printf("%ld\n", part2);
+
+    arena_destroy(&arena);
+}
+
 void create(List *regions, const Grid *grid, Arena *arena) {
     Set seen = set_create(arena);
     for (long r = 0; r < grid->rows; r++) {
@@ -63,24 +87,4 @@ long price2(const Set *region) {
         }
     }
     return region->length * corners;
-}
-
-int main(void) {
-    Arena arena = arena_create(6 << 20);
-
-    Grid grid = grid_parse("2024/input/12.txt", &arena);
-
-    List regions = list_create(&arena, sizeof(Set), 0);
-    create(&regions, &grid, &arena);
-
-    long part1 = 0;
-    long part2 = 0;
-    list_for_each(region, &regions) {
-        part1 += price1(region->data, &grid);
-        part2 += price2(region->data);
-    }
-    printf("%ld\n", part1);
-    printf("%ld\n", part2);
-
-    arena_destroy(&arena);
 }
