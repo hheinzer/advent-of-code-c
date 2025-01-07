@@ -17,7 +17,7 @@
 
 // convenience functions
 #define countof(a) (sizeof(a) / sizeof(*(a)))
-#define for_each(t, i, ...) for (t _a[] = {__VA_ARGS__}, *i = _a; i < _a + countof(_a); i++)
+#define array_for_each(t, i, ...) for (t _a[] = {__VA_ARGS__}, *i = _a; i < _a + countof(_a); i++)
 
 // comparison functions
 int longcmp(const void *a, const void *b, void *) {

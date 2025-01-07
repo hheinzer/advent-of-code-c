@@ -36,15 +36,15 @@ Dict freqs_find(const Grid *grid, Arena *arena) {
 
 long count(const Grid *grid, const Dict *freq, long start, long stop, Arena arena) {
     Set loc = set_create(&arena);
-    for (DictItem *freqs = dict_items(freq, &arena), *f = freqs; f < freqs + freq->length; f++) {
-        const List *pos = f->data;
-        for (ListItem *p1 = pos->begin; p1; p1 = p1->next) {
-            for (ListItem *p2 = pos->begin; p2; p2 = p2->next) {
+    dict_for_each(f, freq) {
+        List *pos = f->data;
+        list_for_each(p1, pos) {
+            list_for_each(p2, pos) {
                 if (p1 == p2) {
                     continue;
                 }
-                const Vec2 *a = p1->data;
-                const Vec2 *b = p2->data;
+                Vec2 *a = p1->data;
+                Vec2 *b = p2->data;
                 Vec2 dir = {b->r - a->r, b->c - a->c};
                 Vec2 l1 = *a;
                 Vec2 l2 = *b;

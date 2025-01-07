@@ -21,9 +21,9 @@ int main(void) {
     printf("%ld\n", part1);
 
     long part2 = 0;
-    for (ListItem *l = left.begin; l; l = l->next) {
+    list_for_each(l, &left) {
         long a = *(long *)l->data;
-        for (ListItem *r = right.begin; r; r = r->next) {
+        list_for_each(r, &right) {
             long b = *(long *)r->data;
             if (a == b) {
                 part2 += a;

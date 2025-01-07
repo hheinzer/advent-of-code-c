@@ -9,7 +9,7 @@ int main(void) {
 
     long part1 = 0;
     long part2 = 0;
-    const char *stone = strtok(stones, " ");
+    char *stone = strtok(stones, " ");
     while (stone) {
         part1 += count(stone, 25, &arena);
         part2 += count(stone, 75, &arena);

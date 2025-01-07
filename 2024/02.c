@@ -17,7 +17,7 @@ int main(void) {
 
     long part1 = 0;
     long part2 = 0;
-    for (ListItem *r = report.begin; r; r = r->next) {
+    list_for_each(r, &report) {
         part1 += issafe1(r->data);
         part2 += issafe2(r->data, arena);
     }
@@ -33,7 +33,7 @@ void parse(List *reports, const char *fname, Arena *arena) {
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         Report report = {0};
-        const char *token = strtok(line, " ");
+        char *token = strtok(line, " ");
         while (token) {
             report.level = realloc(arena, report.level, ++report.length);
             report.level[report.length - 1] = strtol(token, 0, 10);

@@ -13,7 +13,7 @@ int main(void) {
 
     long part1 = 0;
     long part2 = 0;
-    for (ListItem *u = update.begin; u; u = u->next) {
+    list_for_each(u, &update) {
         List *page = u->data;
         if (sorted(page, &rule)) {
             part1 += *(long *)list_get(page, page->length / 2);
@@ -44,7 +44,7 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
     }
     while (fgets(line, sizeof(line), file)) {
         List page = list_create(arena, sizeof(long), compare);
-        const char *token = strtok(line, ",");
+        char *token = strtok(line, ",");
         while (token) {
             list_append(&page, (long[]){strtol(token, 0, 10)});
             token = strtok(0, ",");
