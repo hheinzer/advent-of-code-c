@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <limits.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -33,6 +34,9 @@ long lpow(long a, long b) {
     }
     return c;
 }
+long modulo(long a, long b) {
+    return ((a % b) + b) % b;
+}
 
 // parse functions
 char *string_parse(const char *fname, const char *skip, Arena *arena) {
@@ -63,6 +67,14 @@ typedef struct {
     long cols;
     char *data;
 } Grid;
+Grid grid_create(long rows, long cols, char c, Arena *arena) {
+    Grid grid = {0};
+    grid.rows = rows;
+    grid.cols = cols;
+    grid.data = calloc(arena, grid.data, grid.rows * grid.cols + 1);
+    memset(grid.data, c, grid.rows * grid.cols);
+    return grid;
+}
 Grid grid_parse(const char *fname, Arena *arena) {
     Grid grid = {0};
     grid.data = calloc(arena, grid.data, 1);
@@ -86,9 +98,25 @@ char grid_get(const Grid *grid, long r, long c) {
     return grid->data[r * grid->cols + c];
 }
 char grid_set(Grid *grid, long r, long c, char new) {
-    char old = grid_get(grid, r, c);
-    if (old) {
-        grid->data[r * grid->cols + c] = new;
+    if (r < 0 || grid->rows <= r || c < 0 || grid->cols <= c) {
+        return 0;
     }
+    char old = grid->data[r * grid->cols + c];
+    grid->data[r * grid->cols + c] = new;
     return old;
+}
+void grid_print(const Grid *grid) {
+    for (long r = 0; r < grid->rows; r++) {
+        for (long c = 0; c < grid->cols; c++) {
+            putchar(grid_get(grid, r, c));
+        }
+        putchar('\n');
+    }
+}
+void grid_write_pgm(const Grid *grid, const char *fname) {
+    FILE *file = fopen(fname, "wb");
+    assert(file);
+    fprintf(file, "P5\n%ld %ld\n255\n", grid->cols, grid->rows);
+    fwrite(grid->data, 1, grid->cols * grid->rows, file);
+    fclose(file);
 }
