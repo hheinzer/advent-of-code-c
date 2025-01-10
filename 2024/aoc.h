@@ -13,7 +13,7 @@
 #include "../cdsa/set.h"
 
 // memory management
-#define calloc(A, P, N) arena_alloc(A, N, sizeof(*(P)), alignof(typeof(*(P))), 0)
+#define calloc(A, P, N) arena_calloc(A, N, sizeof(*(P)), alignof(typeof(*(P))))
 #define realloc(A, P, N) arena_realloc(A, P, N, sizeof(*(P)), alignof(typeof(*(P))))
 
 // convenience functions
