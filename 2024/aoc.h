@@ -83,6 +83,9 @@ Grid grid_parse(const char *fname, Arena *arena) {
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         *strchr(line, '\n') = 0;
+        if (line[0] == 0) {
+            break;
+        }
         grid.rows += 1;
         grid.cols = strlen(line);
         grid.data = realloc(arena, grid.data, grid.rows * grid.cols + 1);
@@ -97,13 +100,23 @@ char grid_get(const Grid *grid, long r, long c) {
     }
     return grid->data[r * grid->cols + c];
 }
-char grid_set(Grid *grid, long r, long c, char new) {
+char grid_set(Grid *grid, long r, long c, char chr) {
     if (r < 0 || grid->rows <= r || c < 0 || grid->cols <= c) {
         return 0;
     }
     char old = grid->data[r * grid->cols + c];
-    grid->data[r * grid->cols + c] = new;
+    grid->data[r * grid->cols + c] = chr;
     return old;
+}
+Vec2 grid_find(const Grid *grid, char chr) {
+    for (long r = 0; r < grid->rows; r++) {
+        for (long c = 0; c < grid->cols; c++) {
+            if (grid->data[r * grid->cols + c] == chr) {
+                return (Vec2){r, c};
+            }
+        }
+    }
+    return (Vec2){-1, -1};
 }
 void grid_print(const Grid *grid) {
     for (long r = 0; r < grid->rows; r++) {

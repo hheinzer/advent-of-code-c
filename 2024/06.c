@@ -34,14 +34,10 @@ int main(void) {
 }
 
 State init(const Grid *grid) {
-    for (long r = 0; r < grid->rows; r++) {
-        for (long c = 0; c < grid->cols; c++) {
-            if (grid_get(grid, r, c) == '^') {
-                return (State){{r, c}, {-1, 0}};
-            }
-        }
-    }
-    unreachable();
+    State s = {0};
+    s.pos = grid_find(grid, '^');
+    s.dir = (Vec2){-1, 0};
+    return s;
 }
 
 int walk(const Grid *grid, Set *seen, const Vec2 *obstacle, Arena arena) {
