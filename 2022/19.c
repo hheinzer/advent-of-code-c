@@ -24,8 +24,7 @@ typedef struct Miningstate {
     long amt[N];  // amount of minerals
 } Miningstate;
 
-long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
-{
+long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best) {
     // check remaining time
     if (time == 0) {
         return s.amt[GEO];
@@ -111,8 +110,7 @@ long _dfs(Blueprint *bp, long time, Miningstate s, Dict *cache, long *best)
     return max_geo;
 }
 
-long dfs(Blueprint *bp, long time)
-{
+long dfs(Blueprint *bp, long time) {
     Miningstate s = {0};
     s.bot[ORE] = 1;
     Dict *cache = dict_alloc(sizeof(long), 200000);
@@ -122,8 +120,7 @@ long dfs(Blueprint *bp, long time)
     return max_geo;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/19.txt");

@@ -12,8 +12,7 @@
  */
 #include "aoc.h"
 
-void find_most_common_bit(char pos[256], const List *input, size_t nj)
-{
+void find_most_common_bit(char pos[256], const List *input, size_t nj) {
     // count number of zero bits per position
     size_t n_zeros[256] = {0};
     for (const Node *node = input->first; node; node = node->next) {
@@ -41,8 +40,7 @@ void find_most_common_bit(char pos[256], const List *input, size_t nj)
     pos[nj] = 0;
 }
 
-void find_least_common_bit(char pos[256], const List *input, size_t nj)
-{
+void find_least_common_bit(char pos[256], const List *input, size_t nj) {
     find_most_common_bit(pos, input, nj);
     for (size_t j = 0; j < nj; ++j) {
         if (pos[j] != 'e') {
@@ -52,8 +50,7 @@ void find_least_common_bit(char pos[256], const List *input, size_t nj)
 }
 
 const char *compute_rating(List *input, size_t nj,
-                           void (*find_bit)(char[256], const List *, size_t), char keep)
-{
+                           void (*find_bit)(char[256], const List *, size_t), char keep) {
     char pos[256] = "";
     while (input->len > 1) {
         for (size_t j = 0; j < nj; ++j) {
@@ -87,8 +84,7 @@ const char *compute_rating(List *input, size_t nj,
     return ret;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/03.txt");

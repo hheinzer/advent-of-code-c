@@ -10,8 +10,7 @@
  */
 #include "aoc.h"
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/02.txt");
@@ -23,10 +22,17 @@ int main(void)
         long X = 0;
         sscanf(line[i], "%*s %ld", &X);
         switch (line[i][0]) {
-            case 'f': position += X; break;
-            case 'd': depth += X; break;
-            case 'u': depth -= X; break;
-            default: assert(!"Illegal direction encountered.");
+            case 'f':
+                position += X;
+                break;
+            case 'd':
+                depth += X;
+                break;
+            case 'u':
+                depth -= X;
+                break;
+            default:
+                assert(!"Illegal direction encountered.");
         }
     }
 
@@ -45,9 +51,14 @@ int main(void)
                 position += X;
                 depth += aim * X;
                 break;
-            case 'd': aim += X; break;
-            case 'u': aim -= X; break;
-            default: assert(!"Illegal direction encountered.");
+            case 'd':
+                aim += X;
+                break;
+            case 'u':
+                aim -= X;
+                break;
+            default:
+                assert(!"Illegal direction encountered.");
         }
     }
 

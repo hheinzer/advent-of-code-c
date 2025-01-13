@@ -27,8 +27,7 @@ typedef struct Monkey {
     size_t inspect_count;
 } Monkey;
 
-void solve(const char **line, size_t n_lines, size_t part)
-{
+void solve(const char **line, size_t n_lines, size_t part) {
     // create monkeys
     Monkey monkey[8] = {0};
     for (size_t i = 0; i < n_lines; i += 7) {
@@ -72,9 +71,14 @@ void solve(const char **line, size_t n_lines, size_t part)
     // simulate rounds
     size_t n_rounds = 0;
     switch (part) {
-        case 1: n_rounds = 20; break;
-        case 2: n_rounds = 10000; break;
-        default: assert(!"Illegal part detected.");
+        case 1:
+            n_rounds = 20;
+            break;
+        case 2:
+            n_rounds = 10000;
+            break;
+        default:
+            assert(!"Illegal part detected.");
     }
     for (size_t round = 0; round < n_rounds; ++round) {
         for (size_t i = 0; i < LEN(monkey); ++i) {
@@ -82,20 +86,36 @@ void solve(const char **line, size_t n_lines, size_t part)
                 // inspect item
                 long *item = queue_pop(monkey[i].item);
                 switch (monkey[i].op_type) {
-                    case '+': *item += monkey[i].op_value; break;
-                    case '-': *item -= monkey[i].op_value; break;
-                    case '*': *item *= monkey[i].op_value; break;
-                    case '/': *item /= monkey[i].op_value; break;
-                    case '^': *item *= *item; break;
-                    default: assert(!"Illegal operation encountered.");
+                    case '+':
+                        *item += monkey[i].op_value;
+                        break;
+                    case '-':
+                        *item -= monkey[i].op_value;
+                        break;
+                    case '*':
+                        *item *= monkey[i].op_value;
+                        break;
+                    case '/':
+                        *item /= monkey[i].op_value;
+                        break;
+                    case '^':
+                        *item *= *item;
+                        break;
+                    default:
+                        assert(!"Illegal operation encountered.");
                 }
                 ++monkey[i].inspect_count;
 
                 // modify worry level
                 switch (part) {
-                    case 1: *item /= 3; break;
-                    case 2: *item %= mod; break;
-                    default: break;
+                    case 1:
+                        *item /= 3;
+                        break;
+                    case 2:
+                        *item %= mod;
+                        break;
+                    default:
+                        break;
                 }
 
                 // test and throw item
@@ -125,8 +145,7 @@ void solve(const char **line, size_t n_lines, size_t part)
     }
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/11.txt");

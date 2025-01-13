@@ -12,8 +12,7 @@
  */
 #include "aoc.h"
 
-size_t reproduce(size_t n_fish_of_age[9], size_t n)
-{
+size_t reproduce(size_t n_fish_of_age[9], size_t n) {
     for (size_t i = 0; i < n; ++i) {
         const size_t n_new_fish = n_fish_of_age[0];
         for (size_t j = 0; j < 8; ++j) {
@@ -29,8 +28,7 @@ size_t reproduce(size_t n_fish_of_age[9], size_t n)
     return n_fish;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/06.txt");

@@ -12,8 +12,7 @@
  */
 #include "aoc.h"
 
-char find_common_char_2(const char *str1, const char *str2, size_t n)
-{
+char find_common_char_2(const char *str1, const char *str2, size_t n) {
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = 0; j < n; ++j) {
             if (str1[i] == str2[j]) {
@@ -24,8 +23,7 @@ char find_common_char_2(const char *str1, const char *str2, size_t n)
     assert(!"No common character found.");
 }
 
-int item2prio(char item)
-{
+int item2prio(char item) {
     if (('a' <= item) && (item <= 'z')) {
         return 1 + item - 'a';
     }
@@ -35,8 +33,7 @@ int item2prio(char item)
     assert(!"Illegal item encountered.");
 }
 
-char find_common_char_3(const char *str1, const char *str2, const char *str3)
-{
+char find_common_char_3(const char *str1, const char *str2, const char *str3) {
     const size_t ni = strlen(str1);
     const size_t nj = strlen(str2);
     const size_t nk = strlen(str3);
@@ -54,8 +51,7 @@ char find_common_char_3(const char *str1, const char *str2, const char *str3)
     assert(!"No common character found.");
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/03.txt");

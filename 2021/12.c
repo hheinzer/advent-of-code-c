@@ -15,8 +15,7 @@
 #define NL 10
 #define FMT "%9[^-]-%9s"
 
-int is_lowercase(const char *str)
-{
+int is_lowercase(const char *str) {
     while (*str) {
         if (!islower(*str)) {
             return 0;
@@ -27,8 +26,7 @@ int is_lowercase(const char *str)
 }
 
 size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i, size_t iS, size_t iE,
-           int part)
-{
+           int part) {
     // return if end was found
     if (i == iE) {
         return 1;
@@ -52,8 +50,7 @@ size_t dfs(size_t n, int small[n], int path[n][n], int seen[n], size_t i, size_t
     return count;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/12.txt");

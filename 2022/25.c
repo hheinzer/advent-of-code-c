@@ -7,8 +7,7 @@
  */
 #include "aoc.h"
 
-long snafu_to_decimal(const char *snafu)
-{
+long snafu_to_decimal(const char *snafu) {
     static const char *code = "=-012";
     const size_t n = strlen(snafu);
     const char *s = &snafu[n - 1];
@@ -22,8 +21,7 @@ long snafu_to_decimal(const char *snafu)
     return d;
 }
 
-char *string_reverse(char *str)
-{
+char *string_reverse(char *str) {
     const size_t n = strlen(str);
     for (size_t i = 0, j = n - 1; i < n / 2; ++i, --j) {
         SWAP(str[i], str[j]);
@@ -31,8 +29,7 @@ char *string_reverse(char *str)
     return str;
 }
 
-char *decimal_to_snafu(long decimal, char *snafu)
-{
+char *decimal_to_snafu(long decimal, char *snafu) {
     static const char *code = "012=-";
     char *s = snafu;
     while (decimal) {
@@ -48,8 +45,7 @@ char *decimal_to_snafu(long decimal, char *snafu)
     return string_reverse(snafu);
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/25.txt");

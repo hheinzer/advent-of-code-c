@@ -13,8 +13,7 @@
  */
 #include "aoc.h"
 
-size_t play_with_deterministic_die(size_t position[2])
-{
+size_t play_with_deterministic_die(size_t position[2]) {
     size_t die = 0;
     size_t count = 0;
     size_t score[2] = {0};
@@ -40,8 +39,7 @@ size_t play_with_deterministic_die(size_t position[2])
 }
 
 void play_with_dirac_die(size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_, size_t *w1_,
-                         Dict *cache)
-{
+                         Dict *cache) {
     // check if result exists in cache
     char key[256] = "";
     const Item *item = dict_find(cache, KEY(key, "%zu,%zu,%zu,%zu", p0, p1, s0, s1));
@@ -81,8 +79,7 @@ void play_with_dirac_die(size_t p0, size_t p1, size_t s0, size_t s1, size_t *w0_
     dict_insert(cache, key, memdup(data, sizeof(data)));
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/21.txt");

@@ -13,8 +13,7 @@
  */
 #include "aoc.h"
 
-char *image_enhance(char *image, size_t *ni, size_t *nj, char *outside, const char *enhance)
-{
+char *image_enhance(char *image, size_t *ni, size_t *nj, char *outside, const char *enhance) {
     // enhance all outside pixels
     if (*outside == '.') {
         *outside = enhance[strtoul("000000000", 0, 2)];
@@ -56,8 +55,7 @@ char *image_enhance(char *image, size_t *ni, size_t *nj, char *outside, const ch
     return image_;
 }
 
-size_t image_count_pixels(const char *image, size_t ni, size_t nj)
-{
+size_t image_count_pixels(const char *image, size_t ni, size_t nj) {
     size_t count = 0;
     for (size_t i = 0; i < ni; ++i) {
         for (size_t j = 0; j < nj; ++j) {
@@ -67,8 +65,7 @@ size_t image_count_pixels(const char *image, size_t ni, size_t nj)
     return count;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/20.txt");

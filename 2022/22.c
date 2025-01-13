@@ -23,8 +23,7 @@ typedef struct Face {
     Facing facing[4];    // which side the runner will be facing on the neighbor face
 } Face;
 
-void face_create(Face face[6], int shape[6][6], size_t n, const char **line)
-{
+void face_create(Face face[6], int shape[6][6], size_t n, const char **line) {
     for (size_t i = 0, iface = 0; i < 6; ++i) {
         for (size_t j = 0; j < 6; ++j) {
             if (shape[i][j]) {
@@ -76,8 +75,7 @@ void face_create(Face face[6], int shape[6][6], size_t n, const char **line)
     }
 }
 
-void face_cube_remap(Face face[6], size_t n)
-{
+void face_cube_remap(Face face[6], size_t n) {
     // hard coded !!!
     if (n == 4) {
         Face new_face[6] = {
@@ -119,8 +117,7 @@ typedef struct Runner {
     Facing facing;
 } Runner;
 
-void runner_init(Runner *runner, const Face face[6], size_t n)
-{
+void runner_init(Runner *runner, const Face face[6], size_t n) {
     runner->iface = 0;
     runner->row = 1;
     char(*map)[n + 2] = TENSOR(map, face[0].map);
@@ -133,8 +130,7 @@ void runner_init(Runner *runner, const Face face[6], size_t n)
     runner->facing = R;
 }
 
-void runner_move(Runner *runner, const Face face[6], size_t n, size_t move)
-{
+void runner_move(Runner *runner, const Face face[6], size_t n, size_t move) {
     for (size_t imove = 0; imove < move; ++imove) {
         const size_t iface = runner->iface;
         const char(*map)[n + 2] = TENSOR(map, face[iface].map);
@@ -194,17 +190,20 @@ void runner_move(Runner *runner, const Face face[6], size_t n, size_t move)
     }
 }
 
-void runner_turn(Runner *runner, char turn)
-{
+void runner_turn(Runner *runner, char turn) {
     switch (turn) {
-        case 'R': runner->facing = (runner->facing + 1) % 4; break;
-        case 'L': runner->facing = (runner->facing - 1) % 4; break;
-        default: assert(!"Illegal turn signal encountered.");
+        case 'R':
+            runner->facing = (runner->facing + 1) % 4;
+            break;
+        case 'L':
+            runner->facing = (runner->facing - 1) % 4;
+            break;
+        default:
+            assert(!"Illegal turn signal encountered.");
     }
 }
 
-void runner_run(Runner *runner, const Face face[6], size_t n, const char *inst)
-{
+void runner_run(Runner *runner, const Face face[6], size_t n, const char *inst) {
     while (1) {
         size_t move;
         char turn;
@@ -218,15 +217,13 @@ void runner_run(Runner *runner, const Face face[6], size_t n, const char *inst)
     }
 }
 
-size_t runner_password(const Runner *runner, const Face face[6])
-{
+size_t runner_password(const Runner *runner, const Face face[6]) {
     size_t row = face[runner->iface].g_row + runner->row;
     size_t col = face[runner->iface].g_col + runner->col;
     return 1000 * row + 4 * col + runner->facing;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/22.txt");

@@ -27,8 +27,7 @@ typedef struct Pair {
     size_t count;
 } Pair;
 
-Pair most_common(const long *a, size_t n)
-{
+Pair most_common(const long *a, size_t n) {
     size_t count_max = 0;
     const char *key_max = 0;
     char key[256] = "";
@@ -54,8 +53,7 @@ Pair most_common(const long *a, size_t n)
     return ret;
 }
 
-Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate)
-{
+Scanner *scanner_try_align(const Scanner *aligned, Scanner *candidate) {
     static const long D[] = {0, 1, 2, 0, 1, 2};
     static const long s[] = {1, 1, 1, -1, -1, -1};
     const size_t na = aligned->nb;
@@ -136,13 +134,11 @@ cleanup:
     return ret;
 }
 
-size_t manhatten(const long a[3], const long b[3])
-{
+size_t manhatten(const long a[3], const long b[3]) {
     return labs(a[0] - b[0]) + labs(a[1] - b[1]) + labs(a[2] - b[2]);
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/19.txt");

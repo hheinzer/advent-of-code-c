@@ -23,8 +23,7 @@ static const size_t stepout[] = {['A'] = 2, ['B'] = 4, ['C'] = 6, ['D'] = 8};
 static const size_t parc[] = {0, 1, 3, 5, 7, 9, 10};
 static const char solution[NB] = "...........ABCDABCDABCDABCD";
 
-int burrow_is_blocked(size_t a, size_t b, const char *burrow)
-{
+int burrow_is_blocked(size_t a, size_t b, const char *burrow) {
     if (a < b) {
         for (size_t p = a + 1; p <= b; ++p) {
             if (burrow[p] != '.') return 1;
@@ -40,8 +39,7 @@ int burrow_is_blocked(size_t a, size_t b, const char *burrow)
 }
 
 size_t burrow_can_enter_room(size_t a, size_t b, char amph, size_t nt, const size_t target[4],
-                             const char *burrow)
-{
+                             const char *burrow) {
     size_t best_pos = SIZE_MAX;
     for (const size_t *t = target; t < target + nt; ++t) {
         if (burrow[*t] == '.') {
@@ -55,8 +53,7 @@ size_t burrow_can_enter_room(size_t a, size_t b, char amph, size_t nt, const siz
     return SIZE_MAX;
 }
 
-size_t burrow_can_leave_room(size_t nt, const size_t target[4], const char *burrow)
-{
+size_t burrow_can_leave_room(size_t nt, const size_t target[4], const char *burrow) {
     for (const size_t *t = target; t < target + nt; ++t) {
         if (burrow[*t] == '.') continue;
         return *t;
@@ -64,8 +61,7 @@ size_t burrow_can_leave_room(size_t nt, const size_t target[4], const char *burr
     return SIZE_MAX;
 }
 
-size_t burrow_possible_moves(size_t move[NM][2], const char *burrow, size_t nt)
-{
+size_t burrow_possible_moves(size_t move[NM][2], const char *burrow, size_t nt) {
     static const size_t target[][4] = {
         ['A'] = {11, 15, 19, 23},
         ['B'] = {12, 16, 20, 24},
@@ -98,23 +94,20 @@ size_t burrow_possible_moves(size_t move[NM][2], const char *burrow, size_t nt)
     return nm;
 }
 
-long burrow_distance(size_t a, size_t b)
-{
+long burrow_distance(size_t a, size_t b) {
     const long p = MIN(a, b);
     const long r = MAX(a, b);
     return labs((long)stepout[(size_t)solution[r]] - p) + (r - 7) / 4;
 }
 
-char *burrow_move(const char *burrow, size_t a, size_t b)
-{
+char *burrow_move(const char *burrow, size_t a, size_t b) {
     char *new_burrow = strdup(burrow);
     new_burrow[a] = burrow[b];
     new_burrow[b] = burrow[a];
     return new_burrow;
 }
 
-long dijkstra(const char *burrow)
-{
+long dijkstra(const char *burrow) {
     // compute the number of spots per room
     const size_t nb = strlen(burrow);
     const size_t nt = (nb - NH) / 4;
@@ -170,8 +163,7 @@ cleanup:
     return cost;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/23.txt");

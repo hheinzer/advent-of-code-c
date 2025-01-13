@@ -14,8 +14,7 @@
 
 CMP(long)
 
-size_t strcnt(const char *str, const char c)
-{
+size_t strcnt(const char *str, const char c) {
     size_t n = 0;
     while (*str) {
         if (*(str++) == c) {
@@ -25,14 +24,12 @@ size_t strcnt(const char *str, const char c)
     return n;
 }
 
-long pos_median(long *pos, size_t n)
-{
+long pos_median(long *pos, size_t n) {
     qsort(pos, n, sizeof(*pos), cmp_long_asc);
     return pos[n / 2];
 }
 
-long pos_cost1(const long *pos, size_t n, long p)
-{
+long pos_cost1(const long *pos, size_t n, long p) {
     long cost = 0;
     for (size_t i = 0; i < n; ++i) {
         cost += labs(p - pos[i]);
@@ -40,8 +37,7 @@ long pos_cost1(const long *pos, size_t n, long p)
     return cost;
 }
 
-long pos_mean(const long *pos, size_t n)
-{
+long pos_mean(const long *pos, size_t n) {
     long mean = 0;
     for (size_t i = 0; i < n; ++i) {
         mean += pos[i];
@@ -49,8 +45,7 @@ long pos_mean(const long *pos, size_t n)
     return (long)round((double)mean / (double)n);
 }
 
-long pos_cost2(const long *pos, size_t n, long p, long dp)
-{
+long pos_cost2(const long *pos, size_t n, long p, long dp) {
     long min_cost = LONG_MAX;
     for (long _dp = -dp; _dp <= dp; ++_dp) {
         long cost = 0;
@@ -63,8 +58,7 @@ long pos_cost2(const long *pos, size_t n, long p, long dp)
     return min_cost;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/07.txt");

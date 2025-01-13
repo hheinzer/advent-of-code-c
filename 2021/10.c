@@ -34,8 +34,7 @@ static const char closing[] = {
     ['<'] = '>',
 };
 
-int is_corrupted(const char *line)
-{
+int is_corrupted(const char *line) {
     int stack[256] = {0};
     size_t n = 0;
     while (*line) {
@@ -51,8 +50,7 @@ int is_corrupted(const char *line)
     return 0;
 }
 
-size_t complete_if_not_corrupted(const char *line)
-{
+size_t complete_if_not_corrupted(const char *line) {
     int stack[256] = {0};
     size_t n = 0;
     while (*line) {
@@ -73,8 +71,7 @@ size_t complete_if_not_corrupted(const char *line)
     return score;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/10.txt");

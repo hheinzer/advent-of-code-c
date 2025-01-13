@@ -12,8 +12,7 @@
  */
 #include "aoc.h"
 
-char *hex_to_bin(const char *hex)
-{
+char *hex_to_bin(const char *hex) {
     static const char map[][5] = {
         ['0'] = "0000", ['1'] = "0001", ['2'] = "0010", ['3'] = "0011",
         ['4'] = "0100", ['5'] = "0101", ['6'] = "0110", ['7'] = "0111",
@@ -51,8 +50,7 @@ typedef struct Packet {
     };
 } Packet;
 
-size_t bin_to_size_t(const char **input, size_t n)
-{
+size_t bin_to_size_t(const char **input, size_t n) {
     char *buf = calloc(n + 1, sizeof(*buf));
     strncpy(buf, *input, n);
     size_t ret = strtoul(buf, 0, 2);
@@ -61,8 +59,7 @@ size_t bin_to_size_t(const char **input, size_t n)
     return ret;
 }
 
-Packet *packet_alloc(const char **input)
-{
+Packet *packet_alloc(const char **input) {
     Packet *packet = calloc(1, sizeof(*packet));
     packet->version = bin_to_size_t(input, 3);
     packet->type = (PacketType)bin_to_size_t(input, 3);
@@ -103,8 +100,7 @@ Packet *packet_alloc(const char **input)
     return packet;
 }
 
-size_t packet_sum_version(const Packet *packet)
-{
+size_t packet_sum_version(const Packet *packet) {
     size_t sum = packet->version;
     if (packet->type != PT_LITERAL) {
         for (size_t i = 0; i < packet->operator.n_sub; ++i) {
@@ -114,8 +110,7 @@ size_t packet_sum_version(const Packet *packet)
     return sum;
 }
 
-size_t packet_eval(const Packet *packet)
-{
+size_t packet_eval(const Packet *packet) {
     size_t ret = 0;
     switch (packet->type) {
         case PT_SUM:
@@ -140,7 +135,9 @@ size_t packet_eval(const Packet *packet)
                 ret = MAX(ret, packet_eval(packet->operator.sub[i]));
             }
             break;
-        case PT_LITERAL: ret = packet->number; break;
+        case PT_LITERAL:
+            ret = packet->number;
+            break;
         case PT_GREATER:
             assert(packet->operator.n_sub == 2);
             ret = (packet_eval(packet->operator.sub[0]) > packet_eval(packet->operator.sub[1]));
@@ -153,13 +150,13 @@ size_t packet_eval(const Packet *packet)
             assert(packet->operator.n_sub == 2);
             ret = (packet_eval(packet->operator.sub[0]) == packet_eval(packet->operator.sub[1]));
             break;
-        default: assert(!"Illegal packet type encountered.");
+        default:
+            assert(!"Illegal packet type encountered.");
     }
     return ret;
 }
 
-void packet_free(Packet *packet)
-{
+void packet_free(Packet *packet) {
     if (packet->type != PT_LITERAL) {
         for (size_t i = 0; i < packet->operator.n_sub; ++i) {
             packet_free(packet->operator.sub[i]);
@@ -169,8 +166,7 @@ void packet_free(Packet *packet)
     free(packet);
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/16.txt");

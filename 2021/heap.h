@@ -23,8 +23,7 @@ struct Elem {
 
 // allocate heap,
 // return 0 on memory failure
-Heap *heap_alloc(size_t data_size, size_t size)
-{
+Heap *heap_alloc(size_t data_size, size_t size) {
     size = (size ? size : 1);
     const Heap heap = {
         .data_size = data_size,
@@ -34,13 +33,11 @@ Heap *heap_alloc(size_t data_size, size_t size)
     return memdup(&heap, sizeof(heap));
 }
 
-size_t _parent(size_t i)
-{
+size_t _parent(size_t i) {
     return (i - 1) / 2;
 }
 
-void _elem_swap(Elem *a, Elem *b)
-{
+void _elem_swap(Elem *a, Elem *b) {
     long swap_priority = a->priority;
     a->priority = b->priority;
     b->priority = swap_priority;
@@ -50,8 +47,7 @@ void _elem_swap(Elem *a, Elem *b)
 }
 
 // insert data into heap with specified priority
-void heap_insert(Heap *heap, long priority, void *data)
-{
+void heap_insert(Heap *heap, long priority, void *data) {
     if (heap->len == heap->size) {  // grow heap if necessary
         heap->size *= 2;
         heap->elem = realloc(heap->elem, heap->size * sizeof(Elem));
@@ -69,8 +65,7 @@ void heap_insert(Heap *heap, long priority, void *data)
 // allocate copy of heap,
 // use data_copy to copy data from other, if 0 do not copy data,
 // return 0 on memory failure
-Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size_t))
-{
+Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size_t)) {
     Heap *heap = heap_alloc(other->data_size, other->size);
     heap->len = other->len;
     for (size_t i = 0; i < heap->len; ++i) {
@@ -88,8 +83,7 @@ Heap *heap_copy(const Heap *other, void *(*data_copy)(void *, const void *, size
 
 // free heap,
 // use data_free to free data, if 0 do not free data
-void heap_free(Heap **heap, void (*data_free)(void *))
-{
+void heap_free(Heap **heap, void (*data_free)(void *)) {
     if (data_free) {
         for (size_t i = 0; i < (*heap)->len; ++i) {
             data_free((*heap)->elem[i].data);
@@ -100,18 +94,15 @@ void heap_free(Heap **heap, void (*data_free)(void *))
     *heap = 0;
 }
 
-size_t _left(size_t i)
-{
+size_t _left(size_t i) {
     return 2 * i + 1;
 }
 
-size_t _right(size_t i)
-{
+size_t _right(size_t i) {
     return 2 * i + 2;
 }
 
-void _heapify(Heap *heap, size_t i)
-{
+void _heapify(Heap *heap, size_t i) {
     const size_t l = _left(i);
     const size_t r = _right(i);
     size_t max = i;
@@ -130,8 +121,7 @@ void _heapify(Heap *heap, size_t i)
 
 // remove highest priority element from heap,
 // return 0, if heap is empty
-void *heap_remove(Heap *heap)
-{
+void *heap_remove(Heap *heap) {
     if (heap->len == 0) {
         return 0;
     }
@@ -147,8 +137,7 @@ void *heap_remove(Heap *heap)
 
 // return pointer to highest priority element in heap,
 // return 0, if heap is empty
-Elem *heap_peek(Heap *heap)
-{
+Elem *heap_peek(Heap *heap) {
     if (heap->len == 0) {
         return 0;
     }

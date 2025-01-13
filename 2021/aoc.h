@@ -66,7 +66,8 @@ size_t lines_read(const char ***line, const char *fname) {
             // append character
             l = realloc(l, ++nc * sizeof(*l));
             l[nc - 1] = (char)c;
-        } else {
+        }
+        else {
             // append end of string
             l = realloc(l, ++nc * sizeof(*l));
             l[nc - 1] = 0;

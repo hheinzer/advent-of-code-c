@@ -13,8 +13,7 @@
 
 #define N 10
 
-size_t simulate(int grid[N + 2][N + 2], size_t n_steps)
-{
+size_t simulate(int grid[N + 2][N + 2], size_t n_steps) {
     size_t count = 0;
     for (size_t step = 0; step < n_steps; ++step) {
         // increase energy level by 1
@@ -62,8 +61,7 @@ size_t simulate(int grid[N + 2][N + 2], size_t n_steps)
     return count;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/11.txt");

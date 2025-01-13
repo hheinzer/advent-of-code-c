@@ -14,8 +14,7 @@
 
 CMP(long)
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/01.txt");

@@ -17,8 +17,7 @@
  */
 #include "aoc.h"
 
-void polymer_modify(size_t ni, size_t count[ni], size_t rule[ni][2], size_t n_steps)
-{
+void polymer_modify(size_t ni, size_t count[ni], size_t rule[ni][2], size_t n_steps) {
     size_t *new_count = malloc(ni * sizeof(*new_count));
     for (size_t step = 0; step < n_steps; ++step) {
         memset(new_count, 0, ni * sizeof(*new_count));
@@ -32,8 +31,7 @@ void polymer_modify(size_t ni, size_t count[ni], size_t rule[ni][2], size_t n_st
 }
 
 size_t polymer_quantity_diff(size_t ni, const char input[ni][3], const size_t count[ni],
-                             const char *poly)
-{
+                             const char *poly) {
     // compute histogram of pairs
     size_t hist['Z' - 'A' + 1] = {0};
     for (size_t i = 0; i < ni; ++i) {
@@ -60,8 +58,7 @@ size_t polymer_quantity_diff(size_t ni, const char input[ni][3], const size_t co
     return max - min;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/14.txt");

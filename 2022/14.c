@@ -15,8 +15,7 @@
 #define NY 200
 #define NX 1000
 
-size_t drop_sand(char grid[NY][NX], long max_y)
-{
+size_t drop_sand(char grid[NY][NX], long max_y) {
     long xs = 500;
     long ys = 0;
     size_t ns = 0;
@@ -42,8 +41,7 @@ size_t drop_sand(char grid[NY][NX], long max_y)
     return ns;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/14.txt");

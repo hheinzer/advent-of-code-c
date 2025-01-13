@@ -12,8 +12,7 @@
  */
 #include "aoc.h"
 
-int does_collide(const long r[5][2], const Dict *cave, long dx, long dy)
-{
+int does_collide(const long r[5][2], const Dict *cave, long dx, long dy) {
     // check for collision with wall, floor, or other rock
     char key[256] = "";
     for (size_t j = 0; j < 5; ++j) {
@@ -26,8 +25,7 @@ int does_collide(const long r[5][2], const Dict *cave, long dx, long dy)
     return 0;
 }
 
-int array_repeats(const long *a, const long *b, size_t n)
-{
+int array_repeats(const long *a, const long *b, size_t n) {
     for (size_t i = 0; i < n; ++i) {
         if (a[i] != b[i]) {
             return 0;
@@ -36,8 +34,7 @@ int array_repeats(const long *a, const long *b, size_t n)
     return 1;
 }
 
-void find_pattern(const long *a, size_t n, size_t *np, size_t *nr)
-{
+void find_pattern(const long *a, size_t n, size_t *np, size_t *nr) {
     for (size_t i = 0; i < n; ++i) {
         // get pointer to sub array
         const long *s = a + i;
@@ -60,8 +57,7 @@ void find_pattern(const long *a, size_t n, size_t *np, size_t *nr)
     }
 }
 
-size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
-{
+size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n) {
     // we are not dropping more than 5000 rocks
     const size_t n = MIN(_n, 5000);
 
@@ -152,8 +148,7 @@ size_t drop_rocks(const char *jet, const long rock[5][5][2], size_t _n)
     return ret;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/17.txt");

@@ -11,8 +11,7 @@
  */
 #include "aoc.h"
 
-void board_mark_number(long board[5][5], long num)
-{
+void board_mark_number(long board[5][5], long num) {
     for (size_t i = 0; i < 5; ++i) {
         for (size_t j = 0; j < 5; ++j) {
             if (board[i][j] == num) {
@@ -22,8 +21,7 @@ void board_mark_number(long board[5][5], long num)
     }
 }
 
-int board_is_winner(const long board[5][5])
-{
+int board_is_winner(const long board[5][5]) {
     for (size_t i = 0; i < 5; ++i) {
         int row = 1;
         int col = 1;
@@ -38,8 +36,7 @@ int board_is_winner(const long board[5][5])
     return 0;
 }
 
-long board_sum_unmakred(long board[5][5])
-{
+long board_sum_unmakred(long board[5][5]) {
     long sum = 0;
     for (size_t i = 0; i < 5; ++i) {
         for (size_t j = 0; j < 5; ++j) {
@@ -51,8 +48,7 @@ long board_sum_unmakred(long board[5][5])
     return sum;
 }
 
-void play_bingo(long *score, size_t *rank, long (*board)[5][5], size_t nb, const char *_numbers)
-{
+void play_bingo(long *score, size_t *rank, long (*board)[5][5], size_t nb, const char *_numbers) {
     char *numbers = strdup(_numbers);
     const char *tok = strtok(numbers, ",");
     size_t irank = 1;
@@ -70,8 +66,7 @@ void play_bingo(long *score, size_t *rank, long (*board)[5][5], size_t nb, const
     free(numbers);
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/04.txt");

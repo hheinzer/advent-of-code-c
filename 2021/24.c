@@ -21,16 +21,14 @@ typedef struct Parameters {
     long a, b, c;
 } Parameters;
 
-long alu_chunk_func(Parameters param, long z, long w)
-{
+long alu_chunk_func(Parameters param, long z, long w) {
     if (z % 26 + param.b != w)
         return ((z / param.a) * 26) + w + param.c;
     else
         return z / param.a;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/24.txt");

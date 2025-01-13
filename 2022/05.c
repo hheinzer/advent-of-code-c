@@ -10,8 +10,7 @@
  */
 #include "aoc.h"
 
-void solve(const char **line, size_t n_lines, size_t cratemover)
-{
+void solve(const char **line, size_t n_lines, size_t cratemover) {
     // find separator line
     const size_t i0 = line_find(line, n_lines, "");
 
@@ -56,7 +55,8 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
                     stack_push(stack[t - 1], stack_pop(tmp));
                 }
                 break;
-            default: assert(!"Illegal cratemover encountered.");
+            default:
+                assert(!"Illegal cratemover encountered.");
         }
     }
     stack_free(&tmp, free);
@@ -73,8 +73,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover)
     }
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/05.txt");

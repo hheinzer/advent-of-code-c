@@ -18,8 +18,7 @@ typedef struct Point {
     long d;  // distance of sensor to beacon, if sensor, else 0
 } Point;
 
-long point_distance(const Point *a, const Point *b)
-{
+long point_distance(const Point *a, const Point *b) {
     return labs(b->x - a->x) + labs(b->y - a->y);  // Manhattan distance
 }
 
@@ -28,13 +27,11 @@ typedef struct Range {
     long x1;
 } Range;
 
-int range_cmp_x0(const void *a, const void *b)
-{
+int range_cmp_x0(const void *a, const void *b) {
     return (int)(((Range *)a)->x0 - ((Range *)b)->x0);
 }
 
-size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
-{
+size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0) {
     // for every sensor create a range of x values that it can see on specified line
     List *range = list_alloc(sizeof(Range));
     for (const Node *node = sensor->first; node; node = node->next) {
@@ -88,8 +85,7 @@ size_t solve_part_1(const List *sensor, const Dict *beacon, const long y0)
     return count;
 }
 
-size_t solve_part_2(const List *sensor, const long clip[2])
-{
+size_t solve_part_2(const List *sensor, const long clip[2]) {
     // missing beacon must be +1 outside of the range of one of the sensors
     // find it by only checking these points
     for (const Node *node0 = sensor->first; node0; node0 = node0->next) {
@@ -135,8 +131,7 @@ size_t solve_part_2(const List *sensor, const long clip[2])
     assert(!"Beacon not found.");
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/15.txt");

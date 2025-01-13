@@ -13,8 +13,7 @@
  */
 #include "aoc.h"
 
-size_t count_overlapping(const Dict *grid)
-{
+size_t count_overlapping(const Dict *grid) {
     size_t count = 0;
     for (size_t i = 0; i < grid->size; ++i) {
         for (const Item *item = &grid->item[i]; item && item->key; item = item->next) {
@@ -27,8 +26,7 @@ size_t count_overlapping(const Dict *grid)
     return count;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/05.txt");

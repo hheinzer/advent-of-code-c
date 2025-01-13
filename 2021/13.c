@@ -14,8 +14,7 @@
  */
 #include "aoc.h"
 
-void paper_fold(const char **line, size_t ny, size_t nx, int grid[ny][nx], size_t i0, size_t n)
-{
+void paper_fold(const char **line, size_t ny, size_t nx, int grid[ny][nx], size_t i0, size_t n) {
     for (size_t i = i0; i < n; ++i) {
         char axis;
         size_t value;
@@ -48,8 +47,7 @@ void paper_fold(const char **line, size_t ny, size_t nx, int grid[ny][nx], size_
     }
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/13.txt");

@@ -16,8 +16,7 @@
 
 CMP(size_t)
 
-size_t compute_basin_size(const char *map, int *seen, size_t nj)
-{
+size_t compute_basin_size(const char *map, int *seen, size_t nj) {
     if (*seen || *map >= '9') return 0;
     *seen = 1;
     size_t size = 1;
@@ -28,8 +27,7 @@ size_t compute_basin_size(const char *map, int *seen, size_t nj)
     return size;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/09.txt");

@@ -13,8 +13,7 @@
  */
 #include "aoc.h"
 
-int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
-{
+int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0) {
     // look left
     char max_height = line[i0][0];
     for (size_t j = 1; j < j0; ++j) {
@@ -54,8 +53,7 @@ int is_visible(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
     return 0;
 }
 
-size_t scenic_score(const char **line, size_t ni, size_t nj, size_t i0, size_t j0)
-{
+size_t scenic_score(const char **line, size_t ni, size_t nj, size_t i0, size_t j0) {
     // look left
     size_t score = 1;
     size_t j;
@@ -98,8 +96,7 @@ size_t scenic_score(const char **line, size_t ni, size_t nj, size_t i0, size_t j
     return score;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/08.txt");

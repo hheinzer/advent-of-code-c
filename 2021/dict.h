@@ -24,8 +24,7 @@ struct Item {
     Item *next;       // pointer to next item in bucket
 };
 
-Item *_item_alloc(const char *key, size_t key_size, void *data)
-{
+Item *_item_alloc(const char *key, size_t key_size, void *data) {
     const Item item = {
         .key = memdup(key, key_size + 1),
         .key_size = key_size,
@@ -34,8 +33,7 @@ Item *_item_alloc(const char *key, size_t key_size, void *data)
     return memdup(&item, sizeof(item));
 }
 
-void _item_clear(Item *item, void (*data_free)(void *))
-{
+void _item_clear(Item *item, void (*data_free)(void *)) {
     free((void *)item->key);
     item->key = 0;
     item->key_size = 0;
@@ -46,15 +44,13 @@ void _item_clear(Item *item, void (*data_free)(void *))
     item->next = 0;
 }
 
-void _item_free(Item *item, void (*data_free)(void *))
-{
+void _item_free(Item *item, void (*data_free)(void *)) {
     _item_clear(item, data_free);
     free(item);
 }
 
 // allocate dict
-Dict *dict_alloc(size_t data_size, size_t size)
-{
+Dict *dict_alloc(size_t data_size, size_t size) {
     const Dict dict = {
         .data_size = data_size,
         .size = size,
@@ -63,8 +59,7 @@ Dict *dict_alloc(size_t data_size, size_t size)
     return memdup(&dict, sizeof(dict));
 }
 
-size_t _hash(const char *str)
-{
+size_t _hash(const char *str) {
     // source: https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
     size_t hash = 14695981039346656037ULL;
     unsigned char c;
@@ -75,8 +70,7 @@ size_t _hash(const char *str)
     return hash;
 }
 
-int _keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2)
-{
+int _keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_size2) {
     if (key_size1 != key_size2) {
         return 1;
     }
@@ -91,8 +85,7 @@ int _keycmp(const char *key1, size_t key_size1, const char *key2, size_t key_siz
 // overwrite data if key present,
 // return data pointer if key present,
 // return 0 if key not present
-void *dict_insert(Dict *dict, const char *key, void *data)
-{
+void *dict_insert(Dict *dict, const char *key, void *data) {
     const size_t key_size = strlen(key);
     const size_t i = _hash(key) % dict->size;
     Item *item = &dict->item[i];
@@ -122,8 +115,7 @@ void *dict_insert(Dict *dict, const char *key, void *data)
 
 // allocate copy of other,
 // use data_copy to copy data from other, if 0 do not copy data
-Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t))
-{
+Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size_t)) {
     Dict *dict = dict_alloc(other->data_size, other->size);
     for (size_t i = 0; i < other->size; ++i) {
         for (const Item *item = &other->item[i]; item && item->key; item = item->next) {
@@ -142,8 +134,7 @@ Dict *dict_copy(const Dict *other, void *(*data_copy)(void *, const void *, size
 
 // free dict,
 // use data_free to free data, if 0 do not free data
-void dict_free(Dict **dict, void (*data_free)(void *))
-{
+void dict_free(Dict **dict, void (*data_free)(void *)) {
     for (size_t i = 0; i < (*dict)->size; ++i) {
         Item *item = &(*dict)->item[i];
         if (item->key) {
@@ -165,8 +156,7 @@ void dict_free(Dict **dict, void (*data_free)(void *))
 // remove item from dict with specified key,
 // return data pointer,
 // return 0 if key not present
-void *dict_remove(Dict *dict, const char *key)
-{
+void *dict_remove(Dict *dict, const char *key) {
     const size_t key_size = strlen(key);
     const size_t i = _hash(key) % dict->size;
     Item *item = &dict->item[i];
@@ -199,8 +189,7 @@ void *dict_remove(Dict *dict, const char *key)
 // search for item in dict,
 // return item if present,
 // return 0 if key not present
-Item *dict_find(const Dict *dict, const char *key)
-{
+Item *dict_find(const Dict *dict, const char *key) {
     const size_t key_size = strlen(key);
     const size_t i = _hash(key) % dict->size;
     Item *item = &dict->item[i];
@@ -210,14 +199,12 @@ Item *dict_find(const Dict *dict, const char *key)
     return (!item || !item->key ? 0 : item);
 }
 
-int _cmp_size_t_asc(const void *a, const void *b)
-{
+int _cmp_size_t_asc(const void *a, const void *b) {
     return (*(size_t *)a > *(size_t *)b) - (*(size_t *)a < *(size_t *)b);
 }
 
 // print collision histogram of dict
-void dict_histogram(const Dict *dict)
-{
+void dict_histogram(const Dict *dict) {
     // compute occupation histogram of dict
     char key[256] = "";
     Dict *hist = dict_alloc(sizeof(size_t), dict->len);

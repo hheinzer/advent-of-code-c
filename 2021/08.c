@@ -31,13 +31,11 @@ typedef struct Entry {
     char output[4][8];
 } Entry;
 
-int cmp_strlen_asc(const void *a, const void *b)
-{
+int cmp_strlen_asc(const void *a, const void *b) {
     return (int)strlen(a) - (int)strlen(b);
 }
 
-size_t count_common_chars(const char *str1, const char *str2)
-{
+size_t count_common_chars(const char *str1, const char *str2) {
     const size_t n1 = strlen(str1);
     const size_t n2 = strlen(str2);
     size_t n = 0;
@@ -51,8 +49,7 @@ size_t count_common_chars(const char *str1, const char *str2)
     return n;
 }
 
-size_t entry_decode(const size_t common[10][10], const Entry *entry)
-{
+size_t entry_decode(const size_t common[10][10], const Entry *entry) {
     static const int perm1[6][3] = {
         {2, 3, 5}, {2, 5, 3}, {3, 2, 5}, {3, 5, 2}, {5, 2, 3}, {5, 3, 2},
     };
@@ -93,8 +90,7 @@ size_t entry_decode(const size_t common[10][10], const Entry *entry)
     assert(!"Houston we have a problem.");
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/08.txt");

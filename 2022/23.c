@@ -18,8 +18,7 @@ typedef struct Elf {
     long prop_j;
 } Elf;
 
-size_t elf_simulate(List *elf, size_t n_round)
-{
+size_t elf_simulate(List *elf, size_t n_round) {
     size_t round = 0;
     char key[256] = "";
     Dict *pos = dict_alloc(0, 2 * elf->len);
@@ -143,8 +142,7 @@ size_t elf_simulate(List *elf, size_t n_round)
     return ret;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/23.txt");

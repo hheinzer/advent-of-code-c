@@ -28,8 +28,7 @@ typedef struct PacketData {
     };
 } PacketData;
 
-PacketData *pd_create(const char **line_ptr)
-{
+PacketData *pd_create(const char **line_ptr) {
     // create new list
     PacketData *pd = malloc(sizeof(*pd));
     pd->type = PDT_LIST;
@@ -66,8 +65,7 @@ PacketData *pd_create(const char **line_ptr)
     return pd;
 }
 
-void pd_free(void *_pd)
-{
+void pd_free(void *_pd) {
     // recursively free the packet
     PacketData *pd = (PacketData *)_pd;
     if (pd->type == PDT_LIST) {
@@ -82,8 +80,7 @@ void pd_free(void *_pd)
     free(pd);
 }
 
-void pd_print(const PacketData *pd)
-{
+void pd_print(const PacketData *pd) {
     // recursively print packet
     printf("[");
     Node *node = pd->pd_list->first;
@@ -101,8 +98,7 @@ void pd_print(const PacketData *pd)
     printf("]");
 }
 
-PacketData *pd_copy(const PacketData *src)
-{
+PacketData *pd_copy(const PacketData *src) {
     PacketData *dest = malloc(sizeof(*dest));
 
     dest->type = src->type;
@@ -123,8 +119,7 @@ PacketData *pd_copy(const PacketData *src)
     return dest;
 }
 
-int cmp_packet_asc(const void *_a, const void *_b)
-{
+int cmp_packet_asc(const void *_a, const void *_b) {
     const PacketData *a = (PacketData *)_a;
     const PacketData *b = (PacketData *)_b;
 
@@ -170,8 +165,7 @@ int cmp_packet_asc(const void *_a, const void *_b)
     }
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/13.txt");

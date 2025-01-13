@@ -11,8 +11,7 @@
  */
 #include "aoc.h"
 
-int all_chars_unique(const char *str, size_t n)
-{
+int all_chars_unique(const char *str, size_t n) {
     for (size_t i = 0; i < n - 1; ++i) {
         for (size_t j = i + 1; j < n; ++j) {
             if (str[i] == str[j]) {
@@ -23,8 +22,7 @@ int all_chars_unique(const char *str, size_t n)
     return 1;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/06.txt");

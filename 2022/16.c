@@ -14,8 +14,7 @@
  */
 #include "aoc.h"
 
-size_t bfs(size_t n, const size_t *_adj, size_t S, size_t E)
-{
+size_t bfs(size_t n, const size_t *_adj, size_t S, size_t E) {
     // breadth first search
     Queue *q = queue_alloc(sizeof(size_t));
     int *visited = calloc(n, sizeof(*visited));
@@ -49,8 +48,7 @@ cleanup:
 }
 
 size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char *seen, size_t loc,
-            size_t AA, size_t time_allowed, size_t time_taken, size_t n_players)
-{
+            size_t AA, size_t time_allowed, size_t time_taken, size_t n_players) {
     if (time_taken == time_allowed) {
         if (n_players > 1) {
             return _dfs(cache, n, rate, _cost, seen, AA, AA, time_allowed, 0, n_players - 1);
@@ -100,8 +98,7 @@ size_t _dfs(Dict *cache, size_t n, const size_t *rate, const size_t *_cost, char
 }
 
 size_t dfs(size_t n, const size_t *rate, const List *non_zero, const size_t *cost, size_t loc,
-           size_t time_allowed, size_t n_players)
-{
+           size_t time_allowed, size_t n_players) {
     // create array that marks closed, non-zero valves as '0'
     char seen[n + 1];
     memset(seen, '1', sizeof(seen));
@@ -115,8 +112,7 @@ size_t dfs(size_t n, const size_t *rate, const List *non_zero, const size_t *cos
     return ret;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/16.txt");

@@ -13,8 +13,7 @@
  */
 #include "aoc.h"
 
-size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, size_t E)
-{
+size_t shortest_path_length(const char *height, size_t ni, size_t nj, size_t S, size_t E) {
     // prepare breadth first search (BFS)
     Queue *queue = queue_alloc(sizeof(size_t));
     int *visited = calloc(ni * nj, sizeof(*visited));
@@ -62,8 +61,7 @@ cleanup:
     return length;
 }
 
-const char *strchrnul(const char *s, int c)
-{
+const char *strchrnul(const char *s, int c) {
     while (*s) {
         if (*s == c) {
             return s;
@@ -73,8 +71,7 @@ const char *strchrnul(const char *s, int c)
     return s;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/12.txt");

@@ -29,8 +29,7 @@ typedef enum ProbeStatus {
     PS_TARGET_MISS,
 } ProbeStatus;
 
-ProbeStatus probe_move(Vec *pos, Vec *vel, const Vec *min, const Vec *max)
-{
+ProbeStatus probe_move(Vec *pos, Vec *vel, const Vec *min, const Vec *max) {
     pos->x += vel->x;
     pos->y += vel->y;
     vel->x -= SIGN(vel->x);
@@ -44,8 +43,7 @@ ProbeStatus probe_move(Vec *pos, Vec *vel, const Vec *min, const Vec *max)
     return PS_MOVING;
 }
 
-long _probe_max_y(Vec *vel, const Vec *min, const Vec *max)
-{
+long _probe_max_y(Vec *vel, const Vec *min, const Vec *max) {
     Vec pos = {0, 0};
     ProbeStatus status = PS_MOVING;
     long max_pos_y = 0;
@@ -58,8 +56,7 @@ long _probe_max_y(Vec *vel, const Vec *min, const Vec *max)
     return LONG_MIN;
 }
 
-long probe_max_y(const Vec *min, const Vec *max)
-{
+long probe_max_y(const Vec *min, const Vec *max) {
     long max_pos_y = 0;
     for (long vel_x = 0; vel_x < 200; ++vel_x) {
         for (long vel_y = 0; vel_y < 200; ++vel_y) {
@@ -70,8 +67,7 @@ long probe_max_y(const Vec *min, const Vec *max)
     return max_pos_y;
 }
 
-size_t probe_hit_count(const Vec *min, const Vec *max)
-{
+size_t probe_hit_count(const Vec *min, const Vec *max) {
     size_t count = 0;
     for (long vel_x = 0; vel_x < 200; ++vel_x) {
         for (long vel_y = -200; vel_y < 200; ++vel_y) {
@@ -84,8 +80,7 @@ size_t probe_hit_count(const Vec *min, const Vec *max)
     return count;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/17.txt");

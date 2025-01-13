@@ -20,19 +20,26 @@ typedef struct Position {
     long y;
 } Position;
 
-void position_move(Position *pos, char dir)
-{
+void position_move(Position *pos, char dir) {
     switch (dir) {
-        case 'L': --pos->x; break;
-        case 'R': ++pos->x; break;
-        case 'U': ++pos->y; break;
-        case 'D': --pos->y; break;
-        default: assert(!"Illegal direction encountered.");
+        case 'L':
+            --pos->x;
+            break;
+        case 'R':
+            ++pos->x;
+            break;
+        case 'U':
+            ++pos->y;
+            break;
+        case 'D':
+            --pos->y;
+            break;
+        default:
+            assert(!"Illegal direction encountered.");
     }
 }
 
-void position_follow(Position *tail, const Position *head)
-{
+void position_follow(Position *tail, const Position *head) {
     const long dx = head->x - tail->x;
     const long dy = head->y - tail->y;
     if ((labs(dx) == 2) || labs(dy) == 2) {
@@ -41,8 +48,7 @@ void position_follow(Position *tail, const Position *head)
     }
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/09.txt");

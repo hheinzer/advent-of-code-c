@@ -14,8 +14,7 @@
 
 CMP(long)
 
-long solve(List *list, long mul, size_t n_mix)
-{
+long solve(List *list, long mul, size_t n_mix) {
     const size_t n = list->len;
 
     // create array of node pointers, multiply values with decryption key
@@ -77,8 +76,7 @@ long solve(List *list, long mul, size_t n_mix)
     return sum;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n = lines_read(&line, "2022/input/20.txt");

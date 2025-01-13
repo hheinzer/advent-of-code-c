@@ -24,8 +24,7 @@ typedef struct Cube {
     long sign;
 } Cube;
 
-Cube *cube_alloc(const char *line, long limit)
-{
+Cube *cube_alloc(const char *line, long limit) {
     // create cube
     Cube cube = {0};
     char cmd[4] = "";
@@ -55,8 +54,7 @@ Cube *cube_alloc(const char *line, long limit)
     return memdup(&cube, sizeof(cube));
 }
 
-Cube *cube_intersection(const Cube *a, const Cube *b)
-{
+Cube *cube_intersection(const Cube *a, const Cube *b) {
     // create intersecting cube
     Cube cube = {0};
     cube.x0 = MAX(a->x0, b->x0);
@@ -74,8 +72,7 @@ Cube *cube_intersection(const Cube *a, const Cube *b)
     return memdup(&cube, sizeof(cube));
 }
 
-void cube_insert(List *cubes, Cube *new)
-{
+void cube_insert(List *cubes, Cube *new) {
     const size_t n = cubes->len;
     Node *node = cubes->first;
     for (size_t i = 0; i < n; ++i) {
@@ -100,13 +97,11 @@ void cube_insert(List *cubes, Cube *new)
     }
 }
 
-long cube_volume(const Cube *cube)
-{
+long cube_volume(const Cube *cube) {
     return (cube->x1 - cube->x0 + 1) * (cube->y1 - cube->y0 + 1) * (cube->z1 - cube->z0 + 1);
 }
 
-size_t cube_sum_volume(const List *cubes)
-{
+size_t cube_sum_volume(const List *cubes) {
     long vol = 0;
     for (const Node *node = cubes->first; node; node = node->next) {
         const Cube *cube = node->data;
@@ -116,8 +111,7 @@ size_t cube_sum_volume(const List *cubes)
     return vol;
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2021/input/22.txt");

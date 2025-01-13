@@ -15,8 +15,7 @@
 #include "aoc.h"
 
 void flood_fill(size_t ni, size_t nj, size_t nk, int outside[ni][nj][nk], int cube[ni][nj][nk],
-                size_t i, size_t j, size_t k)
-{
+                size_t i, size_t j, size_t k) {
     // mark i,j,k as outside
     outside[i][j][k] = 1;
 
@@ -41,8 +40,7 @@ void flood_fill(size_t ni, size_t nj, size_t nk, int outside[ni][nj][nk], int cu
     }
 }
 
-int main(void)
-{
+int main(void) {
     // read input
     const char **line = 0;
     const size_t n_lines = lines_read(&line, "2022/input/18.txt");
