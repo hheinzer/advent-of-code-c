@@ -29,7 +29,7 @@ Dict freqs_find(const Grid *grid, Arena *arena) {
                 }
             }
         }
-        dict_insert(&freq, f, sizeof(*f), &pos, 0);
+        dict_insert(&freq, f, sizeof(*f), &pos);
     }
     return freq;
 }

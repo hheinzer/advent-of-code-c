@@ -40,7 +40,7 @@ long cached_count(Dict *cache, long stone, long steps) {
     else {
         count = cached_count(cache, stone ? stone * 2024 : 1, steps - 1);
     }
-    dict_insert(cache, (long[]){stone, steps}, sizeof(long[2]), &count, 0);
+    dict_insert(cache, (long[]){stone, steps}, sizeof(long[2]), &count);
     return count;
 }
 

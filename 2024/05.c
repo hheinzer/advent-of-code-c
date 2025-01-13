@@ -39,8 +39,8 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
         }
         long a, b;
         sscanf(line, "%ld|%ld", &a, &b);
-        dict_insert(rule, (long[]){a, b}, sizeof(long[2]), (int[]){-1}, 0);
-        dict_insert(rule, (long[]){b, a}, sizeof(long[2]), (int[]){+1}, 0);
+        dict_insert(rule, (long[]){a, b}, sizeof(long[2]), (int[]){-1});
+        dict_insert(rule, (long[]){b, a}, sizeof(long[2]), (int[]){+1});
     }
     while (fgets(line, sizeof(line), file)) {
         List page = list_create(arena, sizeof(long), compare);
