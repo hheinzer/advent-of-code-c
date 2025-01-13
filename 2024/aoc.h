@@ -126,7 +126,9 @@ void grid_print(const Grid *grid) {
         putchar('\n');
     }
 }
-void grid_write_pgm(const Grid *grid, const char *fname) {
+void grid_write(const Grid *grid, const char *path) {
+    char fname[128];
+    sprintf(fname, "%s.pgm", path);
     FILE *file = fopen(fname, "wb");
     assert(file);
     fprintf(file, "P5\n%ld %ld\n255\n", grid->cols, grid->rows);

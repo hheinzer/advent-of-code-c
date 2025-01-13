@@ -31,12 +31,12 @@ int main(void) {
     }
     printf("%ld\n", part2[1]);
 
-    // Grid grid = grid_create(rows, cols, 0, &arena);
-    // list_for_each(item, &robots) {
-    //     Vec2 p = position(item->data, cols, rows, part2[1]);
-    //     grid_set(&grid, p.r, p.c, -1);
-    // }
-    // grid_write_pgm(&grid, "2024/14.pgm");
+    Grid grid = grid_create(rows, cols, 0, &arena);
+    list_for_each(item, &robots) {
+        Vec2 p = position(item->data, cols, rows, part2[1]);
+        grid_set(&grid, p.r, p.c, -1);
+    }
+    grid_write(&grid, "2024/14");
 
     arena_destroy(&arena);
 }
