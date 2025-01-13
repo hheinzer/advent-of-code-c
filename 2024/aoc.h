@@ -67,12 +67,12 @@ typedef struct {
     long cols;
     char *data;
 } Grid;
-Grid grid_create(long rows, long cols, char c, Arena *arena) {
+Grid grid_create(long rows, long cols, char chr, Arena *arena) {
     Grid grid = {0};
     grid.rows = rows;
     grid.cols = cols;
     grid.data = calloc(arena, grid.data, grid.rows * grid.cols + 1);
-    memset(grid.data, c, grid.rows * grid.cols);
+    memset(grid.data, chr, grid.rows * grid.cols);
     return grid;
 }
 Grid grid_parse(const char *fname, Arena *arena) {
@@ -127,7 +127,7 @@ void grid_print(const Grid *grid) {
     }
 }
 void grid_write(const Grid *grid, const char *path) {
-    char fname[128];
+    char fname[256];
     sprintf(fname, "%s.pgm", path);
     FILE *file = fopen(fname, "wb");
     assert(file);
