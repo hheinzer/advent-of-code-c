@@ -15,6 +15,8 @@
 // memory management
 #define calloc(A, P, N) arena_calloc(A, N, sizeof(*(P)), alignof(typeof(*(P))))
 #define realloc(A, P, N) arena_realloc(A, P, N, sizeof(*(P)), alignof(typeof(*(P))))
+#define memdup(A, P, N) arena_memdup(A, P, N, sizeof(*(P)), alignof(typeof(*(P))))
+#define strdup(A, S) memdup(A, S, strlen(S) + 1)
 
 // convenience functions
 #define countof(A) (sizeof(A) / sizeof(*(A)))
