@@ -39,7 +39,7 @@ void parse(List *left, List *right, const char *fname) {
     FILE *file = fopen(fname, "r");
     assert(file);
     long a, b;
-    while (fscanf(file, "%ld %ld", &a, &b) == 2) {
+    while (fscanf(file, "%ld %ld\n", &a, &b) == 2) {
         list_append(left, &a);
         list_append(right, &b);
     }
