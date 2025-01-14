@@ -2,13 +2,12 @@
 
 typedef struct Pos Pos;
 struct Pos {
+    long score;
     Vec2 pos;
     Vec2 dir;
-    long score;
     Pos *prev;
 };
 
-int poscmp(const void *_a, const void *_b, void *);
 long score(const Grid *grid, Set *seen, Arena *arena);
 
 int main(void) {
@@ -18,15 +17,9 @@ int main(void) {
 
     Set seen = set_create(&arena);
     printf("%ld\n", score(&grid, &seen, &arena));
-
     printf("%ld\n", seen.length);
 
     arena_destroy(&arena);
-}
-
-int poscmp(const void *_a, const void *_b, void *) {
-    const Pos *a = _a, *b = _b;
-    return longcmp(&a->score, &b->score, 0);
 }
 
 long score(const Grid *grid, Set *seen, Arena *arena) {
@@ -35,15 +28,15 @@ long score(const Grid *grid, Set *seen, Arena *arena) {
     start.dir = (Vec2){0, +1};
     long best = LONG_MAX;
     Dict scores = dict_create(arena, sizeof(long));
-    Heap heap = heap_create(arena, sizeof(Pos), poscmp);
+    Heap heap = heap_create(arena, sizeof(Pos), longcmp);
     heap_push(&heap, &start, 0);
     while (heap.length) {
         Pos *cur = heap_pop(&heap, 0);
-        long *score = dict_insert(&scores, cur, sizeof(Vec2[2]), &cur->score);
-        if (score && cur->score > *score) {
+        long *score = dict_insert(&scores, &cur->pos, sizeof(Vec2[2]), &cur->score);
+        if (score && *score < cur->score) {
             continue;
         }
-        if (grid_get(grid, cur->pos.r, cur->pos.c) == 'E' && cur->score <= best) {
+        if (grid_get(grid, cur->pos.r, cur->pos.c) == 'E') {
             best = cur->score;
             for (Pos *pos = cur; pos; pos = pos->prev) {
                 set_insert(seen, &pos->pos, sizeof(Vec2));
