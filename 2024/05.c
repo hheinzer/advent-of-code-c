@@ -34,19 +34,19 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
     assert(file);
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        if (*line == '\n') {
+        if (line[0] == '\n') {
             break;
         }
         long a, b;
         sscanf(line, "%ld|%ld", &a, &b);
-        dict_insert(rule, (long[]){a, b}, sizeof(long[2]), (int[]){-1});
-        dict_insert(rule, (long[]){b, a}, sizeof(long[2]), (int[]){+1});
+        dict_insert(rule, (long[]){a, b}, sizeof(long[2]), &(int){-1});
+        dict_insert(rule, (long[]){b, a}, sizeof(long[2]), &(int){+1});
     }
     while (fgets(line, sizeof(line), file)) {
         List page = list_create(arena, sizeof(long), compare);
         char *token = strtok(line, ",");
         while (token) {
-            list_append(&page, (long[]){strtol(token, 0, 10)});
+            list_append(&page, &(long){strtol(token, 0, 10)});
             token = strtok(0, ",");
         }
         list_append(update, &page);
