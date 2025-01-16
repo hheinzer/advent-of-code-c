@@ -6,11 +6,8 @@ typedef struct {
     long length;
 } Equation;
 
-typedef long Operation(long, long);
-
 void parse(List *eqns, const char *fname, Arena *arena);
-long compute(const List *eqns, Operation **op, long nops, Arena arena);
-Operation add, mul, cat;
+long solvable(const Equation *eqn, long res, long i, int part2);
 
 int main(void) {
     Arena arena = arena_create(1 << 20);
@@ -18,8 +15,15 @@ int main(void) {
     List eqns = list_create(&arena, sizeof(Equation), 0);
     parse(&eqns, "2024/input/07.txt", &arena);
 
-    printf("%ld\n", compute(&eqns, (Operation *[]){add, mul}, 2, arena));
-    printf("%ld\n", compute(&eqns, (Operation *[]){add, mul, cat}, 3, arena));
+    long part1 = 0;
+    long part2 = 0;
+    list_for_each(item, &eqns) {
+        Equation *eqn = item->data;
+        part1 += solvable(eqn, eqn->test, eqn->length - 1, 0) ? eqn->test : 0;
+        part2 += solvable(eqn, eqn->test, eqn->length - 1, 1) ? eqn->test : 0;
+    }
+    printf("%ld\n", part1);
+    printf("%ld\n", part2);
 
     arena_destroy(&arena);
 }
@@ -43,38 +47,16 @@ void parse(List *eqns, const char *fname, Arena *arena) {
     fclose(file);
 }
 
-long compute(const List *eqns, Operation **op, long nops, Arena arena) {
-    long total = 0;
-    ListItem *item = list_items(eqns, &arena);
-#pragma omp parallel for reduction(+ : total) schedule(auto)
-    for (long e = 0; e < eqns->length; e++) {
-        Equation *eqn = item[e].data;
-        long repeat = eqn->length - 1;
-        long ncombs = lpow(nops, repeat);
-        for (long comb = 0; comb < ncombs; comb++) {
-            long test = eqn->number[0];
-            for (long i = 0, j = comb; i < repeat; i++, j /= nops) {
-                test = op[j % nops](test, eqn->number[i + 1]);
-            }
-            if (test == eqn->test) {
-                total += test;
-                break;
-            }
-        }
+long solvable(const Equation *eqn, long res, long i, int part2) {
+    if (i == 0) {
+        return res == eqn->number[i] ? eqn->test : 0;
     }
-    return total;
-}
-
-long add(long a, long b) {
-    return a + b;
-}
-
-long mul(long a, long b) {
-    return a * b;
-}
-
-long cat(long a, long b) {
-    char tmp[128];
-    sprintf(tmp, "%ld%ld", a, b);
-    return strtol(tmp, 0, 10);
+    long x = eqn->number[i];
+    long d = 1;
+    for (long v = x; v; v /= 10) {
+        d *= 10;
+    }
+    return (res > x && solvable(eqn, res - x, i - 1, part2)) ||
+           (res % x == 0 && solvable(eqn, res / x, i - 1, part2)) ||
+           (part2 && res % d == x && solvable(eqn, res / d, i - 1, part2));
 }
