@@ -1,7 +1,7 @@
 #include "aoc.h"
 
 void parse(List *byte, const char *fname);
-long min_distance(const Grid *grid, Arena arena);
+long distance(const Grid *grid, Arena arena);
 
 int main(void) {
     Arena arena = arena_create(1 << 20);
@@ -17,9 +17,9 @@ int main(void) {
         Vec2 *pos = item->data;
         grid_set(&grid, pos->r, pos->c, '#');
         if (--count == 0) {
-            printf("%ld\n", min_distance(&grid, arena));
+            printf("%ld\n", distance(&grid, arena));
         }
-        if (count < 0 && min_distance(&grid, arena) < 0) {
+        if (count < 0 && distance(&grid, arena) < 0) {
             printf("%ld,%ld\n", pos->c, pos->r);
             break;
         }
@@ -38,7 +38,7 @@ void parse(List *byte, const char *fname) {
     fclose(file);
 }
 
-long min_distance(const Grid *grid, Arena arena) {
+long distance(const Grid *grid, Arena arena) {
     Vec2 start = {0, 0};
     Vec2 end = {grid->rows - 1, grid->cols - 1};
     long(*dist)[grid->cols] = calloc(&arena, dist, grid->rows);
