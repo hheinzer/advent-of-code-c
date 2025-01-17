@@ -1,6 +1,6 @@
 #include "aoc.h"
 
-long count(const char *stone, long steps, Arena *arena);
+long blink(long stone, long steps, Arena *arena);
 
 int main(void) {
     Arena arena = arena_create(12 << 20);
@@ -11,8 +11,8 @@ int main(void) {
     long part2 = 0;
     char *stone = strtok(stones, " ");
     while (stone) {
-        part1 += count(stone, 25, &arena);
-        part2 += count(stone, 75, &arena);
+        part1 += blink(strtol(stone, 0, 10), 25, &arena);
+        part2 += blink(strtol(stone, 0, 10), 75, &arena);
         stone = strtok(0, " ");
     }
     printf("%ld\n", part1);
@@ -21,11 +21,15 @@ int main(void) {
     arena_destroy(&arena);
 }
 
-long cached_count(Dict *cache, long stone, long steps) {
+long blink(long stone, long steps, Arena *arena) {
+    static Dict cache = {0};
+    if (!cache.arena) {
+        cache = dict_create(arena, sizeof(long));
+    }
     if (steps == 0) {
         return 1;
     }
-    long *cached = dict_find(cache, (long[]){stone, steps}, sizeof(long[2]));
+    long *cached = dict_find(&cache, (long[]){stone, steps}, sizeof(long[2]));
     if (cached) {
         return *cached;
     }
@@ -35,19 +39,11 @@ long cached_count(Dict *cache, long stone, long steps) {
         long divisor = pow(10, length / 2);
         long a = stone / divisor;
         long b = stone % divisor;
-        count = cached_count(cache, a, steps - 1) + cached_count(cache, b, steps - 1);
+        count = blink(a, steps - 1, 0) + blink(b, steps - 1, 0);
     }
     else {
-        count = cached_count(cache, stone ? stone * 2024 : 1, steps - 1);
+        count = blink(stone ? stone * 2024 : 1, steps - 1, 0);
     }
-    dict_insert(cache, (long[]){stone, steps}, sizeof(long[2]), &count);
+    dict_insert(&cache, (long[]){stone, steps}, sizeof(long[2]), &count);
     return count;
-}
-
-long count(const char *stone, long steps, Arena *arena) {
-    static Dict cache = {0};
-    if (!cache.arena) {
-        cache = dict_create(arena, sizeof(long));
-    }
-    return cached_count(&cache, strtol(stone, 0, 10), steps);
 }
