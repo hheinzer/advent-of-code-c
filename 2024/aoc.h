@@ -16,15 +16,36 @@
 #define calloc(A, P, N) arena_calloc(A, N, sizeof(*(P)), alignof(typeof(*(P))))
 #define realloc(A, P, N) arena_realloc(A, P, N, sizeof(*(P)), alignof(typeof(*(P))))
 #define memdup(A, P, N) arena_memdup(A, P, N, sizeof(*(P)), alignof(typeof(*(P))))
-#define strdup(A, S) memdup(A, S, strlen(S) + 1)
+#define strdup(A, S) memdup(A, (char *)S, strlen(S) + 1)
+#define strapp(A, S1, S2) strcat(realloc(A, (char *)S1, strlen(S1) + strlen(S2) + 1), S2)
 
 // convenience functions
 #define countof(A) (sizeof(A) / sizeof(*(A)))
 #define array_for_each(T, I, ...) for (T A[] = {__VA_ARGS__}, *I = A; I < A + countof(A); I++)
 
+// min/max function
+#define min(a, b) _Generic(a, long: x__min_long, double: x__min_double)(a, b)
+#define max(a, b) _Generic(a, long: x__max_long, double: x__max_double)(a, b)
+long x__min_long(long a, long b) {
+    return a < b ? a : b;
+}
+long x__max_long(long a, long b) {
+    return a > b ? a : b;
+}
+double x__min_double(double a, double b) {
+    return a < b ? a : b;
+}
+double x__max_double(double a, double b) {
+    return a > b ? a : b;
+}
+
 // comparison functions
-int longcmp(const void *a, const void *b, void *) {
+int cmp_long(const void *a, const void *b, void *) {
     const long *_a = a, *_b = b;
+    return (*_a > *_b) - (*_a < *_b);
+}
+int cmp_double(const void *a, const void *b, void *) {
+    const double *_a = a, *_b = b;
     return (*_a > *_b) - (*_a < *_b);
 }
 

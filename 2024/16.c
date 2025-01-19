@@ -28,7 +28,7 @@ long score(const Grid *grid, Set *seen, Arena *arena) {
     start.dir = (Vec2){0, +1};
     long best = LONG_MAX;
     Dict scores = dict_create(arena, sizeof(long));
-    Heap heap = heap_create(arena, sizeof(Pos), longcmp);
+    Heap heap = heap_create(arena, sizeof(Pos), cmp_long);
     heap_push(&heap, &start, 0);
     while (heap.length) {
         Pos *cur = heap_pop(&heap, 0);
