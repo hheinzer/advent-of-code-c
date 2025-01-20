@@ -4,7 +4,7 @@ Dict distance(const Grid *grid, Arena *arena);
 long cheat(const Dict *dist, const Vec2 *pos, const long *d0, long time);
 
 int main(void) {
-    Arena arena = arena_create(2 << 20);
+    Arena arena = arena_create(2 * mega_byte);
 
     Grid grid = grid_parse("2024/input/20.txt", &arena);
     Dict dist = distance(&grid, &arena);
@@ -25,7 +25,7 @@ Dict distance(const Grid *grid, Arena *arena) {
     Vec2 start = grid_find(grid, 'S');
     Dict dist = dict_create(arena, sizeof(long));
     dict_insert(&dist, &start, sizeof(Vec2), &(long){0});
-    List queue = list_create(arena, sizeof(Vec2), 0);
+    List queue = list_create(arena, sizeof(Vec2), nullptr);
     list_append(&queue, &start);
     while (queue.length) {
         Vec2 *cur = list_pop(&queue, 0);

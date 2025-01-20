@@ -13,7 +13,7 @@ void check_move(Grid *grid, long move, Arena arena);
 long sum(const Grid *grid);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     char *fname = "2024/input/15.txt";
     Grid grid = grid_parse(fname, &arena);
@@ -62,15 +62,15 @@ Grid expand(const Grid *grid, Arena *arena) {
             switch (chr) {
                 case 'O':
                     grid_set(&wide, r, 2 * c, '[');
-                    grid_set(&wide, r, 2 * c + 1, ']');
+                    grid_set(&wide, r, (2 * c) + 1, ']');
                     break;
                 case '@':
                     grid_set(&wide, r, 2 * c, '@');
-                    grid_set(&wide, r, 2 * c + 1, '.');
+                    grid_set(&wide, r, (2 * c) + 1, '.');
                     break;
                 default:
                     grid_set(&wide, r, 2 * c, chr);
-                    grid_set(&wide, r, 2 * c + 1, chr);
+                    grid_set(&wide, r, (2 * c) + 1, chr);
             }
         }
     }

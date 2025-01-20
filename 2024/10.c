@@ -3,7 +3,7 @@
 long score(const Grid *grid, long r, long c, int all, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     Grid grid = grid_parse("2024/input/10.txt", &arena);
 
@@ -25,7 +25,7 @@ int main(void) {
 
 long score(const Grid *grid, long r, long c, int all, Arena arena) {
     long count = 0;
-    List queue = list_create(&arena, sizeof(Vec2), 0);
+    List queue = list_create(&arena, sizeof(Vec2), nullptr);
     Set seen = set_create(&arena);
     list_append(&queue, &(Vec2){r, c});
     set_insert(&seen, &(Vec2){r, c}, sizeof(Vec2));

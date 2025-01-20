@@ -5,11 +5,11 @@ long price1(const Set *region, const Grid *grid);
 long price2(const Set *region);
 
 int main(void) {
-    Arena arena = arena_create(6 << 20);
+    Arena arena = arena_create(6 * mega_byte);
 
     Grid grid = grid_parse("2024/input/12.txt", &arena);
 
-    List regions = list_create(&arena, sizeof(Set), 0);
+    List regions = list_create(&arena, sizeof(Set), nullptr);
     create(&regions, &grid, &arena);
 
     long part1 = 0;
@@ -33,7 +33,7 @@ void create(List *regions, const Grid *grid, Arena *arena) {
             }
             char plant = grid_get(grid, r, c);
             Set region = set_create(arena);
-            List queue = list_create(arena, sizeof(Vec2), 0);
+            List queue = list_create(arena, sizeof(Vec2), nullptr);
             list_append(&queue, &(Vec2){r, c});
             while (queue.length) {
                 Vec2 *cur = list_pop(&queue, 0);

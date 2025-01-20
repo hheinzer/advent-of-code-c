@@ -7,7 +7,7 @@ char *run(long a, char *ret, const char *prg);
 long find(long a, char *ret, const char *prg, long depth);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     long a;
     char *prg = parse(&a, "2024/input/17.txt", &arena);
@@ -69,14 +69,14 @@ char *run(long a, char *ret, const char *prg) {
                 break;
             case jnz:
                 if (a) {
-                    p = prg + 2 * oper - 4;
+                    p = prg + (long)(2 * oper) - 4;
                 }
                 break;
             case bxc:
                 b ^= c;
                 break;
             case out:
-                strcat(ret, (char[]){'0' + combo(oper, a, b, c) % 8, ',', 0});
+                strcat(ret, (char[]){'0' + (combo(oper, a, b, c) % 8), ',', 0});
                 break;
             case bdv:
                 b = a >> combo(oper, a, b, c);
@@ -96,8 +96,8 @@ long find(long a, char *ret, const char *prg, long depth) {
         return a;
     }
     for (long i = 0; i < 8; i++) {
-        long aa = 8 * a + i;
-        if (run(aa, ret, prg)[0] == prg[prglen - 2 * depth - 1]) {
+        long aa = (8 * a) + i;
+        if (run(aa, ret, prg)[0] == prg[prglen - (2 * depth) - 1]) {
             long res = find(aa, ret, prg, depth + 1);
             if (res) {
                 return res;

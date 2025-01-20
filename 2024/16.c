@@ -11,7 +11,7 @@ struct Pos {
 long score(const Grid *grid, Set *seen, Arena *arena);
 
 int main(void) {
-    Arena arena = arena_create(27 << 20);
+    Arena arena = arena_create(27 * mega_byte);
 
     Grid grid = grid_parse("2024/input/16.txt", &arena);
 
@@ -29,9 +29,9 @@ long score(const Grid *grid, Set *seen, Arena *arena) {
     long best = LONG_MAX;
     Dict scores = dict_create(arena, sizeof(long));
     Heap heap = heap_create(arena, sizeof(Pos), cmp_long);
-    heap_push(&heap, &start, 0);
+    heap_push(&heap, &start, nullptr);
     while (heap.length) {
-        Pos *cur = heap_pop(&heap, 0);
+        Pos *cur = heap_pop(&heap, nullptr);
         long *score = dict_insert(&scores, &cur->pos, sizeof(Vec2[2]), &cur->score);
         if (score && *score < cur->score) {
             continue;
@@ -51,7 +51,7 @@ long score(const Grid *grid, Set *seen, Arena *arena) {
             nxt.dir = *dir;
             nxt.score = cur->score + (!memcmp(&cur->dir, dir, sizeof(Vec2)) ? 1 : 1001);
             nxt.prev = cur;
-            heap_push(&heap, &nxt, 0);
+            heap_push(&heap, &nxt, nullptr);
         }
     }
     return best;

@@ -10,9 +10,9 @@ int issafe1(const Report *report);
 int issafe2(const Report *report, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
-    List report = list_create(&arena, sizeof(Report), 0);
+    List report = list_create(&arena, sizeof(Report), nullptr);
     parse(&report, "2024/input/02.txt", &arena);
 
     long part1 = 0;
@@ -32,12 +32,12 @@ void parse(List *reports, const char *fname, Arena *arena) {
     assert(file);
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        Report report = {0};
+        Report report = {};
         char *token = strtok(line, " ");
         while (token) {
             report.level = realloc(arena, report.level, ++report.length);
-            report.level[report.length - 1] = strtol(token, 0, 10);
-            token = strtok(0, " ");
+            report.level[report.length - 1] = strtol(token, nullptr, 10);
+            token = strtok(nullptr, " ");
         }
         list_append(reports, &report);
     }
@@ -61,7 +61,7 @@ int issafe2(const Report *report, Arena arena) {
     if (issafe1(report)) {
         return 1;
     }
-    Report modified = {0};
+    Report modified = {};
     modified.level = calloc(&arena, modified.level, report->length - 1);
     modified.length = report->length - 1;
     for (long skip = 0; skip < report->length; skip++) {

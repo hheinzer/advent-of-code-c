@@ -5,10 +5,10 @@ int compare(const void *_a, const void *_b, void *_rule);
 int sorted(const List *page, Dict *rule);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     Dict rule = dict_create(&arena, sizeof(int));
-    List update = list_create(&arena, sizeof(List), 0);
+    List update = list_create(&arena, sizeof(List), nullptr);
     parse(&rule, &update, "2024/input/05.txt", &arena);
 
     long part1 = 0;
@@ -37,7 +37,8 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
         if (line[0] == '\n') {
             break;
         }
-        long a, b;
+        long a;
+        long b;
         sscanf(line, "%ld|%ld", &a, &b);
         dict_insert(rule, (long[]){a, b}, sizeof(long[2]), &(int){-1});
         dict_insert(rule, (long[]){b, a}, sizeof(long[2]), &(int){+1});
@@ -46,8 +47,8 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
         List page = list_create(arena, sizeof(long), compare);
         char *token = strtok(line, ",");
         while (token) {
-            list_append(&page, &(long){strtol(token, 0, 10)});
-            token = strtok(0, ",");
+            list_append(&page, &(long){strtol(token, nullptr, 10)});
+            token = strtok(nullptr, ",");
         }
         list_append(update, &page);
     }
@@ -55,7 +56,8 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
 }
 
 int compare(const void *_a, const void *_b, void *_rule) {
-    const long *a = _a, *b = _b;
+    const long *a = _a;
+    const long *b = _b;
     const Dict *rule = _rule;
     int *order = dict_find(rule, (long[]){*a, *b}, sizeof(long[2]));
     return order ? *order : 0;

@@ -6,9 +6,9 @@ Dict dirpad(Arena *arena);
 long complexity(const char *code, const Dict *num, const Dict *dir, long robots, Arena *arena);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
-    List code = list_create(&arena, 0, 0);
+    List code = list_create(&arena, 0, nullptr);
     parse(&code, "2024/input/21.txt", &arena);
 
     Dict num = numpad(&arena);
@@ -68,7 +68,7 @@ typedef struct {
 void find(Path *path, const Grid *grid, char start, char end, Arena arena) {
     State state = {0};
     state.pos = grid_find(grid, start);
-    List queue = list_create(&arena, sizeof(State), 0);
+    List queue = list_create(&arena, sizeof(State), nullptr);
     list_append(&queue, &state);
     long best = LONG_MAX;
     while (queue.length) {
@@ -132,7 +132,7 @@ Dict dirpad(Arena *arena) {
 }
 
 List generate(const char *code, const Dict *pad, Arena *arena) {
-    List seq = list_create(arena, 0, 0);
+    List seq = list_create(arena, 0, nullptr);
     for (const char *a = "A", *b = code; *b; a = b, b++) {
         Path *path = dict_find(pad, (char[]){*a, *b}, sizeof(char[2]));
         long length = seq.length;
@@ -144,9 +144,9 @@ List generate(const char *code, const Dict *pad, Arena *arena) {
         else {
             for (ListItem *item = seq.begin; length--; item = item->next) {
                 char *str = item->data;
-                item->data = strapp(arena, strdup(arena, str), path->str[0]);
+                item->data = strapp(arena, (char *)strdup(arena, str), path->str[0]);
                 for (long i = 1; i < path->count; i++) {
-                    list_append(&seq, strapp(arena, strdup(arena, str), path->str[i]));
+                    list_append(&seq, strapp(arena, (char *)strdup(arena, str), path->str[i]));
                 }
             }
         }
@@ -160,7 +160,7 @@ typedef struct {
 } Cache;
 
 long get_length(const char *code, const Dict *dir, long depth, Arena *arena) {
-    static Dict cache = {0};
+    static Dict cache = {};
     if (!cache.arena) {
         cache = dict_create(arena, sizeof(long));
     }
@@ -194,5 +194,5 @@ long complexity(const char *code, const Dict *num, const Dict *dir, long robots,
     list_for_each(item, &seq) {
         length = min(length, get_length(item->data, dir, robots, arena));
     }
-    return strtol(code, 0, 10) * length;
+    return strtol(code, nullptr, 10) * length;
 }

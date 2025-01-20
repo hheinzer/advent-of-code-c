@@ -4,10 +4,10 @@ void parse(List *number, const char *fname);
 long evolve(Dict *price, long number, long n, Arena scratch);
 
 int main(void) {
-    Arena arena = arena_create(6 << 20);
-    Arena scratch = arena_scratch_create(&arena, 1 << 20);
+    Arena arena = arena_create(6 * mega_byte);
+    Arena scratch = arena_scratch_create(&arena, mega_byte);
 
-    List number = list_create(&arena, sizeof(long), 0);
+    List number = list_create(&arena, sizeof(long), nullptr);
     parse(&number, "2024/input/22.txt");
 
     long part1 = 0;
@@ -31,14 +31,14 @@ void parse(List *number, const char *fname) {
     assert(file);
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        list_append(number, &(long){strtol(line, 0, 10)});
+        list_append(number, &(long){strtol(line, nullptr, 10)});
     }
     fclose(file);
 }
 
 long evolve(Dict *price, long number, long n, Arena scratch) {
     Set seen = set_create(&scratch);
-    List diff = list_create(&scratch, sizeof(long), 0);
+    List diff = list_create(&scratch, sizeof(long), nullptr);
     for (long i = 0; i < n; i++) {
         long next = number;
         next = ((next * 64) ^ next) % 16777216;

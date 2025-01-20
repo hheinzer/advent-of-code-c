@@ -3,14 +3,14 @@
 void parse(List *left, List *right, const char *fname);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     List left = list_create(&arena, sizeof(long), cmp_long);
     List right = list_create(&arena, sizeof(long), cmp_long);
     parse(&left, &right, "2024/input/01.txt");
 
-    list_sort(&left, 0);
-    list_sort(&right, 0);
+    list_sort(&left, nullptr);
+    list_sort(&right, nullptr);
 
     long part1 = 0;
     for (ListItem *l = left.begin, *r = right.begin; l && r; l = l->next, r = r->next) {
@@ -38,7 +38,8 @@ int main(void) {
 void parse(List *left, List *right, const char *fname) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    long a, b;
+    long a;
+    long b;
     while (fscanf(file, "%ld %ld\n", &a, &b) == 2) {
         list_append(left, &a);
         list_append(right, &b);

@@ -3,7 +3,7 @@
 long blink(long stone, long steps, Arena *arena);
 
 int main(void) {
-    Arena arena = arena_create(12 << 20);
+    Arena arena = arena_create(12 * mega_byte);
 
     char *stones = string_parse("2024/input/11.txt", "\n", &arena);
 
@@ -11,9 +11,9 @@ int main(void) {
     long part2 = 0;
     char *stone = strtok(stones, " ");
     while (stone) {
-        part1 += blink(strtol(stone, 0, 10), 25, &arena);
-        part2 += blink(strtol(stone, 0, 10), 75, &arena);
-        stone = strtok(0, " ");
+        part1 += blink(strtol(stone, nullptr, 10), 25, &arena);
+        part2 += blink(strtol(stone, nullptr, 10), 75, &arena);
+        stone = strtok(nullptr, " ");
     }
     printf("%ld\n", part1);
     printf("%ld\n", part2);
@@ -22,7 +22,7 @@ int main(void) {
 }
 
 long blink(long stone, long steps, Arena *arena) {
-    static Dict cache = {0};
+    static Dict cache = {};
     if (!cache.arena) {
         cache = dict_create(arena, sizeof(long));
     }
@@ -36,13 +36,13 @@ long blink(long stone, long steps, Arena *arena) {
     long count = 0;
     long length = stone > 0 ? log10(stone) + 1 : 1;
     if (length % 2 == 0) {
-        long divisor = pow(10, length / 2);
+        long divisor = lpow(10, length / 2);
         long a = stone / divisor;
         long b = stone % divisor;
-        count = blink(a, steps - 1, 0) + blink(b, steps - 1, 0);
+        count = blink(a, steps - 1, nullptr) + blink(b, steps - 1, nullptr);
     }
     else {
-        count = blink(stone ? stone * 2024 : 1, steps - 1, 0);
+        count = blink(stone ? stone * 2024 : 1, steps - 1, nullptr);
     }
     dict_insert(&cache, (long[]){stone, steps}, sizeof(long[2]), &count);
     return count;

@@ -4,7 +4,7 @@ long search1(const Grid *grid, long r, long c);
 long search2(const Grid *grid, long r, long c);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     Grid grid = grid_parse("2024/input/04.txt", &arena);
 
@@ -35,7 +35,7 @@ long search1(const Grid *grid, long r, long c) {
                 continue;
             }
             for (long i = 1; i <= 3; i++) {
-                xmas[i] = grid_get(grid, r + i * dr, c + i * dc);
+                xmas[i] = grid_get(grid, r + (i * dr), c + (i * dc));
             }
             if (!strcmp(xmas, "XMAS")) {
                 count += 1;

@@ -4,10 +4,10 @@ void parse(List *pattern, List *design, const char *fname, Arena *arena);
 long possible(const List *pattern, const char *design, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
-    List pattern = list_create(&arena, 0, 0);
-    List design = list_create(&arena, 0, 0);
+    List pattern = list_create(&arena, 0, nullptr);
+    List design = list_create(&arena, 0, nullptr);
     parse(&pattern, &design, "2024/input/19.txt", &arena);
 
     long part1 = 0;
@@ -40,7 +40,7 @@ void parse(List *pattern, List *design, const char *fname, Arena *arena) {
 }
 
 long possible(const List *pattern, const char *design, Arena arena) {
-    static Dict cache = {0};
+    static Dict cache = {};
     if (arena.data) {
         cache = dict_create(&arena, sizeof(long));
     }
@@ -55,7 +55,7 @@ long possible(const List *pattern, const char *design, Arena arena) {
     list_for_each(item, pattern) {
         long length = strlen(item->data);
         if (!strncmp(item->data, design, length)) {
-            count += possible(pattern, design + length, (Arena){0});
+            count += possible(pattern, design + length, (Arena){});
         }
     }
     dict_insert(&cache, design, 0, &count);

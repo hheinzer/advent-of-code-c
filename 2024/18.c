@@ -4,9 +4,9 @@ void parse(List *byte, const char *fname);
 long distance(const Grid *grid, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
-    List byte = list_create(&arena, sizeof(Vec2), 0);
+    List byte = list_create(&arena, sizeof(Vec2), nullptr);
     parse(&byte, "2024/input/18.txt");
 
     long size = 71;
@@ -31,7 +31,8 @@ int main(void) {
 void parse(List *byte, const char *fname) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    long c, r;
+    long c;
+    long r;
     while (fscanf(file, "%ld,%ld\n", &c, &r) == 2) {
         list_append(byte, &(Vec2){r, c});
     }
@@ -42,7 +43,7 @@ long distance(const Grid *grid, Arena arena) {
     Vec2 start = {0, 0};
     Vec2 end = {grid->rows - 1, grid->cols - 1};
     long(*dist)[grid->cols] = calloc(&arena, dist, grid->rows);
-    List queue = list_create(&arena, sizeof(Vec2), 0);
+    List queue = list_create(&arena, sizeof(Vec2), nullptr);
     list_append(&queue, &start);
     while (queue.length) {
         Vec2 *cur = list_pop(&queue, 0);

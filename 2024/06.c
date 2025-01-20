@@ -8,7 +8,7 @@ typedef struct {
 int walk(const Grid *grid, Dict *path, State s, const State *obstacle, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(4 << 20);
+    Arena arena = arena_create(4 * mega_byte);
 
     Grid grid = grid_parse("2024/input/06.txt", &arena);
 
@@ -17,12 +17,12 @@ int main(void) {
     start.dir = (Vec2){-1, 0};
 
     Dict path = dict_create(&arena, sizeof(State));
-    walk(&grid, &path, start, 0, arena);
+    walk(&grid, &path, start, nullptr, arena);
     printf("%ld\n", path.length);
 
     long count = 0;
     dict_for_each(item, &path) {
-        count += walk(&grid, 0, *(State *)item->data, item->key.data, arena);
+        count += walk(&grid, nullptr, *(State *)item->data, item->key.data, arena);
     }
     printf("%ld\n", count);
 

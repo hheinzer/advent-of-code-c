@@ -11,9 +11,9 @@ long quadrant(Vec2 p, long cols, long rows);
 long safety(const List *robots, long cols, long rows, long time);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
-    List robots = list_create(&arena, sizeof(Robot), 0);
+    List robots = list_create(&arena, sizeof(Robot), nullptr);
     parse(&robots, "2024/input/14.txt");
 
     long cols = 101;
@@ -55,8 +55,8 @@ void parse(List *robots, const char *fname) {
 
 Vec2 position(const Robot *robot, long cols, long rows, long time) {
     Vec2 p = robot->p;
-    p.r = modulo(p.r + time * robot->v.r, rows);
-    p.c = modulo(p.c + time * robot->v.c, cols);
+    p.r = modulo(p.r + (time * robot->v.r), rows);
+    p.c = modulo(p.c + (time * robot->v.c), cols);
     return p;
 }
 

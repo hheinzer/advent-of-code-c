@@ -10,9 +10,9 @@ void parse(List *eqns, const char *fname, Arena *arena);
 long solvable(const Equation *eqn, long res, long i, int part2);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
-    List eqns = list_create(&arena, sizeof(Equation), 0);
+    List eqns = list_create(&arena, sizeof(Equation), nullptr);
     parse(&eqns, "2024/input/07.txt", &arena);
 
     long part1 = 0;
@@ -35,12 +35,12 @@ void parse(List *eqns, const char *fname, Arena *arena) {
     while (fgets(line, sizeof(line), file)) {
         Equation eqn = {0};
         char *token = strtok(line, " ");
-        eqn.test = strtol(token, 0, 10);
-        token = strtok(0, " ");
+        eqn.test = strtol(token, nullptr, 10);
+        token = strtok(nullptr, " ");
         while (token) {
             eqn.number = realloc(arena, eqn.number, ++eqn.length);
-            eqn.number[eqn.length - 1] = strtol(token, 0, 10);
-            token = strtok(0, " ");
+            eqn.number[eqn.length - 1] = strtol(token, nullptr, 10);
+            token = strtok(nullptr, " ");
         }
         list_append(eqns, &eqn);
     }

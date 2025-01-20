@@ -4,7 +4,7 @@ Dict freqs_find(const Grid *grid, Arena *arena);
 long count(const Grid *grid, const Dict *freq, long start, long stop, Arena arena);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     Grid grid = grid_parse("2024/input/08.txt", &arena);
     Dict freq = freqs_find(&grid, &arena);
@@ -21,7 +21,7 @@ Dict freqs_find(const Grid *grid, Arena *arena) {
         if (*f == '.' || dict_find(&freq, f, sizeof(*f))) {
             continue;
         }
-        List pos = list_create(arena, sizeof(Vec2), 0);
+        List pos = list_create(arena, sizeof(Vec2), nullptr);
         for (long r = 0; r < grid->rows; r++) {
             for (long c = 0; c < grid->cols; c++) {
                 if (grid_get(grid, r, c) == *f) {
@@ -50,8 +50,8 @@ long count(const Grid *grid, const Dict *freq, long start, long stop, Arena aren
                 Vec2 l2 = *b;
                 long n = start;
                 while (grid_get(grid, l1.r, l1.c) || grid_get(grid, l2.r, l2.c)) {
-                    l1 = (Vec2){a->r - n * dir.r, a->c - n * dir.c};
-                    l2 = (Vec2){b->r + n * dir.r, b->c + n * dir.c};
+                    l1 = (Vec2){a->r - (n * dir.r), a->c - (n * dir.c)};
+                    l2 = (Vec2){b->r + (n * dir.r), b->c + (n * dir.c)};
                     if (grid_get(grid, l1.r, l1.c)) {
                         set_insert(&loc, &l1, sizeof(l1));
                     }

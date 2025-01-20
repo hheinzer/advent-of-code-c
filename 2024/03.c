@@ -5,7 +5,7 @@ long compute(const char *input);
 char *filter(char *input);
 
 int main(void) {
-    Arena arena = arena_create(1 << 20);
+    Arena arena = arena_create(mega_byte);
 
     char *input = string_parse("2024/input/03.txt", "\n", &arena);
 
@@ -27,12 +27,14 @@ long compute(const char *input) {
             while (isdigit(*c)) {
                 c++;
             };
-            if (*c == ',' && isdigit(*(++c))) {
+            if (*c == ',' && isdigit(*(c + 1))) {
+                c += 1;
                 while (isdigit(*c)) {
                     c++;
                 };
                 if (*c == ')') {
-                    long x, y;
+                    long x;
+                    long y;
                     sscanf(begin, "mul(%ld,%ld)", &x, &y);
                     sum += x * y;
                 }

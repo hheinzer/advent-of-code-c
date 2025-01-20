@@ -12,7 +12,7 @@ List rearrange2(List *before, Arena *arena);
 long checksum(const List *block);
 
 int main(void) {
-    Arena arena = arena_create(2 << 20);
+    Arena arena = arena_create(2 * mega_byte);
 
     char *disk = string_parse("2024/input/09.txt", "\n", &arena);
 
@@ -34,7 +34,7 @@ int main(void) {
 }
 
 List create(const char *disk, Arena *arena) {
-    List blocks = list_create(arena, sizeof(Block), 0);
+    List blocks = list_create(arena, sizeof(Block), nullptr);
     for (long i = 0, offset = 0; disk[i]; i++) {
         long length = disk[i] - '0';
         list_append(&blocks, &(Block){i % 2 == 0 ? i / 2 : -1, offset, length});
@@ -58,7 +58,7 @@ ListItem *prev_file(ListItem *item) {
 }
 
 List rearrange1(List *before, Arena *arena) {
-    List after = list_create(arena, sizeof(Block), 0);
+    List after = list_create(arena, sizeof(Block), nullptr);
     list_append(&after, before->begin->data);
     for (ListItem *b1 = next_space(before->begin), *b2 = prev_file(before->end); b1 && b2;) {
         Block *space = b1->data;
@@ -87,7 +87,7 @@ List rearrange1(List *before, Arena *arena) {
 }
 
 List rearrange2(List *before, Arena *arena) {
-    List after = list_create(arena, sizeof(Block), 0);
+    List after = list_create(arena, sizeof(Block), nullptr);
     list_append(&after, before->begin->data);
     for (ListItem *b2 = prev_file(before->end); b2; b2 = prev_file(b2->prev)) {
         Block *file = b2->data;
