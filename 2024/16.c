@@ -8,7 +8,7 @@ struct Pos {
     Pos *prev;
 };
 
-long score(const Grid *grid, Set *seen, Arena *arena);
+long lowest_score(const Grid *grid, Set *seen, Arena *arena);
 
 int main(void) {
     Arena arena = arena_create(27 * mega_byte);
@@ -16,13 +16,13 @@ int main(void) {
     Grid grid = grid_parse("2024/input/16.txt", &arena);
 
     Set seen = set_create(&arena);
-    printf("%ld\n", score(&grid, &seen, &arena));
+    printf("%ld\n", lowest_score(&grid, &seen, &arena));
     printf("%ld\n", seen.length);
 
     arena_destroy(&arena);
 }
 
-long score(const Grid *grid, Set *seen, Arena *arena) {
+long lowest_score(const Grid *grid, Set *seen, Arena *arena) {
     Pos start = {0};
     start.pos = grid_find(grid, 'S');
     start.dir = (Vec2){0, +1};
