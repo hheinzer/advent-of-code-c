@@ -42,15 +42,18 @@ double x__max_double(double a, double b) {
 }
 
 // comparison functions
-int cmp_long(const void *a, const void *b, void *) {
-    const long *_a = a;
-    const long *_b = b;
-    return (*_a > *_b) - (*_a < *_b);
+int cmp_long(const void *_a, const void *_b, void *) {
+    const long *a = _a;
+    const long *b = _b;
+    return (*a > *b) - (*a < *b);
 }
-int cmp_double(const void *a, const void *b, void *) {
-    const double *_a = a;
-    const double *_b = b;
-    return (*_a > *_b) - (*_a < *_b);
+int cmp_double(const void *_a, const void *_b, void *) {
+    const double *a = _a;
+    const double *b = _b;
+    return (*a > *b) - (*a < *b);
+}
+int cmp_string(const void *a, const void *b, void *) {
+    return strcmp(a, b);
 }
 
 // integer math functions
