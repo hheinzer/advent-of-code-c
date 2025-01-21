@@ -27,8 +27,7 @@ long search1(const Grid *grid, long r, long c) {
         return 0;
     }
     long count = 0;
-    char xmas[5] = {0};
-    xmas[0] = grid_get(grid, r, c);
+    char xmas[5] = {grid_get(grid, r, c)};
     for (long dr = -1; dr <= 1; dr++) {
         for (long dc = -1; dc <= 1; dc++) {
             if (dr == 0 && dc == 0) {
@@ -49,7 +48,7 @@ long search2(const Grid *grid, long r, long c) {
     if (grid_get(grid, r, c) != 'A') {
         return 0;
     }
-    char s[5] = {0};
+    char s[5] = {};
     s[0] = grid_get(grid, r - 1, c - 1);
     s[1] = grid_get(grid, r - 1, c + 1);
     s[2] = grid_get(grid, r + 1, c + 1);

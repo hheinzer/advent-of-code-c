@@ -66,8 +66,7 @@ typedef struct {
 } Dir;
 
 void find(Path *path, const Grid *grid, char start, char end, Arena arena) {
-    State state = {0};
-    state.pos = grid_find(grid, start);
+    State state = {.pos = grid_find(grid, start)};
     List queue = list_create(&arena, sizeof(State), nullptr);
     list_append(&queue, &state);
     long best = LONG_MAX;
@@ -85,8 +84,7 @@ void find(Path *path, const Grid *grid, char start, char end, Arena arena) {
             return;
         }
         array_for_each(Dir, dir, {-1, 0, '^'}, {+1, 0, 'v'}, {0, -1, '<'}, {0, +1, '>'}) {
-            State nxt = {0};
-            nxt.pos = (Vec2){cur->pos.r + dir->r, cur->pos.c + dir->c};
+            State nxt = {.pos = {cur->pos.r + dir->r, cur->pos.c + dir->c}};
             if (!grid_get(grid, nxt.pos.r, nxt.pos.c)) {
                 continue;
             }
@@ -98,15 +96,13 @@ void find(Path *path, const Grid *grid, char start, char end, Arena arena) {
 }
 
 Dict numpad(Arena *arena) {
-    Grid grid = {0};
-    grid.rows = 4;
-    grid.cols = 3;
+    Grid grid = {.rows = 4, .cols = 3};
     grid.data = strdup(arena, "789456123#0A");
     *strchr(grid.data, '#') = 0;
     Dict paths = dict_create(arena, sizeof(Path));
     for (const char *a = "A0123456789"; *a; a++) {
         for (const char *b = "A0123456789"; *b; b++) {
-            Path path = {0};
+            Path path = {};
             find(&path, &grid, *a, *b, *arena);
             dict_insert(&paths, (char[]){*a, *b}, sizeof(char[2]), &path);
         }
@@ -115,15 +111,13 @@ Dict numpad(Arena *arena) {
 }
 
 Dict dirpad(Arena *arena) {
-    Grid grid = {0};
-    grid.rows = 2;
-    grid.cols = 3;
+    Grid grid = {.rows = 2, .cols = 3};
     grid.data = strdup(arena, "#^A<v>");
     *strchr(grid.data, '#') = 0;
     Dict paths = dict_create(arena, sizeof(Path));
     for (const char *a = "A<v>^"; *a; a++) {
         for (const char *b = "A<v>^"; *b; b++) {
-            Path path = {0};
+            Path path = {};
             find(&path, &grid, *a, *b, *arena);
             dict_insert(&paths, (char[]){*a, *b}, sizeof(char[2]), &path);
         }

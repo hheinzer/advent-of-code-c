@@ -47,7 +47,7 @@ long evolve(Dict *price, long number, long n, Arena scratch) {
         list_append(&diff, &(long){(next % 10) - (number % 10)});
         number = next;
         if (diff.length == 4) {
-            long key[4] = {0};
+            long key[4] = {};
             long j = 0;
             list_for_each(item, &diff) {
                 key[j++] = *(long *)item->data;

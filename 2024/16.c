@@ -23,9 +23,7 @@ int main(void) {
 }
 
 long lowest_score(const Grid *grid, Set *seen, Arena *arena) {
-    Pos start = {0};
-    start.pos = grid_find(grid, 'S');
-    start.dir = (Vec2){0, +1};
+    Pos start = {.pos = grid_find(grid, 'S'), .dir = {0, +1}};
     long best = LONG_MAX;
     Dict scores = dict_create(arena, sizeof(long));
     Heap heap = heap_create(arena, sizeof(Pos), cmp_long);
@@ -43,8 +41,7 @@ long lowest_score(const Grid *grid, Set *seen, Arena *arena) {
             }
         }
         array_for_each(Vec2, dir, cur->dir, {-cur->dir.c, cur->dir.r}, {cur->dir.c, -cur->dir.r}) {
-            Pos nxt = {0};
-            nxt.pos = (Vec2){cur->pos.r + dir->r, cur->pos.c + dir->c};
+            Pos nxt = {.pos = {cur->pos.r + dir->r, cur->pos.c + dir->c}};
             if (grid_get(grid, nxt.pos.r, nxt.pos.c) == '#') {
                 continue;
             }

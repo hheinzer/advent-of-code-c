@@ -95,15 +95,13 @@ typedef struct {
     char *data;
 } Grid;
 Grid grid_create(long rows, long cols, char chr, Arena *arena) {
-    Grid grid = {0};
-    grid.rows = rows;
-    grid.cols = cols;
+    Grid grid = {.rows = rows, .cols = cols};
     grid.data = calloc(arena, grid.data, (grid.rows * grid.cols) + 1);
     memset(grid.data, chr, grid.rows * grid.cols);
     return grid;
 }
 Grid grid_parse(const char *fname, Arena *arena) {
-    Grid grid = {0};
+    Grid grid = {};
     grid.data = calloc(arena, grid.data, 1);
     FILE *file = fopen(fname, "r");
     assert(file);

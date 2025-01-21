@@ -12,9 +12,7 @@ int main(void) {
 
     Grid grid = grid_parse("2024/input/06.txt", &arena);
 
-    State start = {0};
-    start.pos = grid_find(&grid, '^');
-    start.dir = (Vec2){-1, 0};
+    State start = {.pos = grid_find(&grid, '^'), .dir = {-1, 0}};
 
     Dict path = dict_create(&arena, sizeof(State));
     walk(&grid, &path, start, nullptr, arena);

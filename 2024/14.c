@@ -77,7 +77,7 @@ long quadrant(Vec2 p, long cols, long rows) {
 }
 
 long safety(const List *robots, long cols, long rows, long time) {
-    long safety[5] = {0};
+    long safety[5] = {};
     list_for_each(item, robots) {
         Vec2 p = position(item->data, cols, rows, time);
         safety[quadrant(p, cols, rows)] += 1;

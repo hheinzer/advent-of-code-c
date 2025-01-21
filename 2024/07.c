@@ -33,7 +33,7 @@ void parse(List *eqns, const char *fname, Arena *arena) {
     assert(file);
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        Equation eqn = {0};
+        Equation eqn = {};
         char *token = strtok(line, " ");
         eqn.test = strtol(token, nullptr, 10);
         token = strtok(nullptr, " ");
