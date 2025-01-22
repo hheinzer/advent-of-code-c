@@ -44,7 +44,7 @@ int main(void) {
 void parse(List *robots, const char *fname) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         Robot robot;
         sscanf(line, "p=%ld,%ld v=%ld,%ld", &robot.p.c, &robot.p.r, &robot.v.c, &robot.v.r);

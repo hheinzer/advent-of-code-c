@@ -32,7 +32,7 @@ int main(void) {
 void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         if (line[0] == '\n') {
             break;
@@ -47,7 +47,7 @@ void parse(Dict *rule, List *update, const char *fname, Arena *arena) {
         List page = list_create(arena, sizeof(long), compare);
         char *token = strtok(line, ",");
         while (token) {
-            list_append(&page, &(long){strtol(token, nullptr, 10)});
+            list_append(&page, &(long){strtol(token, nullptr, decimal)});
             token = strtok(nullptr, ",");
         }
         list_append(update, &page);

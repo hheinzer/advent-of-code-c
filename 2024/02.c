@@ -30,13 +30,13 @@ int main(void) {
 void parse(List *reports, const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         Report report = {};
         char *token = strtok(line, " ");
         while (token) {
             report.level = realloc(arena, report.level, ++report.length);
-            report.level[report.length - 1] = strtol(token, nullptr, 10);
+            report.level[report.length - 1] = strtol(token, nullptr, decimal);
             token = strtok(nullptr, " ");
         }
         list_append(reports, &report);

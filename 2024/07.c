@@ -31,15 +31,15 @@ int main(void) {
 void parse(List *eqns, const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         Equation eqn = {};
         char *token = strtok(line, " ");
-        eqn.test = strtol(token, nullptr, 10);
+        eqn.test = strtol(token, nullptr, decimal);
         token = strtok(nullptr, " ");
         while (token) {
             eqn.number = realloc(arena, eqn.number, ++eqn.length);
-            eqn.number[eqn.length - 1] = strtol(token, nullptr, 10);
+            eqn.number[eqn.length - 1] = strtol(token, nullptr, decimal);
             token = strtok(nullptr, " ");
         }
         list_append(eqns, &eqn);

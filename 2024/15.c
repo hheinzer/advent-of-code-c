@@ -33,7 +33,7 @@ int main(void) {
 char *parse(const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         if (line[0] == '\n') {
             break;

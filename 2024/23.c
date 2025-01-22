@@ -10,7 +10,7 @@ int main(void) {
     parse(&network, "2024/input/23.txt", &arena);
 
     long part1 = 0;
-    char part2[256] = "";
+    char part2[bufsize] = "";
     dict_for_each(item, &network) {
         part1 += search(&network, item->key.data, nullptr, part2, arena);
     }

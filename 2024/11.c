@@ -11,8 +11,8 @@ int main(void) {
     long part2 = 0;
     char *stone = strtok(stones, " ");
     while (stone) {
-        part1 += blink(strtol(stone, nullptr, 10), 25, &arena);
-        part2 += blink(strtol(stone, nullptr, 10), 75, &arena);
+        part1 += blink(strtol(stone, nullptr, decimal), 25, &arena);
+        part2 += blink(strtol(stone, nullptr, decimal), 75, &arena);
         stone = strtok(nullptr, " ");
     }
     printf("%ld\n", part1);

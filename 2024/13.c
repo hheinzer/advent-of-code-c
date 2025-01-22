@@ -30,7 +30,7 @@ int main(void) {
 void parse(List *claws, const char *fname) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     Claw claw;
     while (fgets(line, sizeof(line), file)) {
         if (sscanf(line, "Button A: X%ld, Y%ld", &claw.a.r, &claw.a.c) == 2) {

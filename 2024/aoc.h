@@ -13,6 +13,9 @@
 #include "../cdsa/set.h"
 
 constexpr long mega_byte = 1 << 20;
+constexpr long bufsize = 256;
+constexpr long decimal = 10;
+constexpr long octal = 8;
 
 // memory management
 #define calloc(A, P, N) arena_calloc(A, N, sizeof(*(P)), alignof(typeof(*(P))))
@@ -108,7 +111,7 @@ Grid grid_parse(const char *fname, Arena *arena) {
     grid.data = calloc(arena, grid.data, 1);
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         *strchr(line, '\n') = 0;
         if (line[0] == 0) {
@@ -155,7 +158,7 @@ void grid_print(const Grid *grid) {
     }
 }
 void grid_write(const Grid *grid, const char *path) {
-    char fname[256];
+    char fname[bufsize];
     sprintf(fname, "%s.pgm", path);
     FILE *file = fopen(fname, "wb");
     assert(file);

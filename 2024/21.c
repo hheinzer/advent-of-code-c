@@ -29,7 +29,7 @@ int main(void) {
 void parse(List *code, const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
         *strchr(line, '\n') = 0;
         list_append(code, strdup(arena, line));
@@ -188,5 +188,5 @@ long complexity(const char *code, const Dict *num, const Dict *dir, long robots,
     list_for_each(item, &seq) {
         length = min(length, get_length(item->data, dir, robots, arena));
     }
-    return strtol(code, nullptr, 10) * length;
+    return strtol(code, nullptr, decimal) * length;
 }

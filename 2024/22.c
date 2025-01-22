@@ -29,9 +29,9 @@ int main(void) {
 void parse(List *number, const char *fname) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fgets(line, sizeof(line), file)) {
-        list_append(number, &(long){strtol(line, nullptr, 10)});
+        list_append(number, &(long){strtol(line, nullptr, decimal)});
     }
     fclose(file);
 }

@@ -24,7 +24,7 @@ char *parse(long *a, const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
     fscanf(file, "Register A: %ld\n", a);
-    char line[256];
+    char line[bufsize];
     for (long i = 0; i < 4; i++) {
         fgets(line, sizeof(line), file);
     }
@@ -65,7 +65,7 @@ char *run(long a, char *ret, const char *prg) {
                 b ^= oper;
                 break;
             case bst:
-                b = combo(oper, a, b, c) % 8;
+                b = combo(oper, a, b, c) % octal;
                 break;
             case jnz:
                 if (a) {
@@ -76,7 +76,7 @@ char *run(long a, char *ret, const char *prg) {
                 b ^= c;
                 break;
             case out:
-                strcat(ret, (char[]){'0' + (combo(oper, a, b, c) % 8), ',', 0});
+                strcat(ret, (char[]){'0' + (combo(oper, a, b, c) % octal), ',', 0});
                 break;
             case bdv:
                 b = a >> combo(oper, a, b, c);
@@ -95,8 +95,8 @@ long find(long a, char *ret, const char *prg, long depth) {
     if (2 * depth >= prglen) {
         return a;
     }
-    for (long i = 0; i < 8; i++) {
-        long aa = (8 * a) + i;
+    for (long i = 0; i < octal; i++) {
+        long aa = (octal * a) + i;
         if (run(aa, ret, prg)[0] == prg[prglen - (2 * depth) - 1]) {
             long res = find(aa, ret, prg, depth + 1);
             if (res) {

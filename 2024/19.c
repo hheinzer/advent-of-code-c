@@ -26,7 +26,7 @@ int main(void) {
 void parse(List *pattern, List *design, const char *fname, Arena *arena) {
     FILE *file = fopen(fname, "r");
     assert(file);
-    char line[256];
+    char line[bufsize];
     while (fscanf(file, "%255[^,\n]%*[, ]", line)) {
         list_append(pattern, strdup(arena, line));
     }
