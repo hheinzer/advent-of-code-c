@@ -11,7 +11,7 @@ struct Pos {
 long lowest_score(const Grid *grid, Set *seen, Arena *arena);
 
 int main(void) {
-    Arena arena = arena_create(27 * mega_byte);
+    Arena arena = arena_create(32 * mega_byte);
 
     Grid grid = grid_parse("2024/input/16.txt", &arena);
 

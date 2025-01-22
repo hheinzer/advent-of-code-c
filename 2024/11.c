@@ -3,7 +3,7 @@
 long blink(long stone, long steps, Arena *arena);
 
 int main(void) {
-    Arena arena = arena_create(12 * mega_byte);
+    Arena arena = arena_create(16 * mega_byte);
 
     char *stones = string_parse("2024/input/11.txt", "\n", &arena);
 

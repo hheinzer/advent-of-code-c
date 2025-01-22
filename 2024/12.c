@@ -5,7 +5,7 @@ long price1(const Set *region, const Grid *grid);
 long price2(const Set *region);
 
 int main(void) {
-    Arena arena = arena_create(6 * mega_byte);
+    Arena arena = arena_create(8 * mega_byte);
 
     Grid grid = grid_parse("2024/input/12.txt", &arena);
 

@@ -4,7 +4,7 @@ void parse(List *number, const char *fname);
 long evolve(Dict *price, long number, long n, Arena scratch);
 
 int main(void) {
-    Arena arena = arena_create(6 * mega_byte);
+    Arena arena = arena_create(7 * mega_byte);
     Arena scratch = arena_scratch_create(&arena, mega_byte);
 
     List number = list_create(&arena, sizeof(long), nullptr);
