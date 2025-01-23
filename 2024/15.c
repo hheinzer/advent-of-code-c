@@ -68,9 +68,7 @@ Grid expand(const Grid *grid, Arena *arena) {
                     grid_set(&wide, r, 2 * c, '@');
                     grid_set(&wide, r, (2 * c) + 1, '.');
                     break;
-                default:
-                    grid_set(&wide, r, 2 * c, chr);
-                    grid_set(&wide, r, (2 * c) + 1, chr);
+                default: grid_set(&wide, r, 2 * c, chr); grid_set(&wide, r, (2 * c) + 1, chr);
             }
         }
     }
@@ -95,8 +93,7 @@ void check_move(Grid *grid, long move, Arena arena) {
     set_for_each(item, &check) {
         Vec2 *cur = item->key.data;
         switch (grid_get(grid, cur->r + dir.r, cur->c + dir.c)) {
-            case '.':
-                break;
+            case '.': break;
             case 'O':
                 set_insert(&check, &(Vec2){cur->r + dir.r, cur->c + dir.c}, sizeof(Vec2));
                 break;
@@ -108,10 +105,8 @@ void check_move(Grid *grid, long move, Arena arena) {
                 set_insert(&check, &(Vec2){cur->r + dir.r, cur->c + dir.c}, sizeof(Vec2));
                 set_insert(&check, &(Vec2){cur->r + dir.r, cur->c + dir.c - 1}, sizeof(Vec2));
                 break;
-            case '#':
-                return;
-            default:
-                abort();
+            case '#': return;
+            default: abort();
         }
     }
     make_move(grid, check.begin, &dir);

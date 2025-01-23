@@ -192,14 +192,9 @@ void runner_move(Runner *runner, const Face face[6], size_t n, size_t move) {
 
 void runner_turn(Runner *runner, char turn) {
     switch (turn) {
-        case 'R':
-            runner->facing = (runner->facing + 1) % 4;
-            break;
-        case 'L':
-            runner->facing = (runner->facing - 1) % 4;
-            break;
-        default:
-            assert(!"Illegal turn signal encountered.");
+        case 'R': runner->facing = (runner->facing + 1) % 4; break;
+        case 'L': runner->facing = (runner->facing - 1) % 4; break;
+        default: assert(!"Illegal turn signal encountered.");
     }
 }
 

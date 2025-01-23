@@ -22,20 +22,11 @@ typedef struct Position {
 
 void position_move(Position *pos, char dir) {
     switch (dir) {
-        case 'L':
-            --pos->x;
-            break;
-        case 'R':
-            ++pos->x;
-            break;
-        case 'U':
-            ++pos->y;
-            break;
-        case 'D':
-            --pos->y;
-            break;
-        default:
-            assert(!"Illegal direction encountered.");
+        case 'L': --pos->x; break;
+        case 'R': ++pos->x; break;
+        case 'U': ++pos->y; break;
+        case 'D': --pos->y; break;
+        default: assert(!"Illegal direction encountered.");
     }
 }
 

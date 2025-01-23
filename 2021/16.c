@@ -135,9 +135,7 @@ size_t packet_eval(const Packet *packet) {
                 ret = MAX(ret, packet_eval(packet->operator.sub[i]));
             }
             break;
-        case PT_LITERAL:
-            ret = packet->number;
-            break;
+        case PT_LITERAL: ret = packet->number; break;
         case PT_GREATER:
             assert(packet->operator.n_sub == 2);
             ret = (packet_eval(packet->operator.sub[0]) > packet_eval(packet->operator.sub[1]));
@@ -150,8 +148,7 @@ size_t packet_eval(const Packet *packet) {
             assert(packet->operator.n_sub == 2);
             ret = (packet_eval(packet->operator.sub[0]) == packet_eval(packet->operator.sub[1]));
             break;
-        default:
-            assert(!"Illegal packet type encountered.");
+        default: assert(!"Illegal packet type encountered.");
     }
     return ret;
 }

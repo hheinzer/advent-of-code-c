@@ -37,16 +37,11 @@ char *parse(long *a, const char *fname, Arena *arena) {
 
 long combo(Opcode op, long a, long b, long c) {
     switch (op) {
-        case 4:
-            return a;
-        case 5:
-            return b;
-        case 6:
-            return c;
-        case 7:
-            abort();
-        default:
-            return op;
+        case 4: return a;
+        case 5: return b;
+        case 6: return c;
+        case 7: abort();
+        default: return op;
     }
 }
 
@@ -58,32 +53,18 @@ char *run(long a, char *ret, const char *prg) {
         Opcode code = p[0] - '0';
         Opcode oper = p[2] - '0';
         switch (code) {
-            case adv:
-                a >>= combo(oper, a, b, c);
-                break;
-            case bxl:
-                b ^= oper;
-                break;
-            case bst:
-                b = combo(oper, a, b, c) % octal;
-                break;
+            case adv: a >>= combo(oper, a, b, c); break;
+            case bxl: b ^= oper; break;
+            case bst: b = combo(oper, a, b, c) % octal; break;
             case jnz:
                 if (a) {
                     p = prg + (long)(2 * oper) - 4;
                 }
                 break;
-            case bxc:
-                b ^= c;
-                break;
-            case out:
-                strcat(ret, (char[]){'0' + (combo(oper, a, b, c) % octal), ',', 0});
-                break;
-            case bdv:
-                b = a >> combo(oper, a, b, c);
-                break;
-            case cdv:
-                c = a >> combo(oper, a, b, c);
-                break;
+            case bxc: b ^= c; break;
+            case out: strcat(ret, (char[]){'0' + (combo(oper, a, b, c) % octal), ',', 0}); break;
+            case bdv: b = a >> combo(oper, a, b, c); break;
+            case cdv: c = a >> combo(oper, a, b, c); break;
         }
     }
     ret[strlen(ret) - 1] = 0;

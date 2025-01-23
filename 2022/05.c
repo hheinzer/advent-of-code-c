@@ -55,8 +55,7 @@ void solve(const char **line, size_t n_lines, size_t cratemover) {
                     stack_push(stack[t - 1], stack_pop(tmp));
                 }
                 break;
-            default:
-                assert(!"Illegal cratemover encountered.");
+            default: assert(!"Illegal cratemover encountered.");
         }
     }
     stack_free(&tmp, free);
