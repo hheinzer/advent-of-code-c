@@ -28,7 +28,7 @@ void create(List *regions, const Grid *grid, Arena *arena) {
     Set seen = set_create(arena);
     for (long r = 0; r < grid->rows; r++) {
         for (long c = 0; c < grid->cols; c++) {
-            if (set_insert(&seen, &(Vec2){r, c}, sizeof(Vec2))) {
+            if (!set_insert(&seen, &(Vec2){r, c}, sizeof(Vec2))) {
                 continue;
             }
             char plant = grid_get(grid, r, c);
@@ -37,7 +37,7 @@ void create(List *regions, const Grid *grid, Arena *arena) {
             list_append(&queue, &(Vec2){r, c});
             while (queue.length) {
                 Vec2 *cur = list_pop(&queue, 0);
-                if (set_insert(&region, cur, sizeof(Vec2))) {
+                if (!set_insert(&region, cur, sizeof(Vec2))) {
                     continue;
                 }
                 set_insert(&seen, cur, sizeof(Vec2));

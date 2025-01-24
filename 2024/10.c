@@ -40,7 +40,7 @@ long score(const Grid *grid, long r, long c, int all, Arena arena) {
             if (grid_get(grid, next.r, next.c) - grid_get(grid, curr->r, curr->c) != 1) {
                 continue;
             }
-            if (all || !set_insert(&seen, &next, sizeof(Vec2))) {
+            if (all || set_insert(&seen, &next, sizeof(Vec2))) {
                 list_append(&queue, &next);
             }
         }

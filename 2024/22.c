@@ -52,7 +52,7 @@ long evolve(Dict *price, long number, long n, Arena scratch) {
             list_for_each(item, &diff) {
                 key[j++] = *(long *)item->data;
             }
-            if (!set_insert(&seen, key, sizeof(key))) {
+            if (set_insert(&seen, key, sizeof(key))) {
                 long *total = dict_insert(price, key, sizeof(key), &(long){number % 10});
                 if (total) {
                     *total += number % 10;
