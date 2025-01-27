@@ -28,22 +28,6 @@ constexpr long octal = 8;
 #define countof(A) (sizeof(A) / sizeof(*(A)))
 #define array_for_each(T, I, ...) for (T A[] = {__VA_ARGS__}, *I = A; I < A + countof(A); I++)
 
-// min/max function
-#define min(a, b) _Generic(a, long: x__min_long, double: x__min_double)(a, b)
-#define max(a, b) _Generic(a, long: x__max_long, double: x__max_double)(a, b)
-long x__min_long(long a, long b) {
-    return a < b ? a : b;
-}
-long x__max_long(long a, long b) {
-    return a > b ? a : b;
-}
-double x__min_double(double a, double b) {
-    return a < b ? a : b;
-}
-double x__max_double(double a, double b) {
-    return a > b ? a : b;
-}
-
 // comparison functions
 int cmp_long(const void *_a, const void *_b, void *) {
     const long *a = _a;
@@ -60,6 +44,12 @@ int cmp_string(const void *a, const void *b, void *) {
 }
 
 // integer math functions
+long lmin(long a, long b) {
+    return a < b ? a : b;
+}
+long lmax(long a, long b) {
+    return a > b ? a : b;
+}
 long lpow(long a, long b) {
     long c = 1;
     for (long i = 0; i < b; i++) {
@@ -67,7 +57,7 @@ long lpow(long a, long b) {
     }
     return c;
 }
-long modulo(long a, long b) {
+long lmod(long a, long b) {
     return ((a % b) + b) % b;
 }
 

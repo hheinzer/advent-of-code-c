@@ -55,8 +55,8 @@ void parse(List *robots, const char *fname) {
 
 Vec2 position(const Robot *robot, long cols, long rows, long time) {
     Vec2 p = robot->p;
-    p.r = modulo(p.r + (time * robot->v.r), rows);
-    p.c = modulo(p.c + (time * robot->v.c), cols);
+    p.r = lmod(p.r + (time * robot->v.r), rows);
+    p.c = lmod(p.c + (time * robot->v.c), cols);
     return p;
 }
 

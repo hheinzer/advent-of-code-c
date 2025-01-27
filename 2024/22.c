@@ -19,7 +19,7 @@ int main(void) {
 
     long part2 = 0;
     dict_for_each(item, &price) {
-        part2 = max(part2, *(long *)item->data);
+        part2 = lmax(part2, *(long *)item->data);
     }
     printf("%ld\n", part2);
 

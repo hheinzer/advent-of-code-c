@@ -174,7 +174,7 @@ long get_length(const char *code, const Dict *dir, long depth, Arena *arena) {
         Path *path = dict_find(dir, (char[]){*a, *b}, sizeof(char[2]));
         long len = LONG_MAX;
         for (long i = 0; i < path->count; i++) {
-            len = min(len, get_length(path->str[i], dir, depth - 1, arena));
+            len = lmin(len, get_length(path->str[i], dir, depth - 1, arena));
         }
         length += len;
     }
@@ -186,7 +186,7 @@ long complexity(const char *code, const Dict *num, const Dict *dir, long robots,
     List seq = generate(code, num, arena);
     long length = LONG_MAX;
     list_for_each(item, &seq) {
-        length = min(length, get_length(item->data, dir, robots, arena));
+        length = lmin(length, get_length(item->data, dir, robots, arena));
     }
     return strtol(code, nullptr, decimal) * length;
 }
