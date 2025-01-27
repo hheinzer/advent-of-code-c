@@ -60,7 +60,7 @@ ListItem *prev_file(ListItem *item) {
 List rearrange1(List *before, Arena *arena) {
     List after = list_create(arena, sizeof(Block), nullptr);
     list_append(&after, before->begin->data);
-    for (ListItem *b1 = next_space(before->begin), *b2 = prev_file(before->end); b1 && b2;) {
+    for (auto b1 = next_space(before->begin), b2 = prev_file(before->end); b1 && b2;) {
         Block *space = b1->data;
         Block *file = b2->data;
         if (space->offset >= file->offset) {
@@ -89,9 +89,9 @@ List rearrange1(List *before, Arena *arena) {
 List rearrange2(List *before, Arena *arena) {
     List after = list_create(arena, sizeof(Block), nullptr);
     list_append(&after, before->begin->data);
-    for (ListItem *b2 = prev_file(before->end); b2; b2 = prev_file(b2->prev)) {
+    for (auto b2 = prev_file(before->end); b2; b2 = prev_file(b2->prev)) {
         Block *file = b2->data;
-        for (ListItem *b1 = next_space(before->begin); b1; b1 = next_space(b1->next)) {
+        for (auto b1 = next_space(before->begin); b1; b1 = next_space(b1->next)) {
             Block *space = b1->data;
             if (space->offset >= file->offset) {
                 break;
@@ -111,7 +111,7 @@ List rearrange2(List *before, Arena *arena) {
 
 long checksum(const List *block) {
     long sum = 0;
-    for (ListItem *b = block->begin; b; b = b->next) {
+    for (auto b = block->begin; b; b = b->next) {
         Block *file = b->data;
         for (long i = 0, pos = file->offset; i < file->length; i++, pos++) {
             sum += pos * file->index;

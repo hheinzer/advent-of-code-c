@@ -84,7 +84,7 @@ long search(const Dict *network, char *name, List *current, char *longest, Arena
         List next_clique = list_clone(clique, &arena);
         list_append(&next_clique, candidate);
         List next_candidates = list_create(&arena, 0, nullptr);
-        for (ListItem *next = item->next; next; next = next->next) {
+        for (auto next = item->next; next; next = next->next) {
             if (list_find(connection, next->data)) {
                 list_append(&next_candidates, next->data);
             }

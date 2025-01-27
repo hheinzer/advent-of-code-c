@@ -17,7 +17,7 @@ int main(void) {
 
 Dict freqs_find(const Grid *grid, Arena *arena) {
     Dict freq = dict_create(arena, sizeof(List));
-    for (char *f = grid->data; *f; f++) {
+    for (auto f = grid->data; *f; f++) {
         if (*f == '.' || dict_find(&freq, f, sizeof(*f))) {
             continue;
         }

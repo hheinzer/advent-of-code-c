@@ -100,8 +100,8 @@ Dict numpad(Arena *arena) {
     grid.data = strdup(arena, "789456123#0A");
     *strchr(grid.data, '#') = 0;
     Dict paths = dict_create(arena, sizeof(Path));
-    for (const char *a = "A0123456789"; *a; a++) {
-        for (const char *b = "A0123456789"; *b; b++) {
+    for (auto a = "A0123456789"; *a; a++) {
+        for (auto b = "A0123456789"; *b; b++) {
             Path path = {};
             find(&path, &grid, *a, *b, *arena);
             dict_insert(&paths, (char[]){*a, *b}, sizeof(char[2]), &path);
@@ -115,8 +115,8 @@ Dict dirpad(Arena *arena) {
     grid.data = strdup(arena, "#^A<v>");
     *strchr(grid.data, '#') = 0;
     Dict paths = dict_create(arena, sizeof(Path));
-    for (const char *a = "A<v>^"; *a; a++) {
-        for (const char *b = "A<v>^"; *b; b++) {
+    for (auto a = "A<v>^"; *a; a++) {
+        for (auto b = "A<v>^"; *b; b++) {
             Path path = {};
             find(&path, &grid, *a, *b, *arena);
             dict_insert(&paths, (char[]){*a, *b}, sizeof(char[2]), &path);
@@ -136,7 +136,7 @@ List generate(const char *code, const Dict *pad, Arena *arena) {
             }
         }
         else {
-            for (ListItem *item = seq.begin; length--; item = item->next) {
+            for (auto item = seq.begin; length--; item = item->next) {
                 char *str = item->data;
                 item->data = strapp(arena, (char *)strdup(arena, str), path->str[0]);
                 for (long i = 1; i < path->count; i++) {

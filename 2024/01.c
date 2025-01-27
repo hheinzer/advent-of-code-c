@@ -13,7 +13,7 @@ int main(void) {
     list_sort(&right, nullptr);
 
     long part1 = 0;
-    for (ListItem *l = left.begin, *r = right.begin; l && r; l = l->next, r = r->next) {
+    for (auto l = left.begin, r = right.begin; l && r; l = l->next, r = r->next) {
         long a = *(long *)l->data;
         long b = *(long *)r->data;
         part1 += labs(a - b);

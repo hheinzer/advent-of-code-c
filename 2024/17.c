@@ -49,7 +49,7 @@ char *run(long a, char *ret, const char *prg) {
     long b = 0;
     long c = 0;
     ret[0] = 0;
-    for (const char *p = prg, *end = prg + strlen(prg); p < end; p += 4) {
+    for (auto p = prg, end = prg + strlen(prg); p < end; p += 4) {
         Opcode code = p[0] - '0';
         Opcode oper = p[2] - '0';
         switch (code) {

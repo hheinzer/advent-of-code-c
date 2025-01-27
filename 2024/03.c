@@ -55,7 +55,7 @@ char *filter(char *input) {
         if (!end) {
             return input;
         }
-        for (char *c = begin; c < end; c++) {
+        for (auto c = begin; c < end; c++) {
             *c = '-';
         }
         str = end + 4;

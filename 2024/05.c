@@ -64,7 +64,7 @@ int compare(const void *_a, const void *_b, void *_rule) {
 }
 
 int sorted(const List *page, Dict *rule) {
-    for (ListItem *a = page->begin, *b = a->next; a && b; a = a->next, b = b->next) {
+    for (auto a = page->begin, b = a->next; a && b; a = a->next, b = b->next) {
         if (compare(a->data, b->data, rule) > 0) {
             return 0;
         }

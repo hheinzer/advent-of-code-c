@@ -20,7 +20,7 @@ int main(void) {
     Grid wide = expand(&grid, &arena);
     char *moves = parse(fname, &arena);
 
-    for (char *move = moves; *move; move++) {
+    for (auto move = moves; *move; move++) {
         check_move(&grid, *move, arena);
         check_move(&wide, *move, arena);
     }

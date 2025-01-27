@@ -36,7 +36,7 @@ long lowest_score(const Grid *grid, Set *seen, Arena *arena) {
         }
         if (grid_get(grid, cur->pos.r, cur->pos.c) == 'E') {
             best = cur->score;
-            for (Pos *pos = cur; pos; pos = pos->prev) {
+            for (auto pos = cur; pos; pos = pos->prev) {
                 set_insert(seen, &pos->pos, sizeof(Vec2));
             }
         }
